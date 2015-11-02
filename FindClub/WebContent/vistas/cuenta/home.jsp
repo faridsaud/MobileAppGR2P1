@@ -12,7 +12,7 @@
       
       <div class="row">
         <div class="col-xs-12">
-          <a href="iniciarSesion" class="btn btn-default btn-block">Iniciar Sesión</a>
+          <a href="IniciarSesion" class="btn btn-default btn-block">Iniciar Sesión</a>
         </div>
       </div>
       <div class="row">
@@ -22,7 +22,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <a href="registrar" class="btn btn-default btn-block">Registrar</a>
+          <a href="Registrar" class="btn btn-default btn-block">Registrar</a>
         </div>
       </div>
       <div class="row">
