@@ -14,11 +14,11 @@
       
       <div class="row">
         <div class="col-xs-12">
-          <form method="post">
+          <form method="get">
             
             <div class="form-group">
               <label for="correo">Correo Eletrónico</label>
-              <input name="correo" type="text" class="form-control" id="correo" >
+              <input name="email" type="text" class="form-control" id="email" >
             </div>
                      
             <button type="submit" class="btn btn-default">Buscar</button>

@@ -32,7 +32,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <a href="administrar" class="btn btn-default btn-block">Administrar</a>
+          <a href="Administrar" class="btn btn-default btn-block">Administrar</a>
         </div>
       </div>
       <div class="row">
@@ -40,6 +40,12 @@
           <br>
         </div>
       </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <a href="CerrarSesion" class="btn btn-default btn-block">Cerrar Sesión</a>
+        </div>
+      </div>
+      
       
     </div>
     

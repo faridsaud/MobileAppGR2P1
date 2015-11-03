@@ -15,7 +15,7 @@ import ec.edu.epn.model.vo.Usuario;
 /**
  * Servlet implementation class Administrar
  */
-@WebServlet("/Administrar")
+@WebServlet("/Cuenta/Administrar")
 public class Administrar extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -53,6 +53,9 @@ public class Administrar extends HttpServlet {
 				emailUsuario=request.getParameter("email");
 				
 			}catch(Exception e){
+				
+			}
+			if(emailUsuario==null){
 				emailUsuario="";
 			}
 			List<Usuario> listaUsuarios=su.listarUsuario(usrIniciado, emailUsuario);

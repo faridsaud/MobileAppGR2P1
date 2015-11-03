@@ -89,7 +89,7 @@ public class ServiceUsuario {
 				st.setString(1, "%" + emailUsuario + "%");
 			}
 			if ((usrLogeado.isAdmin() == false)) {
-				st = con.prepareStatement("Select * from USUARIO where EMAILUSR?");
+				st = con.prepareStatement("Select * from USUARIO where EMAILUSR=?");
 				st.setString(1, usrLogeado.getEmail());
 			}
 			st.execute();
