@@ -10,7 +10,8 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-
+<title>Find your Club!</title>
+ 
 </head>
 <body>
 
@@ -55,5 +56,3 @@
 
     </div>
 
-</body>
-</html>

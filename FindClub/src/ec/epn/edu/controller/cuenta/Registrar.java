@@ -51,7 +51,7 @@ public class Registrar extends HttpServlet {
 			usr.setApellido(apellido);
 			usr.setEmail(email);
 			usr.setPassword(password);
-			usr.setApellido(apellido);
+			usr.setNombre(nombre);
 			ServiceUsuario su= new ServiceUsuario();
 			su.registrarUsuario(usr);
 			doGet(request,response);
