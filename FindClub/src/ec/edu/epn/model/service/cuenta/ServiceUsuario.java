@@ -74,7 +74,7 @@ public class ServiceUsuario {
 	}
 
 	public List<Usuario> listarUsuario(Usuario usrLogeado, String emailUsuario) {
-		List<Usuario> listaUsuarios=new ArrayList<Usuario>();
+		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
@@ -94,9 +94,9 @@ public class ServiceUsuario {
 			}
 			st.execute();
 			ResultSet rs = st.getResultSet();
-			
+
 			while (rs.next()) {
-				Usuario usr= new Usuario();
+				Usuario usr = new Usuario();
 				usr.setNombre(rs.getString("NOMBREUSR"));
 				usr.setEmail(rs.getString("EMAILUSR"));
 				usr.setPassword(rs.getString("PASSWORDUSR"));
@@ -116,6 +116,65 @@ public class ServiceUsuario {
 			e.printStackTrace();
 		}
 		return listaUsuarios;
+	}
+
+	public void modificarUsuario(Usuario usrModificar, Usuario usrModificador) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+					"bases", "bases");
+			PreparedStatement st = con.prepareStatement(
+					"UPDATE USUARIO SET EMAILUSR=?,PASSWORDUSR=?, NOMBREUSR=?, APELLIDOUSR=? WHERE EMAILUSR=?");
+			st.setString(1, usrModificador.getEmail());
+			st.setString(2, usrModificador.getPassword());
+			st.setString(3, usrModificador.getNombre());
+			st.setString(4, usrModificador.getApellido());
+			st.setString(5, usrModificar.getEmail());
+			st.execute();
+			st.close();
+			con.close();
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	public Usuario buscarUsuarioByEmail(String email) {
+		Usuario usr = new Usuario();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+					"bases", "bases");
+			PreparedStatement st = con
+					.prepareStatement("Select * from USUARIO where EMAILUSR=? and ESTADOUSR=?");
+			st.setString(1, email);
+			st.setBoolean(2, true);
+			st.execute();
+			ResultSet rs = st.getResultSet();
+			while (rs.next()) {
+				usr.setNombre(rs.getString("NOMBREUSR"));
+				usr.setEmail(rs.getString("EMAILUSR"));
+				usr.setPassword(rs.getString("PASSWORDUSR"));
+				usr.setApellido(rs.getString("APELLIDOUSR"));
+				usr.setAdmin(rs.getBoolean("ADMINUSR"));
+				usr.setEstado(rs.getBoolean("ESTADOUSR"));
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return usr;
 	}
 
 }
