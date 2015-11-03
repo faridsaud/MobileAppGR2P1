@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ec.edu.epn.model.service.cuenta.ServiceUsuario;
+import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class IniciarSesion
@@ -29,6 +30,20 @@ public class IniciarSesion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Usuario usrIniciado=new Usuario();
+		boolean redireccion=false;
+		try{
+			usrIniciado= (Usuario)request.getSession().getAttribute("usuarioActivo");
+			if(usrIniciado.isEstado()==true){
+				System.out.println("Redireccionando");
+				redireccion=true;
+				getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request, response);
+				
+			}
+		}catch(Exception e){
+			System.out.println("Error obteniendo usuario");
+		}
+		if(redireccion==false)
 		getServletConfig().getServletContext().getRequestDispatcher("/vistas/cuenta/iniciarSesion.jsp").forward(request, response);
 	}
 
@@ -37,6 +52,7 @@ public class IniciarSesion extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		String email="";
 		String password="";
 		try{
