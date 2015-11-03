@@ -151,9 +151,9 @@ public class ServiceUsuario {
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
-					.prepareStatement("Select * from USUARIO where EMAILUSR=? and ESTADOUSR=?");
+					.prepareStatement("Select * from USUARIO where EMAILUSR=?");
 			st.setString(1, email);
-			st.setBoolean(2, true);
+
 			st.execute();
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
@@ -175,6 +175,28 @@ public class ServiceUsuario {
 			e.printStackTrace();
 		}
 		return usr;
+	}
+	public void eliminarUsuario(Usuario usr) {
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+					"bases", "bases");
+			PreparedStatement st = con
+					.prepareStatement("delete from USUARIO where EMAILUSR=?");
+			st.setString(1, usr.getEmail());
+			st.execute();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

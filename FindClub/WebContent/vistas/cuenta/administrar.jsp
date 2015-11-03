@@ -49,14 +49,22 @@
 						<tr>
 							<td><%=usr.getEmail()%></td>
 							<td>
-								<form method="get" action="${pageContext.request.contextPath}/Cuenta/Modificar">
-									<button type="submit"
-										class="btn btn-default" value="<%=usr.getEmail()%>" name="emailModificar"><span
-									class="glyphicon glyphicon-pencil" title="Modificar cuenta"></span></button>
+								<form method="get"
+									action="${pageContext.request.contextPath}/Cuenta/Modificar">
+									<button type="submit" class="btn btn-default"
+										value="<%=usr.getEmail()%>" name="emailModificar">
+										<span class="glyphicon glyphicon-pencil"
+											title="Modificar cuenta"></span>
+									</button>
 								</form>
-								<a href="${pageContext.request.contextPath}/Cuenta/Eliminar"><span
-									class="glyphicon glyphicon-remove" title="Eliminar cuenta"></span></a>
-
+								<form method="post"
+									action="${pageContext.request.contextPath}/Cuenta/Eliminar">
+									<button type="submit" class="btn btn-default"
+										value="<%=usr.getEmail()%>" name="emailEliminar">
+										<span
+									class="glyphicon glyphicon-remove" title="Eliminar cuenta"></span>
+									</button>
+								</form> 
 							</td>
 						</tr>
 						<%
