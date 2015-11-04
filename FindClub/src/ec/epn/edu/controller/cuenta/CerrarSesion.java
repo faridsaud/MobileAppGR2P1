@@ -30,9 +30,7 @@ public class CerrarSesion extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		Usuario usr=(Usuario)request.getSession().getAttribute("usuarioActivo");
-		usr=null;
-		request.getSession().setAttribute("usuarioActivo", usr);
+		request.getSession().invalidate();
 		getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request, response);
 	}
 
