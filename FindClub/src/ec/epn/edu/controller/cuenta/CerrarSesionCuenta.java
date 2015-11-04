@@ -13,13 +13,13 @@ import ec.edu.epn.model.vo.Usuario;
  * Servlet implementation class CerrarSesion
  */
 @WebServlet("/Cuenta/CerrarSesion")
-public class CerrarSesion extends HttpServlet {
+public class CerrarSesionCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CerrarSesion() {
+    public CerrarSesionCuenta() {
         super();
         // TODO Auto-generated constructor stub
     }

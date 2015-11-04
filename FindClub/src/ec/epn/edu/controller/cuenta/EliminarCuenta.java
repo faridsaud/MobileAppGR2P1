@@ -7,17 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ec.edu.epn.model.service.cuenta.ServiceUsuario;
+import ec.edu.epn.model.vo.Usuario;
+
 /**
- * Servlet implementation class Home
+ * Servlet implementation class Eliminar
  */
-@WebServlet("/Cuenta/Home")
-public class Home extends HttpServlet {
+@WebServlet("/Cuenta/Eliminar")
+public class EliminarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Home() {
+    public EliminarCuenta() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,8 +30,7 @@ public class Home extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		getServletConfig().getServletContext().getRequestDispatcher("/vistas/cuenta/home.jsp").forward(request, response);
-
+		getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request, response);
 	}
 
 	/**
@@ -36,6 +38,12 @@ public class Home extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ServiceUsuario su=new ServiceUsuario();
+		Usuario usr=(Usuario)su.buscarUsuarioByEmail((String)request.getParameter("emailEliminar"));
+		
+		System.out.println((String)request.getParameter("emailEliminar"));
+		System.out.println(usr.getEmail());
+		su.eliminarUsuario(usr);
 		doGet(request, response);
 	}
 

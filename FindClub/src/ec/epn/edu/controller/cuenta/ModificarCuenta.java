@@ -15,13 +15,13 @@ import sun.usagetracker.UsageTrackerClient;
  * Servlet implementation class Modificar
  */
 @WebServlet("/Cuenta/Modificar")
-public class Modificar extends HttpServlet {
+public class ModificarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Modificar() {
+    public ModificarCuenta() {
         super();
         // TODO Auto-generated constructor stub
     }

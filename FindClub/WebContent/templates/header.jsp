@@ -28,7 +28,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="../../index.html">Home</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/Home">Home</a>
 
           </div>
 
@@ -45,7 +45,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-            <li><a href="../Cuenta/home.html">Cuenta</a></li>
+            <li><a href="${pageContext.request.contextPath}/Cuenta/Home">Cuenta</a></li>
 
 
             </ul>

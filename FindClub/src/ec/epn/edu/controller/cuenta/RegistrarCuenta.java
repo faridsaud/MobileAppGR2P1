@@ -11,16 +11,16 @@ import ec.edu.epn.model.service.cuenta.ServiceUsuario;
 import ec.edu.epn.model.vo.Usuario;
 
 /**
- * Servlet implementation class Eliminar
+ * Servlet implementation class Registrar
  */
-@WebServlet("/Cuenta/Eliminar")
-public class Eliminar extends HttpServlet {
+@WebServlet("/Cuenta/Registrar")
+public class RegistrarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Eliminar() {
+    public RegistrarCuenta() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,7 +30,7 @@ public class Eliminar extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request, response);
+		getServletConfig().getServletContext().getRequestDispatcher("/vistas/cuenta/registrar.jsp").forward(request, response);
 	}
 
 	/**
@@ -38,13 +38,32 @@ public class Eliminar extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		ServiceUsuario su=new ServiceUsuario();
-		Usuario usr=(Usuario)su.buscarUsuarioByEmail((String)request.getParameter("emailEliminar"));
+		String email="";
+		String password="";
+		String nombre="";
+		String apellido="";
+		try{
+			email=request.getParameter("email");
+			password=request.getParameter("password");
+			nombre=request.getParameter("nombre1");
+			apellido=request.getParameter("apellido1");
+			Usuario usr= new Usuario();
+			usr.setApellido(apellido);
+			usr.setEmail(email);
+			usr.setPassword(password);
+			usr.setNombre(nombre);
+			ServiceUsuario su= new ServiceUsuario();
+			su.registrarUsuario(usr);
+			doGet(request,response);
+
+		}catch(Exception e){
+			email="";
+			password="";
+			nombre="";
+			apellido="";
+			doGet(request, response);
+		}
 		
-		System.out.println((String)request.getParameter("emailEliminar"));
-		System.out.println(usr.getEmail());
-		su.eliminarUsuario(usr);
-		doGet(request, response);
 	}
 
 }

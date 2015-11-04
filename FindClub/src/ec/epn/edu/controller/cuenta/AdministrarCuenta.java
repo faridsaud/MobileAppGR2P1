@@ -16,13 +16,13 @@ import ec.edu.epn.model.vo.Usuario;
  * Servlet implementation class Administrar
  */
 @WebServlet("/Cuenta/Administrar")
-public class Administrar extends HttpServlet {
+public class AdministrarCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Administrar() {
+	public AdministrarCuenta() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
