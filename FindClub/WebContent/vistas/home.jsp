@@ -9,5 +9,6 @@
         <p>Prototipo</p>
       </div>
     </div>
+    
   <jsp:include page="/templates/footer.jsp"></jsp:include>  
      
