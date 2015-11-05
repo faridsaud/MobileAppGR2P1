@@ -54,8 +54,8 @@ public class RegistrarCuenta extends HttpServlet {
 			usr.setNombre(nombre);
 			ServiceUsuario su= new ServiceUsuario();
 			su.registrarUsuario(usr);
-			doGet(request,response);
-
+			getServletConfig().getServletContext().getRequestDispatcher("/vistas/cuenta/home.jsp").forward(request, response);
+			
 		}catch(Exception e){
 			email="";
 			password="";
