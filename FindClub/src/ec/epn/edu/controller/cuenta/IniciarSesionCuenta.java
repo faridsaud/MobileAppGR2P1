@@ -16,58 +16,63 @@ import ec.edu.epn.model.vo.Usuario;
 @WebServlet("/Cuenta/IniciarSesion")
 public class IniciarSesionCuenta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public IniciarSesionCuenta() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		Usuario usrIniciado=new Usuario();
-		boolean redireccion=false;
-		try{
-			usrIniciado= (Usuario)request.getSession().getAttribute("usuarioActivo");
-			if(usrIniciado.isEstado()==true){
-				System.out.println("Redireccionando");
-				redireccion=true;
-				getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request, response);
-				
-			}
-		}catch(Exception e){
-			System.out.println("Error obteniendo usuario");
-		}
-		if(redireccion==false)
-		getServletConfig().getServletContext().getRequestDispatcher("/vistas/cuenta/iniciarSesion.jsp").forward(request, response);
+	public IniciarSesionCuenta() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		String email="";
-		String password="";
-		try{
-		email=request.getParameter("email");
-		password=request.getParameter("password");
+		Usuario usrIniciado = new Usuario();
+		boolean redireccion = false;
+		try {
+			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+			if (usrIniciado != null)
+				if (usrIniciado.isEstado() == true) {
+					redireccion = true;
+					getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request,
+							response);
+
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch(Exception e){
-			email="";
-			password="";
+		if (redireccion == false)
+			getServletConfig().getServletContext().getRequestDispatcher("/vistas/cuenta/iniciarSesion.jsp")
+					.forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+
+		String email = "";
+		String password = "";
+		try {
+			email = request.getParameter("email");
+			password = request.getParameter("password");
+		} catch (Exception e) {
+			email = "";
+			password = "";
 		}
-		ServiceUsuario se=new ServiceUsuario();
+		ServiceUsuario se = new ServiceUsuario();
 		request.getSession().setAttribute("usuarioActivo", se.buscarUsuario(email, password));
 		System.out.println(se.buscarUsuario(email, password).getNombre());
-		doGet(request,response);
-		
+		doGet(request, response);
+
 	}
 
 }

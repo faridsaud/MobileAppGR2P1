@@ -30,6 +30,16 @@ public class EliminarCuenta extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Usuario usr;
+		usr=(Usuario)request.getSession().getAttribute("usuarioActivo");
+		if(usr==null){
+			usr=new Usuario();
+		}else{
+			if(usr.getEmail().equals((String)request.getAttribute("emailEliminar")))
+				request.getSession().invalidate();
+				
+		}
+		
 		getServletConfig().getServletContext().getRequestDispatcher("/Cuenta/Home").forward(request, response);
 	}
 
@@ -39,11 +49,14 @@ public class EliminarCuenta extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		ServiceUsuario su=new ServiceUsuario();
-		Usuario usr=(Usuario)su.buscarUsuarioByEmail((String)request.getParameter("emailEliminar"));
+		String email=(String)request.getParameter("emailEliminar");
+		if(email==null){
+			email="";
+		}
+		Usuario usr=(Usuario)su.buscarUsuarioByEmail(email);
 		
-		System.out.println((String)request.getParameter("emailEliminar"));
-		System.out.println(usr.getEmail());
 		su.eliminarUsuario(usr);
+		request.setAttribute("emailEliminar",email );
 		doGet(request, response);
 	}
 
