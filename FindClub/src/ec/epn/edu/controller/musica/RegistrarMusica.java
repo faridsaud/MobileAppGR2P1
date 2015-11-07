@@ -67,7 +67,6 @@ public class RegistrarMusica extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		doGet(request, response);
 	}
 
 }

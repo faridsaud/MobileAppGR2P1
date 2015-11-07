@@ -14,7 +14,7 @@
 
         <div class="form-group">
           <label for="descripcion">Descripción (Opcional)</label>
-          <textarea name="descripcion" class="form-control" rows="5" id="descripcion" placeholder="Explicar el tipo de música" required="true"></textarea>
+          <textarea name="descripcion" class="form-control" rows="5" id="descripcion" placeholder="Explicar el tipo de música" ></textarea>
         </div>
 
         <button type="submit" class="btn btn-default">Registrar</button>
