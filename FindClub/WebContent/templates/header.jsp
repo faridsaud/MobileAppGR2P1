@@ -36,12 +36,12 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" >
             <li><a href="../Discoteca/home.html">Discotecas</a></li>
-            <li><a href="../Trago/home.html">Tragos</a></li>
+            <li><a href="${pageContext.request.contextPath}/Fiestas/Home">Fiestas</a></li>
 
             <li><a href="../Musica/home.html">Música</a></li>
 
-            <li><a href="../Pais/home.html">País</a></li>
-            <li><a href="../Ciudad/home.html">Ciudad</a></li>
+            <li><a href="${pageContext.request.contextPath}/Pais/Home">País</a></li>
+            <li><a href="${pageContext.request.contextPath}/Ciudad/Home">Ciudad</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

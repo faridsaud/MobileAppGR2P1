@@ -1,26 +1,29 @@
-package ec.epn.edu.controller;
+package ec.epn.edu.controller.pais;
 
 import java.io.IOException;
+
+import javax.security.auth.kerberos.ServicePermission;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ec.edu.epn.model.service.pais.ServicePais;
+import ec.edu.epn.model.vo.Pais;
 import ec.edu.epn.model.vo.Usuario;
-import sun.usagetracker.UsageTrackerClient;
 
 /**
- * Servlet implementation class ServletPrueba
+ * Servlet implementation class EliminarPais
  */
-@WebServlet("/ServletPrueba")
-public class ServletPrueba extends HttpServlet {
+@WebServlet("/Pais/Eliminar")
+public class EliminarPais extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletPrueba() {
+    public EliminarPais() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,17 +33,7 @@ public class ServletPrueba extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		Usuario usr= new Usuario();
-		try{
-			usr=(Usuario) request.getSession().getAttribute("usuarioActivo");
-			System.out.println("usuario logeado"+usr.getNombre());
-			response.getWriter().append("usuario logeado"+usr.getNombre());
-		}catch(Exception e){
-			System.out.println("error");
-		}
-		
-		
+		getServletConfig().getServletContext().getRequestDispatcher("/Pais/Home").forward(request, response);
 	}
 
 	/**
@@ -48,6 +41,18 @@ public class ServletPrueba extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+
+		Pais pais = new Pais();
+		ServicePais sp = new ServicePais();
+		String nombrePais = (String) request.getParameter("paisEliminar");
+		
+		if (nombrePais == null)
+			nombrePais="";
+		
+		pais.setNombrePais(nombrePais);
+		pais = (Pais) sp.buscarPais(nombrePais);
+		sp.eliminarPais(pais);
+		request.setAttribute("paisEliminar", nombrePais);
 		doGet(request, response);
 	}
 

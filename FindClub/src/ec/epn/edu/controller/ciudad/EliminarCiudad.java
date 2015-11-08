@@ -1,4 +1,4 @@
-package ec.epn.edu.controller;
+package ec.epn.edu.controller.ciudad;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,20 +7,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ec.edu.epn.model.vo.Usuario;
-import sun.usagetracker.UsageTrackerClient;
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
+import ec.edu.epn.model.service.pais.ServicePais;
+import ec.edu.epn.model.vo.Ciudad;
+import ec.edu.epn.model.vo.Pais;
 
 /**
- * Servlet implementation class ServletPrueba
+ * Servlet implementation class EliminarCiudad
  */
-@WebServlet("/ServletPrueba")
-public class ServletPrueba extends HttpServlet {
+@WebServlet("/Ciudad/Eliminar")
+public class EliminarCiudad extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletPrueba() {
+    public EliminarCiudad() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,17 +32,7 @@ public class ServletPrueba extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		Usuario usr= new Usuario();
-		try{
-			usr=(Usuario) request.getSession().getAttribute("usuarioActivo");
-			System.out.println("usuario logeado"+usr.getNombre());
-			response.getWriter().append("usuario logeado"+usr.getNombre());
-		}catch(Exception e){
-			System.out.println("error");
-		}
-		
-		
+		getServletConfig().getServletContext().getRequestDispatcher("/Ciudad/Home").forward(request, response);
 	}
 
 	/**
@@ -48,6 +40,17 @@ public class ServletPrueba extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Ciudad ciudad = new Ciudad();
+		ServiceCiudad sc = new ServiceCiudad();
+		String nombreCiudad = (String) request.getParameter("nombreCiudadEliminar");
+		
+		if (nombreCiudad == null)
+			nombreCiudad="";
+		
+		ciudad.setNombrePais(nombreCiudad);
+		ciudad = (Ciudad) sc.buscarCiudad(ciudad, nombreCiudad);
+		sc.eliminarCiudad(ciudad);
+		request.setAttribute("ciudadEliminar", nombreCiudad);
 		doGet(request, response);
 	}
 
