@@ -35,13 +35,12 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" >
-<<<<<<< HEAD
+
             <li><a href="../Discoteca/home.html">Discotecas</a></li>
             <li><a href="${pageContext.request.contextPath}/Fiestas/Home">Fiestas</a></li>
-=======
+
             <li><a href="${pageContext.request.contextPath}/Discoteca/Home">Discotecas</a></li>
             <li><a href="${pageContext.request.contextPath}/Fiesta/Home">Fiesta</a></li>
->>>>>>> refs/remotes/origin/master
 
             <li><a href="${pageContext.request.contextPath}/Musica/Home">Música</a></li>
 
