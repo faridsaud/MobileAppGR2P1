@@ -45,7 +45,7 @@ public class ServiceFiesta {
 		return false;
 	}
 	
-	public void registrarCiudad(Fiesta fiesta){
+	public void registrarFiesta(Fiesta fiesta){
 		if (existeFiesta(fiesta.getNombreFiesta()) == false){
 			try {
 				java.sql.Connection con = establecerConexion();

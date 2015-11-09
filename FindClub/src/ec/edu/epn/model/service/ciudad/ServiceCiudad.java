@@ -89,15 +89,19 @@ public class ServiceCiudad {
 	
 	public List<Ciudad> listarCiudad(Ciudad ciudad){
 		List<Ciudad> listaCiudad = new ArrayList<Ciudad>();
-		PreparedStatement st;
+		PreparedStatement st = null;
 		ServicePais sp = new ServicePais();
 			
 		try{
 			java.sql.Connection con = establecerConexion();
+			System.out.println(ciudad.getNombreCiudad());
 			if (ciudad.getNombreCiudad().equals("")){
 				st = con.prepareStatement("Select * from CIUDAD where IDPAIS = ?");
 				st.setInt(1, sp.identificadorPais(ciudad.getNombrePais()));
-			}else{
+				System.out.println("f"+ciudad.getNombreCiudad()+ciudad.getNombrePais()+"t");
+			} 
+			else {
+				System.out.println("t"+ciudad.getNombreCiudad()+"t");
 				st = con.prepareStatement("Select * from CIUDAD where IDPAIS = ? and NOMBRECIUDAD = ?");
 				st.setInt(1, sp.identificadorPais(ciudad.getNombrePais()));
 				st.setString(2, ciudad.getNombreCiudad());

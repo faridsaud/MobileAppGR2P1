@@ -7,7 +7,7 @@
 
       <div class="row">
         <div class="col-xs-12">
-  <a href="./registrar.html" class="btn btn-default btn-block">Registrar</a>
+  <a href="Registrar" class="btn btn-default btn-block">Registrar</a>
           </div>
       </div>
       <div class="row">
@@ -17,7 +17,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <a href="./administrar.html" class="btn btn-default btn-block">Administrar</a>
+          <a href="Administrar" class="btn btn-default btn-block">Administrar</a>
         </div>
       </div>
       <div class="row">

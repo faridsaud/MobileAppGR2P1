@@ -7,11 +7,12 @@
 	List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
 	List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
 	List<Discoteca> listaDiscoteca = (List<Discoteca>) request.getAttribute("listaDiscoteca");
-	List<Musica> listaMusica = (List<Musica>) request.getAttribute("listaMusica");
 %>
     <div class="container">
-      <form method="post">
-      <label for="pais">Pais</label>
+      
+      <form action="${pageContext.request.contextPath}/Fiesta/CargarCuidad">
+      <div class="form-group">
+      	<label for="pais">Pais</label>
           <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
             <%
         		int contadorElementos = 0;
@@ -30,7 +31,12 @@
               	}
               %>
           </select>
-          <select name="ciudad" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
+       </div>
+       </form>
+       
+       <div class="form-group">
+       <label for="pais">Ciudad</label>
+          <select name="ciudad" class="form-control" id="ciudad" name="ciudad1" placeholder="Ciudad" required="true">
             <%
         		contadorElementos = 0;
             	try{
@@ -48,17 +54,20 @@
               	}
               %>
           </select>
-          <select name="ciudad" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
+       </div>
+       <div class="form-group">
+       <label for="pais">Discoteca</label>
+          <select name="discoteca" class="form-control" id="discoteca" name="discoteca" placeholder="Discoteca" required="true">
             <%
         		contadorElementos = 0;
             	try{
               		for (Discoteca d: listaDiscoteca){
               			if (contadorElementos == 0){
-                  			%><option selected value="<%=d.getNombreDiscoteca()%>"><%=d.getNombreDiscoteca()%></option><%
+                  			%><option selected value="<%=d.getNombre()%>"><%=d.getNombre()%></option><%
                   			contadorElementos++;
                   		}
                   		else{
-                  			%><option value="<%=d.getNombreDiscoteca()%>"><%=d.getNombreDiscoteca()%></option><%
+                  			%><option value="<%=d.getNombre()%>"><%=d.getNombre()%></option><%
                   		}
               		}
               	}catch(Exception e){
@@ -66,17 +75,24 @@
               	}
               %>
           </select>
+        </div>
+        
+      <form method="post">
         <div class="form-group">
           <label for="email">Nombre</label>
-          <input type="nombreFiesta" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" required="true">
+          <input type="text" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" required="true">
         </div>
         <div class="form-group">
-          <label for="email">Nombre</label>
-          <input type="nombreFiesta" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" required="true">
+          <label for="email">Fecha</label>
+          <input type="date" class="form-control" id="fecha" placeholder="yyyy-mm-dd" name="fecha" required="true">
         </div>
         <div class="form-group">
-          <label for="email">Nombre</label>
-          <input type="nombreFiesta" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" required="true">
+          <label for="email">Hora</label>
+          <input type="time" class="form-control" id="hora" placeholder="00:00:00" name="hora" required="true">
+        </div>
+        <div class="form-group">
+          <label for="email">Descripción</label>
+          <input type="text" class="form-control" id="descripcion" placeholder="Descripcion" name="descripcion" required="true">
         </div>
         <button type="submit" class="btn btn-default">Registrar</button>
       </form>

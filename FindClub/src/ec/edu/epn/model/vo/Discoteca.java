@@ -1,58 +1,73 @@
 package ec.edu.epn.model.vo;
 
+import java.awt.Image;
+
 public class Discoteca {
-	private int idDiscoteca;
-	private String nombreDiscoteca;
-	private String nombreMusica;
-	private int idCiudad;
-	private String email;
-	private String descripcionMusica;
-	private String path;
+	private String nombre="";
+	private String pais="";
+	private String ciudad="";
+	private String tipoMusica="";
+	private String emailUsr="";
+	private String descripcion="";
+	private String imagen=null;
 	
-	private Discoteca(){
-		
+	public String getEmailUsr() {
+		return emailUsr;
+	}
+
+	public void setEmailUsr(String emailUsr) {
+		this.emailUsr = emailUsr;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 	
-	public int getIdDiscoteca() {
-		return idDiscoteca;
+	public Discoteca() {
 	}
-	public void setIdDiscoteca(int idDiscoteca) {
-		this.idDiscoteca = idDiscoteca;
+
+	public String getNombre() {
+		return nombre;
 	}
-	public String getNombreDiscoteca() {
-		return nombreDiscoteca;
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
-	public void setNombreDiscoteca(String nombreDiscoteca) {
-		this.nombreDiscoteca = nombreDiscoteca;
+
+	public String getPais() {
+		return pais;
 	}
-	public String getNombreMusica() {
-		return nombreMusica;
+
+	public void setPais(String pais) {
+		this.pais = pais;
 	}
-	public void setNombreMusica(String nombreMusica) {
-		this.nombreMusica = nombreMusica;
+
+	public String getCiudad() {
+		return ciudad;
 	}
-	public int getIdCiudad() {
-		return idCiudad;
+
+	public void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
 	}
-	public void setIdCiudad(int idCiudad) {
-		this.idCiudad = idCiudad;
+
+	public String getTipoMusica() {
+		return tipoMusica;
 	}
-	public String getEmail() {
-		return email;
+
+	public void setTipoMusica(String tipoMusica) {
+		this.tipoMusica = tipoMusica;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+
+	public String getImagen() {
+		return imagen;
 	}
-	public String getDescripcionMusica() {
-		return descripcionMusica;
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
-	public void setDescripcionMusica(String descripcionMusica) {
-		this.descripcionMusica = descripcionMusica;
-	}
-	public String getPath() {
-		return path;
-	}
-	public void setPath(String path) {
-		this.path = path;
-	}
+
 }
