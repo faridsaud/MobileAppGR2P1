@@ -6,8 +6,8 @@
 <%	
 	List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
 	List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
-	List<Pais> listaDiscoteca = (List<Pais>) request.getAttribute("listaDiscoteca");
-	List<Pais> listaMusica = (List<Pais>) request.getAttribute("listaMusica");
+	List<Discoteca> listaDiscoteca = (List<Discoteca>) request.getAttribute("listaDiscoteca");
+	List<Musica> listaMusica = (List<Musica>) request.getAttribute("listaMusica");
 %>
     <div class="container">
       <form method="post">
@@ -34,13 +34,31 @@
             <%
         		contadorElementos = 0;
             	try{
-              		for (Pais p: listaPais){
+              		for (Ciudad c: listaCiudad){
               			if (contadorElementos == 0){
-                  			%><option selected value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+                  			%><option selected value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
                   			contadorElementos++;
                   		}
                   		else{
-                  			%><option value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+                  			%><option value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
+                  		}
+              		}
+              	}catch(Exception e){
+              		
+              	}
+              %>
+          </select>
+          <select name="ciudad" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
+            <%
+        		contadorElementos = 0;
+            	try{
+              		for (Discoteca d: listaDiscoteca){
+              			if (contadorElementos == 0){
+                  			%><option selected value="<%=d.getNombreDiscoteca()%>"><%=d.getNombreDiscoteca()%></option><%
+                  			contadorElementos++;
+                  		}
+                  		else{
+                  			%><option value="<%=d.getNombreDiscoteca()%>"><%=d.getNombreDiscoteca()%></option><%
                   		}
               		}
               	}catch(Exception e){
