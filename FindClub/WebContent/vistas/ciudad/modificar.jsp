@@ -3,7 +3,7 @@
 <%@page import="ec.edu.epn.model.vo.Ciudad, ec.edu.epn.model.vo.Usuario, ec.edu.epn.model.vo.Pais, java.util.*"%>
 
 <jsp:include page="/templates/header.jsp"></jsp:include>
-
+<%-- --%>
     <div class="container">
     <%
     	Ciudad ciudadModificar = new Ciudad();

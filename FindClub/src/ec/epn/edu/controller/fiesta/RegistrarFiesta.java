@@ -58,11 +58,11 @@ public class RegistrarFiesta extends HttpServlet {
 		java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 		request.setAttribute("listaCiudad", listaCiudad);
 		
-//		discoteca = sd.buscarDiscotecaByCiudad(request.getParameter("ciudad"));
-//		discoteca.setNombre("");
-//		java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(discoteca.getNombre(), discoteca);
-//		request.setAttribute("listaDiscoteca", listaDiscoteca);
-//		
+		discoteca = sd.buscarDiscotecaByCiudad(request.getParameter("ciudad"));
+		discoteca.setNombre("");
+		java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(discoteca.getNombre(), discoteca);
+		request.setAttribute("listaDiscoteca", listaDiscoteca);
+		
 		getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/registrar.jsp").forward(request, response);
 	}
 

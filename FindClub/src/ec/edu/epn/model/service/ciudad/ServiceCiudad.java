@@ -38,6 +38,20 @@ public class ServiceCiudad {
 		return false;
 	}
 	
+	public int identificadorCiudad(String nombreCiudad){
+		ServiceCiudad sc= new ServiceCiudad();
+		Ciudad ciudad = new Ciudad();
+		sc.buscarCiudad(ciudad, nombreCiudad);
+		return ciudad.getIdCiudad();
+	}
+
+	public String nombrePais(int identificadorPais){
+		ServiceCiudad sc= new ServiceCiudad();
+		Ciudad ciudad = new Ciudad();
+		sc.buscarNombreCiudad(identificadorPais);
+		return ciudad.getNombrePais();
+	}
+	
 	public void registrarCiudad(Ciudad ciudad){
 		boolean insertarRegistro = existeCiudad(ciudad.getNombreCiudad());
 		ServicePais sp = new ServicePais();
@@ -87,6 +101,29 @@ public class ServiceCiudad {
 		return ciudad;
 	}
 	
+	public Ciudad buscarNombreCiudad(int identificadorCiudad){
+		Ciudad ciudad = new Ciudad();
+		try {
+			java.sql.Connection con = establecerConexion();
+			PreparedStatement st = con.prepareStatement("Select * from PAIS, USUARIO where IDPAIS = ?");
+			st.setInt(1, identificadorCiudad);
+			st.execute();
+			
+			ResultSet rs = st.getResultSet();
+			while (rs.next()){
+				ciudad.setIdCiudad(rs.getInt("IDCIUDAD"));
+				ciudad.setNombreCiudad(rs.getString("NOMBRECIUDAD"));
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ciudad;
+	}
+	
 	public List<Ciudad> listarCiudad(Ciudad ciudad){
 		List<Ciudad> listaCiudad = new ArrayList<Ciudad>();
 		PreparedStatement st = null;
@@ -94,14 +131,11 @@ public class ServiceCiudad {
 			
 		try{
 			java.sql.Connection con = establecerConexion();
-			System.out.println(ciudad.getNombreCiudad());
 			if (ciudad.getNombreCiudad().equals("")){
 				st = con.prepareStatement("Select * from CIUDAD where IDPAIS = ?");
 				st.setInt(1, sp.identificadorPais(ciudad.getNombrePais()));
-				System.out.println("f"+ciudad.getNombreCiudad()+ciudad.getNombrePais()+"t");
 			} 
 			else {
-				System.out.println("t"+ciudad.getNombreCiudad()+"t");
 				st = con.prepareStatement("Select * from CIUDAD where IDPAIS = ? and NOMBRECIUDAD = ?");
 				st.setInt(1, sp.identificadorPais(ciudad.getNombrePais()));
 				st.setString(2, ciudad.getNombreCiudad());
