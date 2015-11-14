@@ -25,6 +25,6 @@
         <button type="submit" class="btn btn-default">Registrar</button>
       </form>
     </div>
-
-
+    
+    
 <jsp:include page="/templates/footer.jsp"></jsp:include>
