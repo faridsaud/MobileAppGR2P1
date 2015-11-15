@@ -1,39 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="java.util.*,ec.edu.epn.model.vo.*"%>
+    <%@page import="ec.edu.epn.model.vo.Pais, ec.edu.epn.model.vo.Ciudad, ec.edu.epn.model.vo.Usuario, ec.edu.epn.model.vo.Musica, java.util.*"%>
 	<jsp:include page="/templates/header.jsp"></jsp:include>
 	 <div class="container">
-	 <%
-		Usuario usrIniciado = new Usuario();
-		boolean redireccion = true;
-	
-		try {
-			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
-			if (usrIniciado.isEstado() == true) {
-				redireccion = false;
-			}
-		} catch (Exception e) {
-			System.out.println("Error obteniendo usuario");
-		}	
-		if (redireccion == true) {
-			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
-		}
-
-		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
+    <%
+		String email = (String)request.getAttribute("emailUsr");
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
+		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
 		List<Musica> listaMusica = (List<Musica>) request.getAttribute("listaMusica");
-		
 	%>
       <form method="post">
         <div class="form-group">
           <label for="nombre">Nombre</label>
-          <input type="nombre" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required="true">
+          <input type="nombre" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required = true>
         </div>
 
         <div class="form-group">
-          <label for="pais">País</label>
-          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
-        		<%
+          <label for="pais">Pais</label>
+          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais">
+            <%
         		int contadorElementos = 0;
             	try{
               		for (Pais p: listaPais){
@@ -42,7 +27,7 @@
                   			contadorElementos++;
                   		}
                   		else{
-                  			%><option value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+                  			%><option value="<%=p.getNombrePais()%>"><%= p.getNombrePais()%></option><%
                   		}
               		}
               	}catch(Exception e){
@@ -54,14 +39,14 @@
 
         <div class="form-group">
           <label for="ciudad">Ciudad</label>
-          <select name="ciudad" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
+          <select name="ciudad" class="form-control" id="pais" name="pais" placeholder="Pais">
             	<%
-        		int contadorElementos1 = 0;
+        		int contador2 = 0;
             	try{
               		for (Ciudad c: listaCiudad){
-              			if (contadorElementos1 == 0){
+              			if (contador2 == 0){
                   			%><option selected value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
-                  			contadorElementos1++;
+                  			contador2++;
                   		}
                   		else{
                   			%><option value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
@@ -79,12 +64,12 @@
           <label for="tipoMusica">Tipo de musica principal</label>
           <select name="tipoMusica" class="form-control" id="tipoMusica">
             	<%
-        		int contadorElementos2 = 0;
+        		int contador3 = 0;
             	try{
               		for (Musica m: listaMusica){
-              			if (contadorElementos2 == 0){
+              			if (contador3 == 0){
                   			%><option selected value="<%=m.getNombreTipo()%>"><%=m.getNombreTipo()%></option><%
-                  			contadorElementos2++;
+                  			contador3++;
                   		}
                   		else{
                   			%><option value="<%=m.getNombreTipo()%>"><%=m.getNombreTipo()%></option><%
@@ -97,41 +82,17 @@
           </select>
         </div>
 
-
-        <div class="form-group">
-          <label>Tragos</label>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" value="fuerte" name="tipoTrago">
-              Fuerte
-            </label>
-            <label>
-              <input type="checkbox" value="cocteles" name="tipoTrago">
-              Cocteles
-            </label>
-            <label>
-              <input type="checkbox" value="cerveza" name="tipoTrago">
-              Cervezas
-            </label>
-
-            <label>
-              <input type="checkbox" value="noAlcoholicas" name="tipoTrago">
-              Bebidas no alcohólicas
-            </label>
-          </div>
-        </div>
-
-
         <div class="form-group">
           <label for="descripcion">Descripción</label>
           <textarea name="descripcion" class="form-control" rows="5" id="descripcion" placeholder="dirección, tipo de vestimenta, etc" required=true></textarea>
         </div>
         <div class="form-group">
-          <label for="imagen">Imágen de la discoteca</label>
-          <input type="file" id="imagen">
+          <label for="inputFile">Imágen de la discoteca</label>
+          <input type="file" id="inputFile", name="imagen">
           <p class="help-block">Foto que muestre algo característico de la discoteca</p>
         </div>
         <button type="submit" class="btn btn-default">Registrar</button>
+
       </form>
 
     </div>

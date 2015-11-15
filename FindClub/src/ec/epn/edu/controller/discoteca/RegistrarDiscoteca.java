@@ -1,5 +1,6 @@
 package ec.epn.edu.controller.discoteca;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,10 +8,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import sun.text.normalizer.UBiDiProps;
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
+import ec.edu.epn.model.service.musica.ServiceMusica;
+import ec.edu.epn.model.service.pais.ServicePais;
+import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
-import ec.edu.epn.model.vo.Usuario;
+import ec.edu.epn.model.vo.Fiesta;
+import ec.edu.epn.model.vo.Musica;
+import ec.edu.epn.model.vo.Pais;
 
 /**
  * Servlet implementation class RegistrarDiscoteca
@@ -32,6 +38,24 @@ public class RegistrarDiscoteca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ServicePais sp = new ServicePais();
+		Pais p = new Pais();
+		p.setNombrePais("");
+		List<Pais> listaPais = sp.listarPais(p);
+		request.setAttribute("listaPais", listaPais);
+		
+		ServiceCiudad sc = new ServiceCiudad();
+		Ciudad c = new Ciudad();
+		c.setNombrePais("");
+		List<Ciudad> listaCiudad = sc.listarCiudad(c);
+		request.setAttribute("listaCiudad", listaCiudad);
+		request.setAttribute("listaPais", listaPais);
+		
+		ServiceMusica sm = new ServiceMusica();
+		Musica m = new Musica();
+		m.setNombreTipo("");
+		List<Musica> listaMusica = sm.listarMusica();
+		request.setAttribute("listaMusica", listaMusica);
 		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/registrar.jsp").forward(request, response);
 	}
 
@@ -54,9 +78,8 @@ public class RegistrarDiscoteca extends HttpServlet {
 			tipoMusica=request.getParameter("tipoMusica");
 			imagen=request.getParameter("imagen");
 			descripcion=request.getParameter("descripcion");
-			emailUsr=request.getParameter("emailUsuario");
+			emailUsr=request.getParameter("emailUsr");
 			Discoteca disco = new Discoteca();
-			Usuario usr = new Usuario();
 			disco.setNombre(nombre);
 			disco.setPais(pais);
 			disco.setCiudad(ciudad);
@@ -78,5 +101,4 @@ public class RegistrarDiscoteca extends HttpServlet {
 			doGet(request, response);
 		}
 	}
-
 }

@@ -9,13 +9,14 @@ import java.util.List;
 
 import org.apache.taglibs.standard.tag.common.sql.DriverManagerAccessor;
 
+import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
+
 import ec.edu.epn.model.vo.Discoteca;
 import ec.edu.epn.model.vo.Usuario;
 public class ServiceDiscoteca {
 	
 	public Discoteca buscarDiscoteca(String nombreDisco){
 		Discoteca disco = new Discoteca();
-		Usuario usr = new Usuario();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
@@ -28,7 +29,6 @@ public class ServiceDiscoteca {
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
 				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
-				usr.setEmail(rs.getString("EMAILUSR"));
 				disco.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
 				disco.setDescripcion(rs.getString("DESCRIPCION"));
@@ -61,7 +61,6 @@ public class ServiceDiscoteca {
 			st.execute();
 			st.close();
 			con.close();
-
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,7 +68,6 @@ public class ServiceDiscoteca {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 	public List<Discoteca> listarDiscoteca(String nombre, Discoteca disco) {
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
@@ -78,8 +76,7 @@ public class ServiceDiscoteca {
 
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
-			PreparedStatement st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA = ?");
-			st.setString(1, nombre);
+			PreparedStatement st = con.prepareStatement("Select * from DISCOTECA ");
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
@@ -118,7 +115,7 @@ public class ServiceDiscoteca {
 			st.setString(4, discoModificador.getEmailUsr());
 			st.setString(5, discoModificador.getDescripcion());
 			st.setString(6, discoModificador.getImagen());
-			st.setString(7, discoModificar.getEmailUsr());
+			st.setString(7, discoModificar.getNombre());
 			st.execute();
 			st.close();
 			con.close();
@@ -194,6 +191,7 @@ public class ServiceDiscoteca {
 		}
 		return disco;
 	}
+	
 	public void eliminarDiscoteca(Discoteca disco) {
 		
 		try {

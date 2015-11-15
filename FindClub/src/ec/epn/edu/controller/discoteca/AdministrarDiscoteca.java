@@ -8,8 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
+import ec.edu.epn.model.service.musica.ServiceMusica;
+import ec.edu.epn.model.service.pais.ServicePais;
+import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
+import ec.edu.epn.model.vo.Musica;
+import ec.edu.epn.model.vo.Pais;
 import ec.edu.epn.model.vo.Usuario;
 
 /**
@@ -47,16 +53,35 @@ public class AdministrarDiscoteca extends HttpServlet {
 		} else {
 			ServiceDiscoteca sd = new ServiceDiscoteca();
 			String nombre = "";
-			String pais = "";
-			String ciudad = "";
 			String tipoMusica = "";
 			String imagen = "";
+			String nombreCiudad = request.getParameter("ciudad");
+			String nombrePais = request.getParameter("pais");
 			String descripcion = "";
 			String email = "";
+			ServicePais sp = new ServicePais();
+			ServiceCiudad sc = new ServiceCiudad();
+			ServiceMusica sm = new ServiceMusica();
+			Ciudad ciudad = new Ciudad();
+			Pais pais = new Pais();
+			if (nombreCiudad == null)
+				nombreCiudad = "";
+			ciudad.setNombreCiudad(nombreCiudad);
+			if (nombrePais == null)
+				nombrePais = "";
+			pais.setNombrePais("");
+			ciudad.setNombrePais(nombrePais);
+			List<Pais> listaPais = sp.listarPais(pais);
+			request.setAttribute("listaPais", listaPais);
+			List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
+			request.setAttribute("listaCiudad", listaCiudad);
+			request.setAttribute("listaPais", listaPais);
+			List<Musica> listaMusica = sm.listarMusicaByTipo(tipoMusica);
+			request.setAttribute("listaMusica", listaMusica);
 			try{
 				nombre=request.getParameter("nombre");
-				pais=request.getParameter("pais");
-				ciudad=request.getParameter("ciudad");
+				nombrePais=request.getParameter("pais");
+				nombreCiudad=request.getParameter("ciudad");
 				tipoMusica=request.getParameter("tipoMusica");
 				imagen=request.getParameter("imagen");
 				descripcion=request.getParameter("descripcion");
@@ -68,6 +93,7 @@ public class AdministrarDiscoteca extends HttpServlet {
 			List<Discoteca> listarDiscotecas = sd.listarDiscoteca(nombre, disco);
 			request.setAttribute("listaDiscotecas", listarDiscotecas);
 			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/administrar.jsp").forward(request, response);
+			
 		}
 	}
 	/**
@@ -75,6 +101,7 @@ public class AdministrarDiscoteca extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		doGet(request, response);
 	}
 
