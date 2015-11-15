@@ -15,6 +15,9 @@ import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Fiesta;
 import ec.edu.epn.model.vo.Usuario;
 
+/***
+ * @author Samantha Molina
+ */
 public class ServiceFiesta {
 	
 	private String driver = "com.mysql.jdbc.Driver";
@@ -155,47 +158,47 @@ public class ServiceFiesta {
 //		}
 		return listaFiesta;
 	}
-	
-	public void modificarCiudad(Ciudad ciudadModificar, Ciudad ciudadModificador){
-		Fiesta fiesta = new Fiesta();
-		if (existeFiesta(fiesta.getNombreFiesta()) == false){
-		ServicePais sp = new ServicePais();
-				
-			try {
-				java.sql.Connection con = establecerConexion();
-				PreparedStatement st = 
-					con.prepareStatement("Update CIUDAD set NOMBRECIUDAD=?, IDPAIS=? where NOMBRECIUDAD=?");
-				st.setString(1, ciudadModificador.getNombreCiudad());
-				st.setInt(2, sp.identificadorPais(ciudadModificador.getNombrePais()));
-				st.setString(3, ciudadModificar.getNombreCiudad());
-				st.execute();
-				st.close();
-				con.close();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void eliminarCiudad(Ciudad ciudad){
-		try {
-			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Delete from CIUDAD where NOMBRECIUDAD=?");
-			st.setString(1, ciudad.getNombreCiudad());
-			st.execute();
-			st.close();
-			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	
+//	public void modificarCiudad(Ciudad ciudadModificar, Ciudad ciudadModificador){
+//		Fiesta fiesta = new Fiesta();
+//		if (existeFiesta(fiesta.getNombreFiesta()) == false){
+//		ServicePais sp = new ServicePais();
+//				
+//			try {
+//				java.sql.Connection con = establecerConexion();
+//				PreparedStatement st = 
+//					con.prepareStatement("Update CIUDAD set NOMBRECIUDAD=?, IDPAIS=? where NOMBRECIUDAD=?");
+//				st.setString(1, ciudadModificador.getNombreCiudad());
+//				st.setInt(2, sp.buscarPais(cuidad, identificadorPais).identificadorPais(ciudadModificador.getNombrePais()));
+//				st.setString(3, ciudadModificar.getNombreCiudad());
+//				st.execute();
+//				st.close();
+//				con.close();
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+//	
+//	public void eliminarCiudad(Ciudad ciudad){
+//		try {
+//			java.sql.Connection con = establecerConexion();
+//			PreparedStatement st = con.prepareStatement("Delete from CIUDAD where NOMBRECIUDAD=?");
+//			st.setString(1, ciudad.getNombreCiudad());
+//			st.execute();
+//			st.close();
+//			con.close();
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
 }

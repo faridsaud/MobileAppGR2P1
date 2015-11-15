@@ -5,7 +5,7 @@ import java.awt.Image;
 public class Discoteca {
 	private String nombre="";
 	private String pais="";
-	private String ciudad="";
+	private int idCiudad;
 	private String tipoMusica="";
 	private String emailUsr="";
 	private String descripcion="";
@@ -46,12 +46,12 @@ public class Discoteca {
 		this.pais = pais;
 	}
 
-	public String getCiudad() {
-		return ciudad;
+	public int getCiudad() {
+		return idCiudad;
 	}
 
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
+	public void setCiudad(int ciudad) {
+		this.idCiudad = ciudad;
 	}
 
 	public String getTipoMusica() {
@@ -68,6 +68,11 @@ public class Discoteca {
 
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
+	}
+
+	public void setIdCiudad(int int1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

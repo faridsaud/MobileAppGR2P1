@@ -1,5 +1,9 @@
 package ec.edu.epn.model.vo;
 
+/***
+ * @author Samantha Molina
+ */
+
 public class Ciudad {
 	private int idCiudad;
 	private int idPais;

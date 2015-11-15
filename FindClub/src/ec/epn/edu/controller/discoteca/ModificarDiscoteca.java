@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.cuenta.ServiceUsuario;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
 import ec.edu.epn.model.vo.Discoteca;
@@ -55,13 +56,14 @@ public class ModificarDiscoteca extends HttpServlet {
 		// TODO Auto-generated method stub
 		Discoteca discoModificador=new Discoteca();
 		Discoteca discoModificar=new Discoteca();
+		ServiceCiudad sc = new ServiceCiudad();
 		try{
 			
 			discoModificar=(Discoteca)request.getSession().getAttribute("discotecaModificar");
 			discoModificador.setEmailUsr(request.getParameter("email"));
 			discoModificador.setNombre(request.getParameter("nombre"));
 			discoModificador.setPais(request.getParameter("pais"));
-			discoModificador.setCiudad(request.getParameter("ciudad"));
+			discoModificador.setCiudad(sc.buscarCiudad(request.getParameter("ciudad")).getIdCiudad());
 			discoModificador.setTipoMusica(request.getParameter("tipoMusica"));
 			discoModificador.setImagen(request.getParameter("imagen"));
 			ServiceDiscoteca sd=new ServiceDiscoteca();

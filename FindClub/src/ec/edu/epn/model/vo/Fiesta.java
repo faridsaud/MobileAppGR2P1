@@ -2,6 +2,9 @@ package ec.edu.epn.model.vo;
 
 import java.sql.Date;
 
+/**
+ * @author Samantha Molina
+ */
 public class Fiesta {
 	private int idFiesta;
 	private String email;

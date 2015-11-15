@@ -9,8 +9,10 @@ import java.util.List;
 
 import org.apache.taglibs.standard.tag.common.sql.DriverManagerAccessor;
 
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.vo.Discoteca;
 import ec.edu.epn.model.vo.Usuario;
+
 public class ServiceDiscoteca {
 	
 	public Discoteca buscarDiscoteca(String nombreDisco){
@@ -27,7 +29,7 @@ public class ServiceDiscoteca {
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco.setIdCiudad(rs.getInt("IDCIUDAD"));
 				usr.setEmail(rs.getString("EMAILUSR"));
 				disco.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
@@ -54,7 +56,7 @@ public class ServiceDiscoteca {
 					"Insert into DISCOTECA (NOMBREDISCOTECA,NOMBRETIPOMUSICA, NOMBRECIUDAD, EMAILUSR, DESCRIPCIONDISCOTECA, PATHIMAGENDISCOTECA) values (?,?,?,?,?,?) ");
 			st.setString(1, disco.getNombre());
 			st.setString(2, disco.getTipoMusica());
-			st.setString(3, disco.getCiudad());
+			st.setInt(3, disco.getCiudad());
 			st.setString(4, disco.getEmailUsr());
 			st.setString(5, disco.getDescripcion());
 			st.setString(6, disco.getImagen());
@@ -69,8 +71,8 @@ public class ServiceDiscoteca {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
+	
 	public List<Discoteca> listarDiscoteca(String nombre, Discoteca disco) {
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
 		try {
@@ -78,15 +80,14 @@ public class ServiceDiscoteca {
 
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
-			PreparedStatement st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA = ?");
-			st.setString(1, nombre);
+			PreparedStatement st = con.prepareStatement("Select * from DISCOTECA");
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
 			while (rs.next()) {
 				Discoteca disco1 = new Discoteca();
 				disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco1.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco1.setIdCiudad(rs.getInt("IDCIUDAD"));
 				disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco1.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
 				disco1.setEmailUsr(rs.getString("EMAILUSR"));
@@ -111,10 +112,10 @@ public class ServiceDiscoteca {
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con.prepareStatement(
-					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, NOMBRECIUDAD=?, EMAILUSER=?, DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? WHERE NOMBREDISCOTECA=?");
+					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, IDCIUDAD=?, EMAILUSER=?, DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? WHERE NOMBREDISCOTECA=?");
 			st.setString(1, discoModificador.getNombre());
 			st.setString(2, discoModificador.getTipoMusica());
-			st.setString(3, discoModificador.getCiudad());
+			st.setInt(3, discoModificador.getCiudad());
 			st.setString(4, discoModificador.getEmailUsr());
 			st.setString(5, discoModificador.getDescripcion());
 			st.setString(6, discoModificador.getImagen());
@@ -135,17 +136,18 @@ public class ServiceDiscoteca {
 	public Discoteca buscarDiscotecaByCiudad(String ciudad){
 		Discoteca disco = new Discoteca();
 		try{
+			ServiceCiudad sc = new ServiceCiudad();
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
-					.prepareStatement("Select * from DISCOTECA where NOMBRECIUDAD=?");
-			st.setString(1, ciudad);
+					.prepareStatement("Select * from DISCOTECA where IDCIUDAD=?");
+			st.setInt(1, sc.buscarCiudad(ciudad).getIdCiudad());
 			st.execute();
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREUSR"));
-				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco.setIdCiudad(rs.getInt("IDCIUDAD"));
 				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
@@ -176,7 +178,7 @@ public class ServiceDiscoteca {
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREUSR"));
-				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco.setIdCiudad(rs.getInt("IDCIUDAD"));
 				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));

@@ -16,6 +16,7 @@ import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class ModificarCiudad
+ * @author Samantha Molina
  */
 @WebServlet("/Ciudad/Modificar")
 public class ModificarCiudad extends HttpServlet {
@@ -36,7 +37,7 @@ public class ModificarCiudad extends HttpServlet {
 		// TODO Auto-generated method stub
 		Ciudad ciudad = new Ciudad();
 		ServiceCiudad sc = new ServiceCiudad();
-		ciudad = sc.buscarCiudad(ciudad, (String)request.getParameter("nombreCiudadModificar"));
+		ciudad = sc.buscarCiudad((String)request.getParameter("nombreCiudadModificar"));
 		
 		request.getSession().setAttribute("ciudadModificar", ciudad);
 		

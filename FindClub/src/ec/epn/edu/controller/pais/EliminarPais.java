@@ -15,6 +15,7 @@ import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class EliminarPais
+ * @author Samantha Molina
  */
 @WebServlet("/Pais/Eliminar")
 public class EliminarPais extends HttpServlet {

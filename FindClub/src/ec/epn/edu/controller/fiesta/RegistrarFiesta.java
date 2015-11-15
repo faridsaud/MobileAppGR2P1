@@ -46,20 +46,27 @@ public class RegistrarFiesta extends HttpServlet {
 		Ciudad ciudad = new Ciudad();
 		Discoteca discoteca = new Discoteca();
 		
-		pais.setNombrePais("");
+		String nombrePais = request.getParameter("pais");
+		String nombreCiudad = request.getParameter("ciudad");
+		
+		if (nombreCiudad == null)
+			nombreCiudad = "";
+		if (nombrePais == null)
+			nombrePais = "";
+		
+		pais.setNombrePais(nombrePais);
+		ciudad.setNombreCiudad("");
+		ciudad.setNombrePais("");
+		
 		java.util.List<Pais> listaPais = sp.listarPais(pais);
 		request.setAttribute("listaPais", listaPais);
-		
-		String nombrePais = (String) request.getParameter("pais");
-		if(nombrePais == null)
-			nombrePais = listaPais.get(0).getNombrePais();
-		ciudad.setNombrePais(nombrePais);
-		ciudad.setNombreCiudad("");
+
 		java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 		request.setAttribute("listaCiudad", listaCiudad);
 		
-		discoteca = sd.buscarDiscotecaByCiudad(request.getParameter("ciudad"));
+		discoteca = sd.buscarDiscotecaByCiudad(nombreCiudad);
 		discoteca.setNombre("");
+		
 		java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(discoteca.getNombre(), discoteca);
 		request.setAttribute("listaDiscoteca", listaDiscoteca);
 		
@@ -91,9 +98,8 @@ public class RegistrarFiesta extends HttpServlet {
 				System.out.println("Error obteniendo usuario");
 			}
 			if (redireccion == true) {
-				getServletConfig().getServletContext().getRequestDispatcher("/Ciudad/Home").forward(request, response);
+				getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
 			} else {
-				getServletConfig().getServletContext().getRequestDispatcher("/vistas/ciudad/registrar.jsp").forward(request, response);
 				email = usrIniciado.getEmail();
 				nombreDiscoteca = request.getParameter("discoteca");
 				nombreFiesta = request.getParameter("nombreFiesta");

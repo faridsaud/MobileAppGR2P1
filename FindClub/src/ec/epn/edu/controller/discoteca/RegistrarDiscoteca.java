@@ -8,8 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import sun.text.normalizer.UBiDiProps;
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
+import ec.edu.epn.model.service.pais.ServicePais;
+import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
+import ec.edu.epn.model.vo.Pais;
 import ec.edu.epn.model.vo.Usuario;
 
 /**
@@ -32,6 +36,28 @@ public class RegistrarDiscoteca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ServicePais sp = new ServicePais();
+		ServiceCiudad sc = new ServiceCiudad();
+		Ciudad ciudad = new Ciudad();
+		Pais pais = new Pais();
+		
+		String nombreCiudad = request.getParameter("ciudad");
+		if (nombreCiudad == null)
+			nombreCiudad = "";
+		ciudad.setNombreCiudad(nombreCiudad);
+		
+		String nombrePais = request.getParameter("pais");
+		if (nombrePais == null)
+			nombrePais = "";
+		pais.setNombrePais("");
+		ciudad.setNombrePais(nombrePais);
+		
+		java.util.List<Pais> listaPais = sp.listarPais(pais);
+		request.setAttribute("listaPais", listaPais);
+		
+		java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
+		request.setAttribute("listaCiudad", listaCiudad);
+		
 		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/registrar.jsp").forward(request, response);
 	}
 
@@ -47,7 +73,9 @@ public class RegistrarDiscoteca extends HttpServlet {
 		String imagen="";
 		String descripcion="";
 		String emailUsr="";
+		
 		try{
+			ServiceCiudad sc = new ServiceCiudad();
 			nombre=request.getParameter("nombre");
 			pais=request.getParameter("pais");
 			ciudad=request.getParameter("ciudad");
@@ -55,15 +83,17 @@ public class RegistrarDiscoteca extends HttpServlet {
 			imagen=request.getParameter("imagen");
 			descripcion=request.getParameter("descripcion");
 			emailUsr=request.getParameter("emailUsuario");
+			
 			Discoteca disco = new Discoteca();
 			Usuario usr = new Usuario();
 			disco.setNombre(nombre);
 			disco.setPais(pais);
-			disco.setCiudad(ciudad);
+			disco.setCiudad(sc.buscarCiudad(ciudad).getIdCiudad());
 			disco.setTipoMusica(tipoMusica);
 			disco.setImagen(imagen);
 			disco.setDescripcion(descripcion);
 			disco.setEmailUsr(emailUsr);
+			
 			ServiceDiscoteca sd = new ServiceDiscoteca();
 			sd.registrarDiscoteca(disco);
 			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/home.jsp").forward(request, response);

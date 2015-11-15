@@ -14,6 +14,7 @@ import ec.edu.epn.model.vo.Pais;
 
 /**
  * Servlet implementation class EliminarCiudad
+ * @author Samantha Molina
  */
 @WebServlet("/Ciudad/Eliminar")
 public class EliminarCiudad extends HttpServlet {
@@ -48,7 +49,7 @@ public class EliminarCiudad extends HttpServlet {
 			nombreCiudad="";
 		
 		ciudad.setNombrePais(nombreCiudad);
-		ciudad = (Ciudad) sc.buscarCiudad(ciudad, nombreCiudad);
+		ciudad = (Ciudad) sc.buscarCiudad(nombreCiudad);
 		sc.eliminarCiudad(ciudad);
 		request.setAttribute("ciudadEliminar", nombreCiudad);
 		doGet(request, response);

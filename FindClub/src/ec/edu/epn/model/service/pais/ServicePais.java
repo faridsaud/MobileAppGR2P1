@@ -12,6 +12,9 @@ import ec.edu.epn.model.vo.Pais;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/***
+ * @author Samantha Molina
+ */
 public class ServicePais {
 	
 	private String driver = "com.mysql.jdbc.Driver";
@@ -25,8 +28,8 @@ public class ServicePais {
 		return con;
 	}
 	
-	public boolean existePais(Pais pais, String nombrePais){
-		pais = buscarPais(nombrePais);
+	public boolean existePais(String nombrePais){
+		Pais pais = buscarPais(nombrePais);
 
 		try{
 			if (pais.getNombrePais().equals(nombrePais)){
@@ -39,7 +42,7 @@ public class ServicePais {
 	}
 	
 	public void registrarPais(Pais pais){
-		boolean insertarRegistro = existePais(pais, pais.getNombrePais());
+		boolean insertarRegistro = existePais(pais.getNombrePais());
 		
 		if (insertarRegistro == false){
 			try {
@@ -56,23 +59,12 @@ public class ServicePais {
 		}
 	}
 	
-	public int identificadorPais(String nombrePais){
-		ServicePais sp= new ServicePais();
-		Pais pais = sp.buscarPais(nombrePais);
-		return pais.getIdPais();
-	}
-
-	public String nombrePais(int identificadorPais){
-		ServicePais sp= new ServicePais();
-		Pais pais = sp.buscarNombrePais(identificadorPais);
-		return pais.getNombrePais();
-	}
-	
 	public Pais buscarPais(String nombrePais){
 		Pais pais = new Pais();
+		PreparedStatement st = null;
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Select * from PAIS, USUARIO where NOMBREPAIS = ?");
+			st = con.prepareStatement("Select * from PAIS where NOMBREPAIS = ?");
 			st.setString(1, nombrePais);
 			st.execute();
 			
@@ -87,15 +79,15 @@ public class ServicePais {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return pais;
 	}
 	
-	public Pais buscarNombrePais(int identificadorPais){
+	public Pais buscarPais(int identificadorPais){
 		Pais pais = new Pais();
+		PreparedStatement st = null;
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Select * from PAIS, USUARIO where IDPAIS = ?");
+			st = con.prepareStatement("Select * from PAIS where IDPAIS = ?");
 			st.setInt(1, identificadorPais);
 			st.execute();
 			
@@ -110,7 +102,6 @@ public class ServicePais {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return pais;
 	}
 	
