@@ -123,8 +123,8 @@ public class ServicePais {
 			if(pais.getNombrePais().equals("")){
 				st = con.prepareStatement("Select * from PAIS ORDER BY NOMBREPAIS");
 			}else{
-				st = con.prepareStatement("Select * from PAIS where NOMBREPAIS = ? ORDER BY NOMBREPAIS");
-				st.setString(1, pais.getNombrePais());
+				st = con.prepareStatement("Select * from PAIS where NOMBREPAIS LIKE ? ORDER BY NOMBREPAIS");
+				st.setString(1, "%"+pais.getNombrePais()+"%");
 			}
 			st.execute();
 			ResultSet rs = st.getResultSet();
