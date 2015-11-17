@@ -49,22 +49,29 @@ public class RegistrarFiesta extends HttpServlet {
 		String nombrePais = request.getParameter("pais");
 		String nombreCiudad = request.getParameter("ciudad");
 		
-		if (nombreCiudad == null)
-			nombreCiudad = "";
-		if (nombrePais == null)
+		if (nombrePais == null){
 			nombrePais = "";
-		
-		pais.setNombrePais(nombrePais);
-		ciudad.setNombreCiudad("");
-		ciudad.setNombrePais("");
+		}
+		pais.setNombrePais("");
 		
 		java.util.List<Pais> listaPais = sp.listarPais(pais);
 		request.setAttribute("listaPais", listaPais);
-
+		
+		if (nombreCiudad == null)
+			nombreCiudad = "";
+		if (nombrePais == "")
+			nombrePais = listaPais.get(0).getNombrePais();
+		
+		ciudad.setNombreCiudad("");
+		ciudad.setNombrePais(nombrePais);
+		
 		java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 		request.setAttribute("listaCiudad", listaCiudad);
 		
-		discoteca = sd.buscarDiscotecaByCiudad(nombreCiudad);
+		if (nombreCiudad == "")
+			nombreCiudad = listaCiudad.get(0).getNombreCiudad();
+		
+		discoteca.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 		discoteca.setNombre("");
 		
 		java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(discoteca.getNombre(), discoteca);
@@ -79,6 +86,8 @@ public class RegistrarFiesta extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Fiesta fiesta = new Fiesta();
+		String nombrePais;
+		String nombreCiudad;
 		String email="";
 		String nombreDiscoteca="";
 		String nombreFiesta="";
@@ -86,38 +95,54 @@ public class RegistrarFiesta extends HttpServlet {
 		String hora="";
 		String descripcion="";
 		
-		try{
-			Usuario usrIniciado = new Usuario();
-			boolean redireccion = true;
-			try {
-				usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
-				if (usrIniciado.isEstado() == true) {
-					redireccion = false;
-				}
-			} catch (Exception e) {
-				System.out.println("Error obteniendo usuario");
+		Usuario usrIniciado = new Usuario();
+		boolean redireccion = true;
+		try {
+			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+			if (usrIniciado.isEstado() == true) {
+				redireccion = false;
 			}
-			if (redireccion == true) {
-				getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
-			} else {
+		} catch (Exception e) {
+			System.out.println("Error obteniendo usuario");
+		}
+		if (redireccion == true) {
+			getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
+		} else {
+			try{
+				ServiceDiscoteca sd = new ServiceDiscoteca();
+				ServiceCiudad sc = new ServiceCiudad();
 				email = usrIniciado.getEmail();
 				nombreDiscoteca = request.getParameter("discoteca");
 				nombreFiesta = request.getParameter("nombreFiesta");
+				nombrePais = request.getParameter("pais");
+				nombreCiudad = request.getParameter("ciudad");
 				fecha = request.getParameter("fecha");
 				hora = request.getParameter("hora");
 				descripcion = request.getParameter("descripcion");
-				ServiceFiesta sf= new ServiceFiesta();
+	
+				fiesta.setNombreFiesta(nombreFiesta);
+				fiesta.setIdDiscoteca(sd.buscarDiscotecaByNombre(nombreDiscoteca, 
+						sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad()).getIdDiscoteca());
+				fiesta.setEmail(email);
+				fiesta.setFecha(fecha);
+				fiesta.setHora(hora);
+				fiesta.setDescripcion(descripcion);
+				
+				ServiceFiesta sf = new ServiceFiesta();
 				sf.registrarFiesta(fiesta);
-				getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/home.jsp").forward(request, response);
+				
+				getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/home.jsp").forward(request,
+						response);
+			}catch(Exception e){
+				email="";
+				nombreDiscoteca="";
+				nombreFiesta="";
+				fecha="";
+				hora="";
+				descripcion="";
+				doGet(request, response);
+				
 			}
-		}catch(Exception e){
-			email="";
-			nombreDiscoteca="";
-			nombreFiesta="";
-			fecha="";
-			hora="";
-			descripcion="";
-			doGet(request, response);
 		}
 	}
 

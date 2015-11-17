@@ -31,13 +31,10 @@ public class ServiceFiesta {
 		return con;
 	}
 	
-	public boolean existeFiesta(String nombreFiesta){
+	public boolean existeFiesta(String nombreFiesta, String email){
 		Fiesta fiesta = new Fiesta();
-		Usuario usrLogeado = new Usuario();
-		usrLogeado.setEmail("");
+		buscarFiesta(fiesta, nombreFiesta, email);
 		
-		buscarFiesta(fiesta, nombreFiesta, usrLogeado, usrLogeado.getEmail());
-
 		try{
 			if (fiesta.getNombreFiesta().equals(nombreFiesta)){
 				return true;
@@ -49,16 +46,16 @@ public class ServiceFiesta {
 	}
 	
 	public void registrarFiesta(Fiesta fiesta){
-		if (existeFiesta(fiesta.getNombreFiesta()) == false){
+		if (existeFiesta(fiesta.getNombreFiesta(), fiesta.getEmail()) == false){
 			try {
 				java.sql.Connection con = establecerConexion();
 				PreparedStatement st = con.prepareStatement("insert into FIESTA (IDFIESTA, EMAILUSR, IDDISCOTECA, NOMBREFIESTA, FECHAFIESTA, HORAFIESTA, DESCRIPCIONFIESTA) values (NULL,?,?,?,?,?,?)");
 				st.setString(1, fiesta.getEmail());
 				st.setInt(2, fiesta.getIdDiscoteca());
 				st.setString(3, fiesta.getNombreFiesta());
-				st.setString(3, fiesta.getFecha());
-				st.setString(4, fiesta.getHora());
-				st.setString(5, fiesta.getDescripción());
+				st.setString(4, fiesta.getFecha());
+				st.setString(5, fiesta.getHora());
+				st.setString(6, fiesta.getDescripcion());
 				
 				st.execute();
 				st.close();
@@ -73,30 +70,21 @@ public class ServiceFiesta {
 		}
 	}
 	
-	public Fiesta buscarFiesta(Fiesta fiesta, String nombreFiesta, Usuario usrLogeado, String emailUsuario){
+	public Fiesta buscarFiesta(Fiesta fiesta, String nombreFiesta, String emailUsuario){
 		try {
 			java.sql.Connection con = establecerConexion();
 			PreparedStatement st = null;
-			if ((usrLogeado.isAdmin() == true) && (emailUsuario.equals("")) && (nombreFiesta.equals(""))) {
+			if ((nombreFiesta.equals("")) && (emailUsuario.equals(""))) {
 				st = con.prepareStatement("Select * from FIESTA");
 			}
-			else if ((usrLogeado.isAdmin() == true) && (nombreFiesta.equals("") == false) && (nombreFiesta.equals(""))) {
-				st = con.prepareStatement("Select * from FIESTA where EMAILUSR LIKE ?");
+			else if ((nombreFiesta.equals("")) && (!emailUsuario.equals(""))) {
+				st = con.prepareStatement("Select * from FIESTA where EMAILUSR = ?");
 				st.setString(1, "%" + emailUsuario + "%");
 			}
-			else if ((usrLogeado.isAdmin() == true) && (emailUsuario.equals("") == false) && (nombreFiesta.equals("") == false)) {
-				st = con.prepareStatement("Select * from FIESTA where EMAILUSR LIKE ? and NOMBREFIESTA LIKE ?");
-				st.setString(1, "%" + emailUsuario + "%");
-				st.setString(2, "%" + nombreFiesta + "%");
-			}
-			else if ((usrLogeado.isAdmin() == false) && (nombreFiesta.equals(""))) {
-				st = con.prepareStatement("Select * from USUARIO where EMAILUSR=?");
-				st.setString(1, usrLogeado.getEmail());
-			}
-			else if ((usrLogeado.isAdmin() == false) && (nombreFiesta.equals("") == false)) {
-				st = con.prepareStatement("Select * from USUARIO where EMAILUSR=?");
-				st.setString(1, usrLogeado.getEmail());
-				st.setString(2, "%" + nombreFiesta + "%");
+			else if ((!nombreFiesta.equals("")) && (!emailUsuario.equals(""))) {
+				st = con.prepareStatement("Select * from FIESTA where EMAILUSR = ? and NOMBREFIESTA = ?");
+				st.setString(1, emailUsuario);
+				st.setString(2, nombreFiesta);
 			}
 			st.execute();
 			
@@ -108,7 +96,7 @@ public class ServiceFiesta {
 				fiesta.setEmail(rs.getString("EMAILUSR"));
 				fiesta.setFecha(rs.getDate("FECHAFIESTA").toString());
 				fiesta.setHora(rs.getTime("HORAFIESTA").toString());
-				fiesta.setDescripción(rs.getString("DESCRIPCIONFIESTA"));
+				fiesta.setDescripcion(rs.getString("DESCRIPCIONFIESTA"));
 			}
 			st.close();
 			con.close();
@@ -123,39 +111,45 @@ public class ServiceFiesta {
 		return fiesta;
 	}
 	
-	public List<Fiesta> listarFiesta(Fiesta fiesta){
+	public List<Fiesta> listarFiesta(Fiesta fiesta, Usuario usr){
 		List<Fiesta> listaFiesta = new ArrayList<Fiesta>();
-		PreparedStatement st;
-		ServiceCiudad sc = new ServiceCiudad();
 		ServiceDiscoteca sd = new ServiceDiscoteca();
-		ServiceMusica sm = new ServiceMusica();
-		
-//		try{
-//			java.sql.Connection con = establecerConexion();
-//			if (ciudad.getNombreCiudad().equals("")){
-//				st = con.prepareStatement("Select * from CIUDAD where IDPAIS = ?");
-//				st.setInt(1, sp.identificadorPais(ciudad.getNombrePais()));
-//			}else{
-//				st = con.prepareStatement("Select * from CIUDAD where IDPAIS = ? and NOMBRECIUDAD = ?");
-//				st.setInt(1, sp.identificadorPais(ciudad.getNombrePais()));
-//				st.setString(2, ciudad.getNombreCiudad());
-//			}
-//			st.execute();
-//			ResultSet rs = st.getResultSet();
-//			
-//			while (rs.next()){
-//				Ciudad c = new Ciudad();
-//				c.setIdPais(rs.getInt("IDPAIS"));
-//				c.setIdCiudad(rs.getInt("IDCIUDAD"));
-//				c.setNombreCiudad(rs.getString("NOMBRECIUDAD"));
-//				c.setNombrePais(sp.nombrePais(c.getIdPais()));
-//				listaCiudad.add(c);
-//			}
-//			
-//			st.close();
-//			con.close();
-//		}catch(Exception e){
-//		}
+		PreparedStatement st = null;
+		try{
+			java.sql.Connection con = establecerConexion();
+			if (usr.isAdmin() == true){
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=?");
+				st.setInt(1, fiesta.getIdDiscoteca());System.out.println(fiesta.getIdDiscoteca());
+			}else{
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? and EMAILUSR=?");
+				st.setInt(1, fiesta.getIdDiscoteca());
+				st.setString(2, usr.getEmail());System.out.println("rrr"+usr.getEmail()+" "+fiesta.getIdDiscoteca());
+			}
+			st.execute();
+			ResultSet rs = st.getResultSet();
+			
+			while (rs.next()){
+				Fiesta f = new Fiesta();
+				f.setIdFiesta(rs.getInt("IDFIESTA"));
+				f.setNombreFiesta(rs.getString("NOMBREFIESTA"));
+				f.setIdDiscoteca(rs.getInt("IDDISCOTECA"));
+				f.setEmail(rs.getString("EMAILUSR"));
+				f.setFecha(rs.getString("FECHAFIESTA"));
+				f.setHora(rs.getString("HORAFIESTA"));
+				f.setDescripcion(rs.getString("DESCRIPCIONFIESTA"));
+				f.setNombreDiscoteca(sd.buscarDiscoteca(f.getIdDiscoteca()).getNombre());
+				listaFiesta.add(f);
+			}
+			
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return listaFiesta;
 	}
 //	

@@ -1,6 +1,8 @@
 package ec.epn.edu.controller.pais;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -59,7 +61,19 @@ public class ModificarPais extends HttpServlet {
 			paisModificar = (Pais) request.getSession().getAttribute("paisModificar");
 			nombrePais = request.getParameter("pais");
 			paisModificador.setNombrePais(nombrePais);
-			sp.modificarPais(paisModificar, paisModificador);
+			String msm = sp.modificarPais(paisModificar, paisModificador);
+			
+			if (!msm.equals("")){
+				PrintWriter out = response.getWriter();
+				out.write(
+						"<div class=\"panel panel-danger \">"
+						+ "<div class=\"panel-heading\">"
+						+ "<h3 class=\"panel-title\">Panel danger</h3></div>"
+						+ "<div class=\"panel-body\">"+msm+"</div>"
+						+ "</div>"
+						+ "</div>"
+				);
+			}
 			getServletConfig().getServletContext().getRequestDispatcher("/Pais/Home").forward(request, response);
 		}catch(Exception e){
 			nombrePais = "";

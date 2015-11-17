@@ -9,10 +9,11 @@ public class Fiesta {
 	private int idFiesta;
 	private String email;
 	private int idDiscoteca;
+	private String nombreDiscoteca;
 	private String nombreFiesta;
 	private String fecha;
 	private String hora;
-	private String descripción;
+	private String descripcion;
 	
 	public Fiesta(){
 		
@@ -55,11 +56,21 @@ public class Fiesta {
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
-	public String getDescripción() {
-		return descripción;
+
+	public String getNombreDiscoteca() {
+		return nombreDiscoteca;
 	}
-	public void setDescripción(String descripción) {
-		this.descripción = descripción;
+	public void setNombreDiscoteca(String nombreDiscoteca) {
+		this.nombreDiscoteca = nombreDiscoteca;
 	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	
 	
 }

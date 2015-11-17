@@ -29,11 +29,43 @@ public class ServiceDiscoteca {
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco.setIdCiudad(rs.getInt("IDCIUDAD"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
 				usr.setEmail(rs.getString("EMAILUSR"));
 				disco.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
 				disco.setDescripcion(rs.getString("DESCRIPCION"));
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return disco;
+	}
+	public Discoteca buscarDiscoteca(int idDisco){
+		Discoteca disco = new Discoteca();
+		Usuario usr = new Usuario();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+					"bases", "bases");
+			PreparedStatement st = con
+					.prepareStatement("Select * from DISCOTECA where IDDISCOTECA=?");
+			st.setInt(1, idDisco);
+			st.execute();
+			ResultSet rs = st.getResultSet();
+			while (rs.next()) {
+				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
+				usr.setEmail(rs.getString("EMAILUSR"));
+				disco.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
+				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
+				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 			}
 			st.close();
 			con.close();
@@ -80,14 +112,21 @@ public class ServiceDiscoteca {
 
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
-			PreparedStatement st = con.prepareStatement("Select * from DISCOTECA");
+			PreparedStatement st = null;
+			if (nombre.equals("") && disco.getCiudad()==0){
+				st = con.prepareStatement("Select * from DISCOTECA");
+			}
+			else if (disco.getCiudad() != 0){
+				st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
+				st.setInt(1, disco.getCiudad());
+			}
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
 			while (rs.next()) {
 				Discoteca disco1 = new Discoteca();
 				disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco1.setIdCiudad(rs.getInt("IDCIUDAD"));
+				disco1.setCiudad(rs.getInt("IDCIUDAD"));
 				disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco1.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
 				disco1.setEmailUsr(rs.getString("EMAILUSR"));
@@ -106,6 +145,7 @@ public class ServiceDiscoteca {
 		}
 		return listaDiscotecas;
 	}
+
 	public void modificarDiscoteca(Discoteca discoModificar, Discoteca discoModificador) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -133,7 +173,7 @@ public class ServiceDiscoteca {
 		}
 
 	}
-	public Discoteca buscarDiscotecaByCiudad(String ciudad){
+	public Discoteca buscarDiscotecaByCiudad(String ciudad, String pais){
 		Discoteca disco = new Discoteca();
 		try{
 			ServiceCiudad sc = new ServiceCiudad();
@@ -142,12 +182,46 @@ public class ServiceDiscoteca {
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("Select * from DISCOTECA where IDCIUDAD=?");
-			st.setInt(1, sc.buscarCiudad(ciudad).getIdCiudad());
+			st.setInt(1, sc.buscarCiudad(ciudad, pais).getIdCiudad());
 			st.execute();
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
-				disco.setNombre(rs.getString("NOMBREUSR"));
-				disco.setIdCiudad(rs.getInt("IDCIUDAD"));
+				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
+				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
+				disco.setEmailUsr(rs.getString("EMAILUSR"));
+				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
+				disco.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return disco;
+	}
+	public Discoteca buscarDiscotecaByNombre(String discoteca, int ciudad){
+		Discoteca disco = new Discoteca();
+		try{
+			ServiceCiudad sc = new ServiceCiudad();
+			Class.forName("com.mysql.jdbc.Driver");
+			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+					"bases", "bases");
+			PreparedStatement st = con
+					.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA=? and IDCIUDAD=?");
+			st.setString(1, discoteca);
+			st.setInt(2, ciudad);
+			st.execute();
+			ResultSet rs = st.getResultSet();
+			while (rs.next()) {
+				disco.setIdDiscoteca(rs.getInt("IDDISCOTECA"));
+				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
 				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
@@ -178,7 +252,7 @@ public class ServiceDiscoteca {
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREUSR"));
-				disco.setIdCiudad(rs.getInt("IDCIUDAD"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
 				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));

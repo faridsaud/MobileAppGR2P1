@@ -10,21 +10,20 @@
 %>
     <div class="container">
       
-      <form action="${pageContext.request.contextPath}/Fiesta/CargarCuidad">
+      <form method="post">
       <div class="form-group">
       	<label for="pais">Pais</label>
-          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
+          <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true" 
+          		onchange="this.form.method='GET'; this.form.submit()">
             <%
-        		int contadorElementos = 0;
             	try{
               		for (Pais p: listaPais){
-              			if (contadorElementos == 0){
-                  			%><option selected value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
-                  			contadorElementos++;
-                  		}
-                  		else{
-                  			%><option value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
-                  		}
+              			if (p.getNombrePais().equals((String) request.getParameter("pais"))){
+                  			%><option selected values ="<%= p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+              			}
+              			else{
+              				%><option values ="<%= p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+              			}
               		}
               	}catch(Exception e){
               		
@@ -32,18 +31,16 @@
               %>
           </select>
        </div>
-       </form>
        
        <div class="form-group">
        <label for="pais">Ciudad</label>
-          <select name="ciudad" class="form-control" id="ciudad" name="ciudad1" placeholder="Ciudad" required="true">
+          <select name="ciudad" class="form-control" id="ciudad" placeholder="Ciudad" required="true"
+          		onchange="this.form.method='GET'; this.form.submit()">
             <%
-        		contadorElementos = 0;
             	try{
               		for (Ciudad c: listaCiudad){
-              			if (contadorElementos == 0){
+              			if (c.getNombreCiudad().equals((String) request.getParameter("ciudad"))){
                   			%><option selected value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
-                  			contadorElementos++;
                   		}
                   		else{
                   			%><option value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
@@ -57,14 +54,13 @@
        </div>
        <div class="form-group">
        <label for="pais">Discoteca</label>
-          <select name="discoteca" class="form-control" id="discoteca" name="discoteca" placeholder="Discoteca" required="true">
+          <select name="discoteca" class="form-control" id="discoteca" placeholder="Discoteca" required="true"
+          		onchange="this.form.method='GET'; this.form.submit()">
             <%
-        		contadorElementos = 0;
             	try{
               		for (Discoteca d: listaDiscoteca){
-              			if (contadorElementos == 0){
+              			if (d.getNombre().equals((String) request.getParameter("discoteca"))){
                   			%><option selected value="<%=d.getNombre()%>"><%=d.getNombre()%></option><%
-                  			contadorElementos++;
                   		}
                   		else{
                   			%><option value="<%=d.getNombre()%>"><%=d.getNombre()%></option><%
@@ -77,7 +73,6 @@
           </select>
         </div>
         
-      <form method="post">
         <div class="form-group">
           <label for="email">Nombre</label>
           <input type="text" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" required="true">

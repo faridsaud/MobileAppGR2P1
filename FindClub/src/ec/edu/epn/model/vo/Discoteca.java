@@ -3,6 +3,7 @@ package ec.edu.epn.model.vo;
 import java.awt.Image;
 
 public class Discoteca {
+	private int idDiscoteca;
 	private String nombre="";
 	private String pais="";
 	private int idCiudad;
@@ -11,6 +12,14 @@ public class Discoteca {
 	private String descripcion="";
 	private String imagen=null;
 	
+	public int getIdDiscoteca() {
+		return idDiscoteca;
+	}
+
+	public void setIdDiscoteca(int idDiscoteca) {
+		this.idDiscoteca = idDiscoteca;
+	}
+
 	public String getEmailUsr() {
 		return emailUsr;
 	}
@@ -69,10 +78,4 @@ public class Discoteca {
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
-
-	public void setIdCiudad(int int1) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

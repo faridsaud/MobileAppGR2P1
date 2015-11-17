@@ -88,7 +88,7 @@ public class RegistrarDiscoteca extends HttpServlet {
 			Usuario usr = new Usuario();
 			disco.setNombre(nombre);
 			disco.setPais(pais);
-			disco.setCiudad(sc.buscarCiudad(ciudad).getIdCiudad());
+			disco.setCiudad(sc.buscarCiudad(sc.buscarCiudad(request.getParameter("ciudad"), request.getParameter("pais")).getIdCiudad()).getIdCiudad());
 			disco.setTipoMusica(tipoMusica);
 			disco.setImagen(imagen);
 			disco.setDescripcion(descripcion);

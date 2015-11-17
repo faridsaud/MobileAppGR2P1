@@ -19,7 +19,7 @@
       <form method="post">
 
         <div class="form-group">
-          <label for="pais">Ciudad</label>
+          <label for="pais">País</label>
           <input name="pais" type="text" class="form-control" id="pais" name="pais1" placeholder="Pais" value=<%=paisModificar.getNombrePais()%>>
         </div>
         <button type="submit" class="btn btn-default">Actualizar</button>

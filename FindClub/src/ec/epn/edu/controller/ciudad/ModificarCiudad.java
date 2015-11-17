@@ -37,7 +37,7 @@ public class ModificarCiudad extends HttpServlet {
 		// TODO Auto-generated method stub
 		Ciudad ciudad = new Ciudad();
 		ServiceCiudad sc = new ServiceCiudad();
-		ciudad = sc.buscarCiudad((String)request.getParameter("nombreCiudadModificar"));
+		ciudad = sc.buscarCiudad((String)request.getParameter("nombreCiudadModificar"),(String)request.getParameter("nombrePaisModificar"));
 		
 		request.getSession().setAttribute("ciudadModificar", ciudad);
 		
@@ -64,12 +64,23 @@ public class ModificarCiudad extends HttpServlet {
 		Ciudad ciudadModificador = new Ciudad();
 		Ciudad ciudadModificar = new Ciudad();
 		ServiceCiudad sc = new ServiceCiudad();
+		ServicePais sp = new ServicePais();
 		
 		try{
-			ciudadModificar = (Ciudad) request.getSession().getAttribute("ciudadModificar");
-			ciudadModificador.setNombreCiudad(request.getParameter("ciudad"));
-			ciudadModificador.setNombrePais(request.getParameter("pais"));
+			String nombreCiudad = (String) request.getParameter("ciudad");
+			String nombrePais = (String) request.getParameter("pais");
 			
+			if (nombreCiudad == null)
+				nombreCiudad="";
+			if (nombrePais == null)
+				nombrePais="";
+			
+			ciudadModificar = (Ciudad) request.getSession().getAttribute("ciudadModificar");
+			ciudadModificador.setNombreCiudad(nombreCiudad);
+			ciudadModificador.setIdPais(sp.buscarPais(nombrePais).getIdPais());
+			ciudadModificador.setNombrePais(nombrePais);
+			ciudadModificador.setIdCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
+
 			sc.modificarCiudad(ciudadModificar, ciudadModificador);
 		}catch(Exception e){
 			System.out.println("Error modificacion");

@@ -27,13 +27,12 @@ public class ServiceCiudad {
 		return con;
 	}
 	
-	public boolean existeCiudad(String nombreCiudad){
+	public boolean existeCiudad(String nombreCiudad, String nombrePais){
 		Ciudad ciudad = new Ciudad();
-		buscarCiudad(nombreCiudad);
-
+		ciudad = buscarCiudad(nombreCiudad, nombrePais);
 		try{
 			if (ciudad.getNombreCiudad().equals(nombreCiudad)){
-				return true;
+				return true; 
 			}
 		}catch(Exception e){
 			return false;
@@ -42,7 +41,7 @@ public class ServiceCiudad {
 	}
 	
 	public void registrarCiudad(Ciudad ciudad){
-		boolean insertarRegistro = existeCiudad(ciudad.getNombreCiudad());
+		boolean insertarRegistro = existeCiudad(ciudad.getNombreCiudad(), ciudad.getNombrePais());
 		ServicePais sp = new ServicePais();
 				
 		if (insertarRegistro == false){
@@ -65,17 +64,20 @@ public class ServiceCiudad {
 		}
 	}
 	
-	public Ciudad buscarCiudad(String nombreCiudad){
+	public Ciudad buscarCiudad(String nombreCiudad, String nombrePais){
+		ServicePais sp= new ServicePais();
 		Ciudad ciudad = new Ciudad();
 		try {
 			java.sql.Connection con = establecerConexion();
 			PreparedStatement st = null;
-			st = con.prepareStatement("Select * from CIUDAD where NOMBRECIUDAD = ?");
+			st = con.prepareStatement("Select * from CIUDAD where NOMBRECIUDAD = ? and IDPAIS = ?");
 			st.setString(1, nombreCiudad);
+			st.setInt(2, sp.buscarPais(nombrePais).getIdPais());
 			st.execute();
 			
 			ResultSet rs = st.getResultSet();
 			while (rs.next()){
+				ciudad.setIdCiudad(rs.getInt("IDCIUDAD"));
 				ciudad.setNombreCiudad(rs.getString("NOMBRECIUDAD"));
 				ciudad.setIdPais(rs.getInt("IDPAIS"));
 			}
@@ -155,17 +157,17 @@ public class ServiceCiudad {
 	}
 	
 	public void modificarCiudad(Ciudad ciudadModificar, Ciudad ciudadModificador){
-		boolean insertarRegistro = existeCiudad(ciudadModificador.getNombreCiudad());
+		boolean insertarRegistro = existeCiudad(ciudadModificador.getNombreCiudad(), ciudadModificador.getNombrePais());
 		ServicePais sp = new ServicePais();
 				
 		if (insertarRegistro == false){
 			try {
 				java.sql.Connection con = establecerConexion();
 				PreparedStatement st = 
-					con.prepareStatement("Update CIUDAD set NOMBRECIUDAD=?, IDPAIS=? where NOMBRECIUDAD=?");
+					con.prepareStatement("Update CIUDAD set NOMBRECIUDAD=?, IDPAIS=? where IDCIUDAD=?");
 				st.setString(1, ciudadModificador.getNombreCiudad());
-				st.setInt(2, sp.buscarPais(ciudadModificador.getNombrePais()).getIdPais());
-				st.setString(3, ciudadModificar.getNombreCiudad());
+				st.setInt(2, ciudadModificador.getIdPais());
+				st.setInt(3, ciudadModificar.getIdCiudad());
 				st.execute();
 				st.close();
 				con.close();
@@ -182,8 +184,9 @@ public class ServiceCiudad {
 	public void eliminarCiudad(Ciudad ciudad){
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Delete from CIUDAD where NOMBRECIUDAD=?");
+			PreparedStatement st = con.prepareStatement("Delete from CIUDAD where NOMBRECIUDAD=? and IDPAIS=?");
 			st.setString(1, ciudad.getNombreCiudad());
+			st.setInt(2, ciudad.getIdPais());
 			st.execute();
 			st.close();
 			con.close();

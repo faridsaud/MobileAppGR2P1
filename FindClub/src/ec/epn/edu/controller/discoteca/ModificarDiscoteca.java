@@ -63,7 +63,7 @@ public class ModificarDiscoteca extends HttpServlet {
 			discoModificador.setEmailUsr(request.getParameter("email"));
 			discoModificador.setNombre(request.getParameter("nombre"));
 			discoModificador.setPais(request.getParameter("pais"));
-			discoModificador.setCiudad(sc.buscarCiudad(request.getParameter("ciudad")).getIdCiudad());
+			discoModificador.setCiudad(sc.buscarCiudad(request.getParameter("ciudad"), request.getParameter("pais")).getIdCiudad());
 			discoModificador.setTipoMusica(request.getParameter("tipoMusica"));
 			discoModificador.setImagen(request.getParameter("imagen"));
 			ServiceDiscoteca sd=new ServiceDiscoteca();

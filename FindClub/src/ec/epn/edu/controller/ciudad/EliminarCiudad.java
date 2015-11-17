@@ -43,16 +43,19 @@ public class EliminarCiudad extends HttpServlet {
 		// TODO Auto-generated method stub
 		Ciudad ciudad = new Ciudad();
 		ServiceCiudad sc = new ServiceCiudad();
+		ServicePais sp = new ServicePais();
 		String nombreCiudad = (String) request.getParameter("nombreCiudadEliminar");
+		String nombrePais = (String) request.getParameter("nombrePaisEliminar");
 		
 		if (nombreCiudad == null)
 			nombreCiudad="";
+		if (nombrePais == null)
+			nombrePais="";
 		
-		ciudad.setNombrePais(nombreCiudad);
-		ciudad = (Ciudad) sc.buscarCiudad(nombreCiudad);
+		ciudad.setNombreCiudad(nombreCiudad);
+		ciudad.setIdPais(sp.buscarPais(nombrePais).getIdPais());
 		sc.eliminarCiudad(ciudad);
 		request.setAttribute("ciudadEliminar", nombreCiudad);
 		doGet(request, response);
 	}
-
 }
