@@ -25,6 +25,7 @@ import ec.edu.epn.model.vo.Usuario;
 @WebServlet("/Discoteca/Buscar")
 public class BuscarDiscoteca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private String nombre;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -37,21 +38,41 @@ public class BuscarDiscoteca extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/buscar.jsp").forward(request, response);
+	}
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		ServiceDiscoteca sd = new ServiceDiscoteca();
-		String nombre = "";
-		String tipoMusica = "";
-		String imagen = "";
+		String nombre = null;
+		String tipoMusica = null;
+		String imagen = null;
 		String nombreCiudad = request.getParameter("ciudad");
 		String nombrePais = request.getParameter("pais");
-		String descripcion = "";
-		String email = "";
+		String descripcion = null;
+		String email = null;
 		ServicePais sp = new ServicePais();
 		ServiceCiudad sc = new ServiceCiudad();
 		ServiceMusica sm = new ServiceMusica();
 		Ciudad ciudad = new Ciudad();
 		Pais pais = new Pais();
+		if(nombre==null)
+			nombre="";
+		if(imagen==null)
+			imagen="";
+		if(descripcion==null)
+			nombre="";
+		if(email==null)
+			email="";
+		if(tipoMusica==null)
+			tipoMusica="";
 		if (nombreCiudad == null)
 			nombreCiudad = "";
 		ciudad.setNombreCiudad(nombreCiudad);
@@ -75,19 +96,17 @@ public class BuscarDiscoteca extends HttpServlet {
 			descripcion=request.getParameter("descripcion");
 			email=request.getParameter("email");
 		}catch(Exception e){
-		
+			nombre="";
+			nombreCiudad="";
+			nombrePais="";
+			email="";
+			tipoMusica="";
+			descripcion="";
+			imagen="";
 		}
 		Discoteca disco = new Discoteca();
-		List<Discoteca> listarDiscotecas = sd.listarDiscoteca(nombre, disco);
+		List<Discoteca> listarDiscotecas =sd.listarDiscoteca(disco);
 		request.setAttribute("listaDiscotecas", listarDiscotecas);
-		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/buscar.jsp").forward(request, response);
-	}
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }

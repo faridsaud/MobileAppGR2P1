@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import ec.edu.epn.model.service.cuenta.ServiceUsuario;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
+import ec.edu.epn.model.service.pais.ServicePais;
 import ec.edu.epn.model.vo.Discoteca;
 import ec.edu.epn.model.vo.Usuario;
 
@@ -32,13 +33,11 @@ public class ModificarDiscoteca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String email="";
+		
 		Discoteca disco=new Discoteca();
 		ServiceDiscoteca sd=new ServiceDiscoteca();
 		disco=sd.buscarDiscoteca((String)request.getParameter("nombreModificar"));
-		
 		request.getSession().setAttribute("discotecaModificar", disco);
-	
 		try{
 		}
 		catch(Exception e){
@@ -58,14 +57,14 @@ public class ModificarDiscoteca extends HttpServlet {
 		try{
 			
 			discoModificar=(Discoteca)request.getSession().getAttribute("discotecaModificar");
+			discoModificador.setNombre(request.getParameter("nombre"));	
 			discoModificador.setEmailUsr(request.getParameter("email"));
-			discoModificador.setNombre(request.getParameter("nombre"));
 			discoModificador.setPais(request.getParameter("pais"));
-			discoModificador.setCiudad(request.getParameter("ciudad"));
+			//discoModificador.setCiudad(request.getParameter("ciudad"));
 			discoModificador.setTipoMusica(request.getParameter("tipoMusica"));
-			discoModificador.setImagen(request.getParameter("imagen"));
+			discoModificador.setDescripcion(request.getParameter("descripcion"));
+			discoModificador.setImagen(request.getParameter("inputFile"));
 			ServiceDiscoteca sd=new ServiceDiscoteca();
-			
 			sd.modificarDiscoteca(discoModificar, discoModificador);
 			
 		}catch(Exception e){

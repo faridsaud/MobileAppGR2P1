@@ -9,7 +9,7 @@
 		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
 		List<Musica> listaMusica = (List<Musica>) request.getAttribute("listaMusica");
 	%>
-      <form method="post">
+      <form method="get" action="${pageContext.request.contextPath}/Discoteca/Registrar">
         <div class="form-group">
           <label for="nombre">Nombre</label>
           <input type="nombre" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required = true>
@@ -17,7 +17,7 @@
 
         <div class="form-group">
           <label for="pais">Pais</label>
-          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais">
+          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais" onchange=onchange="this.form.method='GET'; this.form.submit()">
             <%
         		int contadorElementos = 0;
             	try{

@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*,ec.edu.epn.model.vo.*"%>
 	<jsp:include page="/templates/header.jsp"></jsp:include>
-		 <div class="container">
+	   <div class="container">
     <%
 		String email = (String)request.getAttribute("emailUsr");
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
@@ -96,12 +96,12 @@
       </form>
 
     </div>
-            <div class="row">
+          <div class="row">
 			<div class="col-xs-12">
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Nombre de la discoteca</th>
+							<th>Nombre discoteca</th>
 							<th>Acción</th>
 
 						</tr>
@@ -112,7 +112,7 @@
 							for (Discoteca disco : listaDiscotecas) {
 						%>
 						<tr>
-							<td><a href="/vistas/discoteca/info.jsp"><%=disco.getNombre()%></a></td>
+							<td><%=disco.getNombre()%></td>
 							<td>
 								<form method="get"
 									action="${pageContext.request.contextPath}/Discoteca/Modificar">

@@ -1,5 +1,4 @@
 package ec.edu.epn.model.service.discoteca;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,12 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.taglibs.standard.tag.common.sql.DriverManagerAccessor;
-
-import com.sun.org.apache.bcel.internal.classfile.ClassFormatException;
-
+import ec.edu.epn.model.service.ciudad.ServiceCiudad;
+import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
-import ec.edu.epn.model.vo.Usuario;
 public class ServiceDiscoteca {
 	
 	public Discoteca buscarDiscoteca(String nombreDisco){
@@ -22,13 +18,15 @@ public class ServiceDiscoteca {
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
-					.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA=?");
+					.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA LIKE ?");
 			st.setString(1, nombreDisco);
 			st.execute();
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
+				
 				disco.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
+				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
 				disco.setDescripcion(rs.getString("DESCRIPCION"));
@@ -45,16 +43,22 @@ public class ServiceDiscoteca {
 		}
 		return disco;
 	}
+	public int identificadorCiudad(String nombreCiudad){
+		ServiceCiudad sc = new ServiceCiudad();
+		Ciudad c = new Ciudad();
+		c=sc.buscarCiudad(c, nombreCiudad);
+		return c.getIdCiudad();
+	}
 	public void registrarDiscoteca(Discoteca disco) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con.prepareStatement(
-					"Insert into DISCOTECA (NOMBREDISCOTECA,NOMBRETIPOMUSICA, NOMBRECIUDAD, EMAILUSR, DESCRIPCIONDISCOTECA, PATHIMAGENDISCOTECA) values (?,?,?,?,?,?) ");
+					"Insert into DISCOTECA (NOMBREDISCOTECA,NOMBRETIPOMUSICA, IDCIUDAD, EMAILUSR, DESCRIPCIONDISCOTECA, PATHIMAGENDISCOTECA) values (?,?,?,?,?,?) ");
 			st.setString(1, disco.getNombre());
 			st.setString(2, disco.getTipoMusica());
-			st.setString(3, disco.getCiudad());
+			st.setInt(3, disco.getCiudad());
 			st.setString(4, disco.getEmailUsr());
 			st.setString(5, disco.getDescripcion());
 			st.setString(6, disco.getImagen());
@@ -64,12 +68,14 @@ public class ServiceDiscoteca {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("error");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("error");
 		}
 	}
-	public List<Discoteca> listarDiscoteca(String nombre, Discoteca disco) {
+	public List<Discoteca> listarDiscoteca(Discoteca disco) {
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -83,7 +89,7 @@ public class ServiceDiscoteca {
 			while (rs.next()) {
 				Discoteca disco1 = new Discoteca();
 				disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco1.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco1.setCiudad(rs.getInt("IDCIUDAD"));
 				disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
 				disco1.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
 				disco1.setEmailUsr(rs.getString("EMAILUSR"));
@@ -108,10 +114,10 @@ public class ServiceDiscoteca {
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con.prepareStatement(
-					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, NOMBRECIUDAD=?, EMAILUSER=?, DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? WHERE NOMBREDISCOTECA=?");
+					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, IDCIUDAD=?, EMAILUSER=?, DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? WHERE NOMBREDISCOTECA=?");
 			st.setString(1, discoModificador.getNombre());
 			st.setString(2, discoModificador.getTipoMusica());
-			st.setString(3, discoModificador.getCiudad());
+			st.setInt(3, discoModificador.getCiudad());
 			st.setString(4, discoModificador.getEmailUsr());
 			st.setString(5, discoModificador.getDescripcion());
 			st.setString(6, discoModificador.getImagen());
@@ -129,20 +135,20 @@ public class ServiceDiscoteca {
 		}
 
 	}
-	public Discoteca buscarDiscotecaByCiudad(String ciudad){
+	public Discoteca buscarDiscotecaByCiudad(int ciudad){
 		Discoteca disco = new Discoteca();
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
-					.prepareStatement("Select * from DISCOTECA where NOMBRECIUDAD=?");
-			st.setString(1, ciudad);
+					.prepareStatement("Select * from DISCOTECA where IDCIUDAD=?");
+			st.setInt(1, ciudad);
 			st.execute();
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREUSR"));
-				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
 				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
@@ -173,7 +179,7 @@ public class ServiceDiscoteca {
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
 				disco.setNombre(rs.getString("NOMBREUSR"));
-				disco.setCiudad(rs.getString("NOMBRECIUDAD"));
+				disco.setCiudad(rs.getInt("IDCIUDAD"));
 				disco.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
 				disco.setEmailUsr(rs.getString("EMAILUSR"));
 				disco.setImagen(rs.getString("PATHIMAGENDISCOTECA"));

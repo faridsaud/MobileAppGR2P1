@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*,ec.edu.epn.model.vo.*"%>
 	<jsp:include page="/templates/header.jsp"></jsp:include>
-			 <div class="container">
+	<div class="container">
     <%
 		String email = (String)request.getAttribute("emailUsr");
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
@@ -12,7 +12,7 @@
       <form method="post">
         <div class="form-group">
           <label for="nombre">Nombre</label>
-          <input type="nombre" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required="true">
+          <input type="nombre" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required="true" readonly="true">
         </div>
 
         <div class="form-group">
@@ -76,7 +76,7 @@
                   		}
               		}
               	}catch(Exception e){
-              		e.getStackTrace();
+              		
               	}
               %>
           </select>
@@ -87,8 +87,8 @@
           <textarea name="descripcion" class="form-control" rows="5" id="descripcion" placeholder="dirección, tipo de vestimenta, etc"></textarea>
         </div>
         <div class="form-group">
-          <label for="inputFile">Imágen de la discoteca</label>
-          <input type="file" id="inputFile">
+          <label for="inputFile">Imagen de la discoteca</label>
+          <input type="file" id="inputFile" name="imagen">
           <p class="help-block">Foto que muestre algo característico de la discoteca</p>
         </div>
         <button type="submit" class="btn btn-default">Buscar</button>
@@ -96,47 +96,30 @@
       </form>
 
     </div>
-		<div class="row">
+          <div class="row">
 			<div class="col-xs-12">
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Nombre de la discoteca</th>
-							<th>Like/Dislike</th>
+							<th>Nombre discoteca</th>
+							
 
 						</tr>
 					</thead>
 					<tbody>
 						<%
-							List<Discoteca> listaDiscotecas = (List<Discoteca>)request.getAttribute("listaDiscotecas");
+							List<Discoteca> listaDiscotecas = (List<Discoteca>) request.getAttribute("listaDiscotecas");
 							for (Discoteca disco : listaDiscotecas) {
 						%>
 						<tr>
 							<td><%=disco.getNombre()%></td>
-							<td>
-								<form method="get"
-									action="${pageContext.request.contextPath}/Discoteca/Buscar">
-									<button type="submit" class="btn btn-default"
-										value="<%=disco.getNombre()%>" name="nombreLike">
-										<span class="glyphicon glyphicon-thumbs-up" title="Agregar Like"></span>
-									</button>
-								</form>
-								<form method="post"
-									action="${pageContext.request.contextPath}/Discoteca/Buscar">
-									<button type="submit" class="btn btn-default"
-										value="<%=disco.getNombre()%>" name="nombreDislike">
-										<span class="glyphicon glyphicon-thumbs-down" title="Agregar Dislike"></span>
-									</button>
-								</form> 
-							</td>
+							
 						</tr>
 						<%
 							}
 						%>
 					</tbody>
 				</table>
-
 			</div>
 		</div>
-	
 	<jsp:include page="/templates/footer.jsp"></jsp:include>

@@ -90,7 +90,7 @@ public class AdministrarDiscoteca extends HttpServlet {
 			
 			}
 			Discoteca disco = new Discoteca();
-			List<Discoteca> listarDiscotecas = sd.listarDiscoteca(nombre, disco);
+			List<Discoteca> listarDiscotecas = sd.listarDiscoteca(disco);
 			request.setAttribute("listaDiscotecas", listarDiscotecas);
 			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/administrar.jsp").forward(request, response);
 			

@@ -14,9 +14,9 @@ import ec.edu.epn.model.service.musica.ServiceMusica;
 import ec.edu.epn.model.service.pais.ServicePais;
 import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
-import ec.edu.epn.model.vo.Fiesta;
 import ec.edu.epn.model.vo.Musica;
 import ec.edu.epn.model.vo.Pais;
+import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class RegistrarDiscoteca
@@ -38,6 +38,9 @@ public class RegistrarDiscoteca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Discoteca disco = new Discoteca();
+		String email = (String)request.getSession().getAttribute("emailUsr");
+		disco.setEmailUsr(email);
 		ServicePais sp = new ServicePais();
 		Pais p = new Pais();
 		p.setNombrePais("");
@@ -66,12 +69,13 @@ public class RegistrarDiscoteca extends HttpServlet {
 		// TODO Auto-generated method stub
 		String nombre="";
 		String pais="";
-		String ciudad="";
 		String tipoMusica="";
 		String imagen="";
+		String ciudad="";
 		String descripcion="";
 		String emailUsr="";
 		try{
+			ServicePais sp = new ServicePais();
 			nombre=request.getParameter("nombre");
 			pais=request.getParameter("pais");
 			ciudad=request.getParameter("ciudad");
@@ -82,8 +86,8 @@ public class RegistrarDiscoteca extends HttpServlet {
 			Discoteca disco = new Discoteca();
 			disco.setNombre(nombre);
 			disco.setPais(pais);
-			disco.setCiudad(ciudad);
 			disco.setTipoMusica(tipoMusica);
+			disco.setCiudad(sp.identificadorPais(pais));
 			disco.setImagen(imagen);
 			disco.setDescripcion(descripcion);
 			disco.setEmailUsr(emailUsr);
