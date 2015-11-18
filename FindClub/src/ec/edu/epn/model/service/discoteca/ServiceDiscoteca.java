@@ -105,7 +105,7 @@ public class ServiceDiscoteca {
 		}
 	}
 	
-	public List<Discoteca> listarDiscoteca(String nombre, Discoteca disco) {
+	public List<Discoteca> listarDiscoteca(String nombreCiudad) {
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -113,24 +113,20 @@ public class ServiceDiscoteca {
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = null;
-			if (nombre.equals("") && disco.getCiudad()==0){
-				st = con.prepareStatement("Select * from DISCOTECA");
-			}
-			else if (disco.getCiudad() != 0){
-				st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
-				st.setInt(1, disco.getCiudad());
-			}
+			
+		    st = con.prepareStatement("Select NOMBREDISCOTECA,d.IDCIUDAD,NOMBRETIPOMUSICA,PATHIMAGENDISCOTECA,EMAILUSR,DESCRIPCIONDISCOTECA from DISCOTECA d, CIUDAD c where d.IDCIUDAD = c.IDCIUDAD and c.NOMBRECIUDAD=?");
+			st.setString(1, nombreCiudad);
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
 			while (rs.next()) {
 				Discoteca disco1 = new Discoteca();
-				disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
-				disco1.setCiudad(rs.getInt("IDCIUDAD"));
-				disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
-				disco1.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
-				disco1.setEmailUsr(rs.getString("EMAILUSR"));
-				disco1.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
+				disco1.setNombre(rs.getString(1));
+				disco1.setCiudad(rs.getInt(2));
+				disco1.setTipoMusica(rs.getString(3));
+				disco1.setImagen(rs.getString(4));
+				disco1.setEmailUsr(rs.getString(5));
+				disco1.setDescripcion(rs.getString(6));
 				listaDiscotecas.add(disco1);
 			}
 			st.close();

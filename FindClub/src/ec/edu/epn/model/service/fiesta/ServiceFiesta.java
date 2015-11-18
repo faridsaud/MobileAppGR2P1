@@ -47,11 +47,12 @@ public class ServiceFiesta {
 	
 	public void registrarFiesta(Fiesta fiesta){
 		if (existeFiesta(fiesta.getNombreFiesta(), fiesta.getEmail()) == false){
+			System.out.println(fiesta.getNombreDiscoteca()+"\t"+fiesta.getIdDiscoteca()+"\t"+fiesta.getNombreFiesta()+"\t"+fiesta.getFecha()+"\t"+fiesta.getHora());
 			try {
 				java.sql.Connection con = establecerConexion();
-				PreparedStatement st = con.prepareStatement("insert into FIESTA (IDFIESTA, EMAILUSR, IDDISCOTECA, NOMBREFIESTA, FECHAFIESTA, HORAFIESTA, DESCRIPCIONFIESTA) values (NULL,?,?,?,?,?,?)");
+				PreparedStatement st = con.prepareStatement("insert into FIESTA (IDFIESTA, EMAILUSR, IDDISCOTECA, NOMBREFIESTA, FECHAFIESTA, HORAFIESTA, DESCRIPCIONFIESTA) values (NULL,?, (select IDDISCOTECA from DISCOTECA where NOMBREDISCOTECA=?),?,?,?,?)");
 				st.setString(1, fiesta.getEmail());
-				st.setInt(2, fiesta.getIdDiscoteca());
+				st.setString(2, fiesta.getNombreDiscoteca());
 				st.setString(3, fiesta.getNombreFiesta());
 				st.setString(4, fiesta.getFecha());
 				st.setString(5, fiesta.getHora());
@@ -111,19 +112,63 @@ public class ServiceFiesta {
 		return fiesta;
 	}
 	
+	public Fiesta buscarFiesta(Fiesta fiesta, int idFiesta){
+		ServiceDiscoteca sd = new ServiceDiscoteca();
+		try {
+			java.sql.Connection con = establecerConexion();
+			PreparedStatement st = null;
+			st = con.prepareStatement("Select * from FIESTA where IDFIESTA = ?");
+			st.setInt(1, idFiesta);
+			st.execute();
+			
+			ResultSet rs = st.getResultSet();
+			while (rs.next()){
+				fiesta.setIdFiesta(rs.getInt("IDFIESTA"));
+				fiesta.setNombreFiesta(rs.getString("NOMBREFIESTA"));
+				fiesta.setIdDiscoteca(rs.getShort("IDDISCOTECA"));
+				fiesta.setNombreDiscoteca(sd.buscarDiscoteca(fiesta.getIdDiscoteca()).getNombre());
+				fiesta.setEmail(rs.getString("EMAILUSR"));
+				fiesta.setFecha(rs.getDate("FECHAFIESTA").toString());
+				fiesta.setHora(rs.getTime("HORAFIESTA").toString());
+				fiesta.setDescripcion(rs.getString("DESCRIPCIONFIESTA"));
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return fiesta;
+	}
+	
 	public List<Fiesta> listarFiesta(Fiesta fiesta, Usuario usr){
 		List<Fiesta> listaFiesta = new ArrayList<Fiesta>();
 		ServiceDiscoteca sd = new ServiceDiscoteca();
 		PreparedStatement st = null;
 		try{
 			java.sql.Connection con = establecerConexion();
-			if (usr.isAdmin() == true){
-				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=?");
-				st.setInt(1, fiesta.getIdDiscoteca());System.out.println(fiesta.getIdDiscoteca());
-			}else{
-				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? and EMAILUSR=?");
+			if (usr.isAdmin() == true && (fiesta.getNombreFiesta().equals(""))){
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? ORDER BY NOMBREFIESTA");
 				st.setInt(1, fiesta.getIdDiscoteca());
-				st.setString(2, usr.getEmail());System.out.println("rrr"+usr.getEmail()+" "+fiesta.getIdDiscoteca());
+			} else if (usr.isAdmin() == true && (fiesta.getNombreFiesta().equals(""))){
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? NOMBREFIESTA like ? ORDER BY NOMBREFIESTA");
+				st.setInt(1, fiesta.getIdDiscoteca());
+				st.setString(2,	"%"+fiesta.getNombreFiesta()+"%");
+			} else if (fiesta.getIdDiscoteca() != 0 && (!usr.getEmail().equals("")) && (fiesta.getNombreFiesta().equals(""))){
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? and EMAILUSR=? ORDER BY NOMBREFIESTA");
+				st.setInt(1, fiesta.getIdDiscoteca());
+				st.setString(2, usr.getEmail());
+			} else if (fiesta.getIdDiscoteca() != 0 && (!usr.getEmail().equals("")) && (!fiesta.getNombreFiesta().equals(""))){
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? and EMAILUSR=? and NOMBREFIESTA like ? ORDER BY NOMBREFIESTA");
+				st.setInt(1, fiesta.getIdDiscoteca());
+				st.setString(2, usr.getEmail());
+				st.setString(3, "%"+fiesta.getNombreFiesta()+"%");
+			}else{
+				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDFIESTA=0");
 			}
 			st.execute();
 			ResultSet rs = st.getResultSet();
@@ -152,47 +197,49 @@ public class ServiceFiesta {
 		}
 		return listaFiesta;
 	}
-//	
-//	public void modificarCiudad(Ciudad ciudadModificar, Ciudad ciudadModificador){
-//		Fiesta fiesta = new Fiesta();
-//		if (existeFiesta(fiesta.getNombreFiesta()) == false){
-//		ServicePais sp = new ServicePais();
-//				
-//			try {
-//				java.sql.Connection con = establecerConexion();
-//				PreparedStatement st = 
-//					con.prepareStatement("Update CIUDAD set NOMBRECIUDAD=?, IDPAIS=? where NOMBRECIUDAD=?");
-//				st.setString(1, ciudadModificador.getNombreCiudad());
-//				st.setInt(2, sp.buscarPais(cuidad, identificadorPais).identificadorPais(ciudadModificador.getNombrePais()));
-//				st.setString(3, ciudadModificar.getNombreCiudad());
-//				st.execute();
-//				st.close();
-//				con.close();
-//			} catch (ClassNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//	
-//	public void eliminarCiudad(Ciudad ciudad){
-//		try {
-//			java.sql.Connection con = establecerConexion();
-//			PreparedStatement st = con.prepareStatement("Delete from CIUDAD where NOMBRECIUDAD=?");
-//			st.setString(1, ciudad.getNombreCiudad());
-//			st.execute();
-//			st.close();
-//			con.close();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	
+	public void modificarFiesta(Fiesta fiestaModificar, Fiesta fiestaModificador){
+		Fiesta fiesta = new Fiesta();
+		if ((existeFiesta(fiestaModificador.getNombreFiesta(), fiestaModificador.getEmail())) == false){
+		
+				
+			try {
+				java.sql.Connection con = establecerConexion();
+				PreparedStatement st = 
+					con.prepareStatement("Update FIESTA set NOMBREFIESTA=?, IDDISCOTECA=?, FECHAFIESTA=?, HORAFIESTA=?, DESCRIPCIONFIESTA?  where IDFIESTA=?");
+				st.setString(1, fiestaModificador.getNombreFiesta());
+				st.setInt(2, fiestaModificador.getIdDiscoteca());
+				st.setString(3, fiestaModificador.getFecha());
+				st.setString(4,	fiestaModificador.getHora());
+				st.setInt(5, fiestaModificar.getIdFiesta());
+				st.execute();
+				st.close();
+				con.close();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void eliminarFiesta(Fiesta fiesta){
+		try {
+			java.sql.Connection con = establecerConexion();
+			PreparedStatement st = con.prepareStatement("Delete from FIESTA where IDFIESTA=?");
+			st.setInt(1, fiesta.getIdFiesta());
+			st.execute();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
