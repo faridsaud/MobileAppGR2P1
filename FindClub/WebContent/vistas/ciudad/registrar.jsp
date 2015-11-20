@@ -22,13 +22,12 @@
 			getServletConfig().getServletContext().getRequestDispatcher("/Ciudad/Home").forward(request, response);
 		}
 
-		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaPais");
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
 	%>
       <form method="post">
         <div class="form-group">
           <label for="pais">Pais</label>
-          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
+          <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true">
             <%
         		int contadorElementos = 0;
             	try{

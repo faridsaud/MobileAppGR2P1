@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class HomeCiudad
+ * @author Samantha Molina
  */
 @WebServlet("/Ciudad/Home")
 public class HomeCiudad extends HttpServlet {

@@ -27,6 +27,7 @@ public class infoDiscoteca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		getServletConfig().getServletContext().getRequestDispatcher("vistas/discoteca/info.jsp").forward(request, response);
 	}
 

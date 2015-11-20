@@ -51,49 +51,52 @@ public class AdministrarDiscoteca extends HttpServlet {
 		if (redireccion == true) {
 			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
 		} else {
-			ServiceDiscoteca sd = new ServiceDiscoteca();
-			String nombre = "";
-			String tipoMusica = "";
-			String imagen = "";
-			String nombreCiudad = request.getParameter("ciudad");
-			String nombrePais = request.getParameter("pais");
-			String descripcion = "";
-			String email = "";
+			String email = usrIniciado.getEmail();
 			ServicePais sp = new ServicePais();
 			ServiceCiudad sc = new ServiceCiudad();
 			ServiceMusica sm = new ServiceMusica();
 			Ciudad ciudad = new Ciudad();
 			Pais pais = new Pais();
+			Musica m = new Musica();
+			String tipoMusica = request.getParameter("tipoMusica");
+			String imagen = request.getParameter("inputFile");
+			Discoteca disco = new Discoteca();
+			String nombre = request.getParameter("nombre");
+			if(nombre==null)
+				nombre="";
+			disco.setNombre(nombre);
+			String nombreCiudad = request.getParameter("ciudad");
 			if (nombreCiudad == null)
 				nombreCiudad = "";
 			ciudad.setNombreCiudad(nombreCiudad);
+			
+			String nombrePais = request.getParameter("pais");
 			if (nombrePais == null)
 				nombrePais = "";
 			pais.setNombrePais("");
 			ciudad.setNombrePais(nombrePais);
+			
 			List<Pais> listaPais = sp.listarPais(pais);
 			request.setAttribute("listaPais", listaPais);
+			
 			List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 			request.setAttribute("listaCiudad", listaCiudad);
 			request.setAttribute("listaPais", listaPais);
-			List<Musica> listaMusica = sm.listarMusicaByTipo(tipoMusica);
+			
+			m.setNombreTipo("");
+			List<Musica> listaMusica = sm.listarMusica();
 			request.setAttribute("listaMusica", listaMusica);
-			try{
-				nombre=request.getParameter("nombre");
-				nombrePais=request.getParameter("pais");
-				nombreCiudad=request.getParameter("ciudad");
-				tipoMusica=request.getParameter("tipoMusica");
-				imagen=request.getParameter("imagen");
-				descripcion=request.getParameter("descripcion");
-				email=request.getParameter("email");
-			}catch(Exception e){
 			
-			}
-			Discoteca disco = new Discoteca();
-			List<Discoteca> listarDiscotecas = sd.listarDiscoteca(disco);
+			String descripcion = request.getParameter("descripcion");
+			if(descripcion==null)
+				descripcion="";
+			disco.setDescripcion(descripcion);
+			ServiceDiscoteca sd = new ServiceDiscoteca();
+			
+			List<Discoteca> listarDiscotecas = sd.listarDiscoteca(nombre, disco);
 			request.setAttribute("listaDiscotecas", listarDiscotecas);
-			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/administrar.jsp").forward(request, response);
 			
+			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/administrar.jsp").forward(request, response);	
 		}
 	}
 	/**
@@ -101,8 +104,35 @@ public class AdministrarDiscoteca extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		doGet(request, response);
+		String nombre="";
+		String nombreCiudad="";
+		String tipoMusica="";
+		String imagen="";
+		String nombrePais="";
+		String descripcion="";
+		String emailUsr="";
+		Usuario usrIniciado= new Usuario();
+		usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+   		emailUsr = usrIniciado.getEmail();
+   		Ciudad c = new Ciudad();
+   		ServiceCiudad sc = new ServiceCiudad();
+		try{
+			nombre=request.getParameter("nombre");
+			nombrePais=request.getParameter("pais");
+			nombreCiudad=request.getParameter("ciudad");
+			tipoMusica=request.getParameter("tipoMusica");
+			imagen=request.getParameter("inputFile");
+			descripcion=request.getParameter("descripcion");			
+		}catch(Exception e){
+			nombre="";
+			emailUsr="";
+			descripcion="";
+			imagen="";
+			nombrePais="";
+			nombreCiudad="";
+			tipoMusica="";
+			doGet(request, response);
+		}
 	}
 
 }

@@ -13,6 +13,7 @@ import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class AdministrarPais
+ * @author Samantha Molina
  */
 @WebServlet("/Pais/Administrar")
 public class AdministrarPais extends HttpServlet {

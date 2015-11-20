@@ -15,6 +15,7 @@ import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class RegistrarCiudad
+ * @author Samantha Molina
  */
 @WebServlet("/Ciudad/Registrar")
 public class RegistrarCiudad extends HttpServlet {

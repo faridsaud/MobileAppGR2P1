@@ -1,5 +1,8 @@
 package ec.edu.epn.model.vo;
 
+/**
+ * @author Samantha Molina
+ */
 public class Pais {
 	private String nombrePais;
 	private int idPais;

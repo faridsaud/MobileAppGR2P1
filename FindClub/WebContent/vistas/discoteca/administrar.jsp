@@ -3,59 +3,68 @@
 <%@ page import="java.util.*,ec.edu.epn.model.vo.*"%>
 	<jsp:include page="/templates/header.jsp"></jsp:include>
 	   <div class="container">
+	   <form method="post">
     <%
-		String email = (String)request.getAttribute("emailUsr");
+    	Usuario usrIniciado = new Usuario();
+		boolean redireccion = true;
+		try {
+			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+			if (usrIniciado.isEstado() == true) {
+				redireccion = false;
+			}
+			if(usrIniciado.isAdmin()==true){
+				redireccion = false;
+			}
+		} catch (Exception e) {
+			System.out.println("Error obteniendo usuario");
+		}	
+		if (redireccion == true) {
+			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
+		}	
+	
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
 		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
 		List<Musica> listaMusica = (List<Musica>) request.getAttribute("listaMusica");
+    	
 	%>
-      <form method="post">
+      
         <div class="form-group">
           <label for="nombre">Nombre</label>
-          <input type="nombre" class="form-control" id="nombre" placeholder="Nombre" name="nombre" required="true">
+          <input class="form-control" id="nombre" placeholder="Nombre" name="nombre" required="true">
         </div>
 
         <div class="form-group">
           <label for="pais">Pais</label>
-          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais">
+          <select name="pais" class="form-control" id="pais" name="pais1" onchange="this.form.method='GET'; document.getElementById('ciudad').value=''; this.form.submit()">
             <%
-        		int contadorElementos = 0;
-            	try{
-              		for (Pais p: listaPais){
-              			if (contadorElementos == 0){
-                  			%><option selected value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
-                  			contadorElementos++;
-                  		}
-                  		else{
-                  			%><option value="<%=p.getNombrePais()%>"><%= p.getNombrePais()%></option><%
-                  		}
-              		}
-              	}catch(Exception e){
-              		
-              	}
+            for (Pais p: listaPais){
+      			if (p.getNombrePais().equals((String) request.getParameter("pais"))){
+          			%><option selected values ="<%= p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+      			}
+      			else{
+      				%><option values ="<%= p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+      			}
+      		}
               %>
           </select>
         </div>
-
         <div class="form-group">
           <label for="ciudad">Ciudad</label>
-          <select name="ciudad" class="form-control" id="pais" name="pais" placeholder="Pais">
-            	<%
-        		int contador2 = 0;
+          <select name="ciudad" class="form-control" id="ciudad" name="ciudad1" 
+          	onchange="this.form.method='GET'; this.form.submit()">
+            	<% 
             	try{
               		for (Ciudad c: listaCiudad){
-              			if (contador2 == 0){
-                  			%><option selected value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
-                  			contador2++;
-                  		}
-                  		else{
-                  			%><option value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option><%
-                  		}
-              		}
-              	}catch(Exception e){
+              			if(c.getNombrePais().equals(request.getParameter("pais"))){ %>
+                  			<option selected value="<%=c.getNombreCiudad()%>"><%=c.getNombreCiudad()%></option>
+                  			<% }
+                  	}
               		
               	}
-              %>
+            	catch(Exception e){
+              		
+              	}
+            	%>
           </select>
         </div>
 
@@ -64,16 +73,10 @@
           <label for="tipoMusica">Tipo de musica principal</label>
           <select name="tipoMusica" class="form-control" id="tipoMusica">
             	<%
-        		int contador3 = 0;
+        	
             	try{
               		for (Musica m: listaMusica){
-              			if (contador3 == 0){
                   			%><option selected value="<%=m.getNombreTipo()%>"><%=m.getNombreTipo()%></option><%
-                  			contador3++;
-                  		}
-                  		else{
-                  			%><option value="<%=m.getNombreTipo()%>"><%=m.getNombreTipo()%></option><%
-                  		}
               		}
               	}catch(Exception e){
               		
@@ -102,6 +105,7 @@
 					<thead>
 						<tr>
 							<th>Nombre discoteca</th>
+							<th>Descripción</th>
 							<th>Acción</th>
 
 						</tr>
@@ -113,6 +117,8 @@
 						%>
 						<tr>
 							<td><%=disco.getNombre()%></td>
+							<td><%=disco.getDescripcion() %></td>
+							
 							<td>
 								<form method="get"
 									action="${pageContext.request.contextPath}/Discoteca/Modificar">

@@ -43,7 +43,6 @@ public class ModificarDiscoteca extends HttpServlet {
 		catch(Exception e){
 			System.out.println("error publicacion discoteca modificar");
 		}
-		
 		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/modificar.jsp").forward(request, response);
 	}
 
@@ -55,19 +54,20 @@ public class ModificarDiscoteca extends HttpServlet {
 		Discoteca discoModificador=new Discoteca();
 		Discoteca discoModificar=new Discoteca();
 		try{
-			
 			discoModificar=(Discoteca)request.getSession().getAttribute("discotecaModificar");
 			discoModificador.setNombre(request.getParameter("nombre"));	
 			discoModificador.setEmailUsr(request.getParameter("email"));
 			discoModificador.setPais(request.getParameter("pais"));
-			//discoModificador.setCiudad(request.getParameter("ciudad"));
+			//discoModificador.setCiudad(request.getParameter("idCiudad"));
 			discoModificador.setTipoMusica(request.getParameter("tipoMusica"));
 			discoModificador.setDescripcion(request.getParameter("descripcion"));
-			discoModificador.setImagen(request.getParameter("inputFile"));
+			discoModificador.setImagen(request.getParameter("imagen"));
 			ServiceDiscoteca sd=new ServiceDiscoteca();
 			sd.modificarDiscoteca(discoModificar, discoModificador);
 			
 		}catch(Exception e){
+			
+			doGet(request, response);
 			System.out.println("Error modificacion");
 		}
 		getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
