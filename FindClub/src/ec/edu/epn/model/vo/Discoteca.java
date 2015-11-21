@@ -3,6 +3,7 @@ package ec.edu.epn.model.vo;
 import java.awt.Image;
 
 public class Discoteca {
+	private int idDiscoteca;
 	private String nombre="";
 	private String pais="";
 	private int ciudad;
@@ -10,6 +11,14 @@ public class Discoteca {
 	private String emailUsr="";
 	private String descripcion="";
 	private String imagen;
+	
+	public int getIdDiscoteca() {
+		return idDiscoteca;
+	}
+
+	public void setIdDiscoteca(int idDiscoteca) {
+		this.idDiscoteca = idDiscoteca;
+	}
 	
 	public String getEmailUsr() {
 		return emailUsr;

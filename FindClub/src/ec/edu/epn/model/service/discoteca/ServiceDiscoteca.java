@@ -18,7 +18,9 @@ public class ServiceDiscoteca {
 		Discoteca disco = new Discoteca();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA LIKE ?");
@@ -54,7 +56,9 @@ public class ServiceDiscoteca {
 		Usuario usr = new Usuario();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("Select * from DISCOTECA where IDDISCOTECA=?");
@@ -88,10 +92,12 @@ public class ServiceDiscoteca {
 		Ciudad c = new Ciudad();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
-			PreparedStatement st = con.prepareStatement(
-					"Insert into DISCOTECA (NOMBREDISCOTECA,NOMBRETIPOMUSICA, IDCIUDAD, EMAILUSR, DESCRIPCIONDISCOTECA, PATHIMAGENDISCOTECA, CIUDAD) values (?,?,?,?,?,?,?) ");
+			PreparedStatement st = con.prepareStatement("Insert into DISCOTECA (NOMBREDISCOTECA, NOMBRETIPOMUSICA,"+
+					"IDCIUDAD, EMAILUSR, DESCRIPCIONDISCOTECA, PATHIMAGENDISCOTECA, CIUDAD) values (?,?,?,?,?,?,?)");
 			st.setString(1, disco.getNombre());
 			st.setString(2, disco.getTipoMusica());
 			st.setInt(3, disco.getCiudad());
@@ -118,7 +124,9 @@ public class ServiceDiscoteca {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 
 			PreparedStatement st = null;
@@ -165,10 +173,12 @@ public class ServiceDiscoteca {
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con.prepareStatement(
-					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, IDCIUDAD=?, EMAILUSER=?,"+ 
+					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, IDCIUDAD=?, EMAILUSER=?," + 
 					"DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=?, NOMBRECIUDAD=? WHERE NOMBREDISCOTECA=?");
 			st.setString(1, discoModificador.getNombre());
 			st.setString(2, discoModificador.getTipoMusica());
@@ -201,7 +211,9 @@ public class ServiceDiscoteca {
 		try{
 			ServiceCiudad sc = new ServiceCiudad();
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("Select * from DISCOTECA where IDCIUDAD=?");
@@ -235,7 +247,9 @@ public class ServiceDiscoteca {
 		try{
 			ServiceCiudad sc = new ServiceCiudad();
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA=? and IDCIUDAD=?");
@@ -268,7 +282,9 @@ public class ServiceDiscoteca {
 		Discoteca disco = new Discoteca();
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("Select * from DISCOTECA where NOMBRETIPOMUSICA=?");
@@ -301,7 +317,9 @@ public class ServiceDiscoteca {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
+			java.sql.Connection con = DriverManager.getConnection
+
+("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("delete from DISCOTECA where NOMBREDISCOTECA=?");
