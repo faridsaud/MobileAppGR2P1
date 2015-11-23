@@ -15,6 +15,7 @@ import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class AdministrarCiudad
+ * @author Samantha Molina
  */
 @WebServlet("/Ciudad/Administrar")
 public class AdministrarCiudad extends HttpServlet {
@@ -67,7 +68,6 @@ public class AdministrarCiudad extends HttpServlet {
 			
 			java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 			request.setAttribute("listaCiudad", listaCiudad);
-			request.setAttribute("listaPais", listaPais);
 			
 			getServletConfig().getServletContext().
 				getRequestDispatcher("/vistas/ciudad/administrar.jsp").forward(request, response);

@@ -7,17 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ec.edu.epn.model.service.fiesta.ServiceFiesta;
+import ec.edu.epn.model.vo.Fiesta;
+
 /**
- * Servlet implementation class HomeFiesta
+ * Servlet implementation class EliminarFiesta
  */
-@WebServlet("/Fiesta/Home")
-public class HomeFiesta extends HttpServlet {
+@WebServlet("/Fiesta/Eliminar")
+public class EliminarFiesta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public HomeFiesta() {
+    public EliminarFiesta() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,7 +30,7 @@ public class HomeFiesta extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/home.jsp").forward(request, response);
+		getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
 	}
 
 	/**
@@ -35,6 +38,18 @@ public class HomeFiesta extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ServiceFiesta sf = new ServiceFiesta();
+		Fiesta fiesta = new Fiesta();
+		int idFiesta = 0;
+		try{
+			idFiesta = Integer.parseInt(request.getParameter("fiestaEliminar"));
+		}catch (Exception e){
+			System.out.println("Error al eliminar fiesta");
+		}
+		
+		fiesta.setIdFiesta(idFiesta);
+		sf.eliminarFiesta(fiesta);
+		
 		doGet(request, response);
 	}
 

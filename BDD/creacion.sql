@@ -21,9 +21,10 @@ drop table if exists USUARIO;
 /*==============================================================*/
 create table CIUDAD
 (
+   IDCIUDAD             int not null AUTO_INCREMENT,
+   IDPAIS               int,
    NOMBRECIUDAD         varchar(30) not null,
-   NOMBREPAIS           varchar(30),
-   primary key (NOMBRECIUDAD)
+   primary key (IDCIUDAD)
 );
 
 /*==============================================================*/
@@ -46,9 +47,12 @@ create table DISCOTECA
 /*==============================================================*/
 create table FIESTA
 (
-   IDFIESTA             bigint not null,
+   IDFIESTA             bigint not null AUTO_INCREMENT,
    EMAILUSR             varchar(50),
    IDDISCOTECA          bigint,
+   FECHAFIESTA          date not null,
+   HORAFIESTA           time not null,
+   DESCRIPCIONFIESTA    char(150) not null,
    primary key (IDFIESTA)
 );
 
@@ -67,8 +71,9 @@ create table MUSICA
 /*==============================================================*/
 create table PAIS
 (
+   IDPAIS               int not null AUTO_INCREMENT,
    NOMBREPAIS           varchar(30) not null,
-   primary key (NOMBREPAIS)
+   primary key (IDPAIS)
 );
 
 /*==============================================================*/
@@ -85,11 +90,11 @@ create table USUARIO
    primary key (EMAILUSR)
 );
 
-alter table CIUDAD add constraint FK_CIUDADPAIS foreign key (NOMBREPAIS)
-      references PAIS (NOMBREPAIS) on delete restrict on update restrict;
+alter table CIUDAD add constraint FK_CIUDADPAIS foreign key (IDPAIS)
+      references PAIS (IDPAIS) on delete restrict on update restrict;
 
-alter table DISCOTECA add constraint FK_DISCOTECACIUDAD foreign key (NOMBRECIUDAD)
-      references CIUDAD (NOMBRECIUDAD) on delete restrict on update restrict;
+alter table DISCOTECA add constraint FK_DISCOTECACIUDAD foreign key (IDCIUDAD)
+      references CIUDAD (IDCIUDAD) on delete restrict on update restrict;
 
 alter table DISCOTECA add constraint FK_DISCOTECAMUSICA foreign key (NOMBRETIPOMUSICA)
       references MUSICA (NOMBRETIPOMUSICA) on delete restrict on update restrict;

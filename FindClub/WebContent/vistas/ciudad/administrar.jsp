@@ -86,14 +86,15 @@
 									value="<%=c.getNombreCiudad()%>" name="nombreCiudadModificar">
 									<span class="glyphicon glyphicon-pencil" title="Modificar ciudad"></span>
 								</button>
+								<input type="hidden" value="<%=c.getNombrePais()%>" name="nombrePaisModificar">
 							</form>
 							<form method="post"
 								action="<%=referenciaEliminar%>">
 								<button type="submit" class="btn btn-default"
 									value="<%=c.getNombreCiudad()%>" name="nombreCiudadEliminar">
-									<span
-								class="glyphicon glyphicon-remove" title="Eliminar ciudad"></span>
+									<span class="glyphicon glyphicon-remove" title="Eliminar ciudad"></span>
 								</button>
+								<input type="hidden" value="<%=c.getNombrePais()%>" name="nombrePaisEliminar">
 							</form> 
 						</td>
               		</tr>

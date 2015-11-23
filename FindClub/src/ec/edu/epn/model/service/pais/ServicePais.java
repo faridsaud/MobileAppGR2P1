@@ -1,5 +1,6 @@
 package ec.edu.epn.model.service.pais;
 
+import java.io.PrintWriter;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,6 +13,9 @@ import ec.edu.epn.model.vo.Pais;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/***
+ * @author Samantha Molina
+ */
 public class ServicePais {
 	
 	private String driver = "com.mysql.jdbc.Driver";
@@ -25,8 +29,8 @@ public class ServicePais {
 		return con;
 	}
 	
-	public boolean existePais(Pais pais, String nombrePais){
-		pais = buscarPais(nombrePais);
+	public boolean existePais(String nombrePais){
+		Pais pais = buscarPais(nombrePais);
 
 		try{
 			if (pais.getNombrePais().equals(nombrePais)){
@@ -39,7 +43,7 @@ public class ServicePais {
 	}
 	
 	public void registrarPais(Pais pais){
-		boolean insertarRegistro = existePais(pais, pais.getNombrePais());
+		boolean insertarRegistro = existePais(pais.getNombrePais());
 		
 		if (insertarRegistro == false){
 			try {
@@ -56,23 +60,12 @@ public class ServicePais {
 		}
 	}
 	
-	public int identificadorPais(String nombrePais){
-		ServicePais sp= new ServicePais();
-		Pais pais = sp.buscarPais(nombrePais);
-		return pais.getIdPais();
-	}
-
-	public String nombrePais(int identificadorPais){
-		ServicePais sp= new ServicePais();
-		Pais pais = sp.buscarNombrePais(identificadorPais);
-		return pais.getNombrePais();
-	}
-	
 	public Pais buscarPais(String nombrePais){
 		Pais pais = new Pais();
+		PreparedStatement st = null;
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Select * from PAIS, USUARIO where NOMBREPAIS = ?");
+			st = con.prepareStatement("Select * from PAIS where NOMBREPAIS = ?");
 			st.setString(1, nombrePais);
 			st.execute();
 			
@@ -87,15 +80,15 @@ public class ServicePais {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return pais;
 	}
 	
-	public Pais buscarNombrePais(int identificadorPais){
+	public Pais buscarPais(int identificadorPais){
 		Pais pais = new Pais();
+		PreparedStatement st = null;
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Select * from PAIS, USUARIO where IDPAIS = ?");
+			st = con.prepareStatement("Select * from PAIS where IDPAIS = ?");
 			st.setInt(1, identificadorPais);
 			st.execute();
 			
@@ -110,7 +103,6 @@ public class ServicePais {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return pais;
 	}
 	
@@ -145,29 +137,36 @@ public class ServicePais {
 		return listaPais;
 	}
 	
-	public void modificarPais(Pais paisModificar, Pais paisModificador){
-		try {
-			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Update PAIS set NOMBREPAIS = ?  where NOMBREPAIS = ?");
-			st.setString(1, paisModificador.getNombrePais());
-			st.setString(2, paisModificar.getNombrePais());
-			st.execute();
-			st.close();
-			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public String modificarPais(Pais paisModificar, Pais paisModificador){
+		if (existePais(paisModificador.getNombrePais()) == false){
+			try {
+				java.sql.Connection con = establecerConexion();
+				PreparedStatement st = con.prepareStatement("Update PAIS set NOMBREPAIS = ?  where IDPAIS = ?");
+				st.setString(1, paisModificador.getNombrePais());
+				st.setInt(2, paisModificar.getIdPais());
+				st.execute();
+				st.close();
+				con.close();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "No se puede modificar el registro";
+			}
+		}else{
+			return "El registro ya existe.";
 		}
+		return "";
 	}
 	
 	public void eliminarPais(Pais pais){
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Delete from PAIS where NOMBREPAIS = ?");
+			PreparedStatement st = con.prepareStatement("Delete from PAIS where NOMBREPAIS = ? and IDPAIS=?");
 			st.setString(1, pais.getNombrePais());
+			st.setInt(2, pais.getIdPais());
 			st.execute();
 			st.close();
 			con.close();

@@ -36,6 +36,7 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" >
 
+
             <li><a href="${pageContext.request.contextPath}/Discoteca/Home">Discotecas</a></li>
             <li><a href="${pageContext.request.contextPath}/Fiesta/Home">Fiesta</a></li>
 
