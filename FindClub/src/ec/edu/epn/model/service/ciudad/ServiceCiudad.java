@@ -159,7 +159,6 @@ public class ServiceCiudad {
 	public void modificarCiudad(Ciudad ciudadModificar, Ciudad ciudadModificador){
 		boolean insertarRegistro = existeCiudad(ciudadModificador.getNombreCiudad(), ciudadModificador.getNombrePais());
 		ServicePais sp = new ServicePais();
-				
 		if (insertarRegistro == false){
 			try {
 				java.sql.Connection con = establecerConexion();

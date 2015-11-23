@@ -110,7 +110,11 @@ public class ServiceDiscoteca {
 			System.out.println("error");
 		}
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> refs/remotes/origin/master
 	public List<Discoteca> listarDiscoteca(String nombreCiudad) {
 
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
@@ -123,6 +127,7 @@ public class ServiceDiscoteca {
 
 			PreparedStatement st = null;
 
+<<<<<<< HEAD
 			st = con.prepareStatement(
 					"Select NOMBREDISCOTECA,d.IDCIUDAD,NOMBRETIPOMUSICA,PATHIMAGENDISCOTECA,EMAILUSR,DESCRIPCIONDISCOTECA from DISCOTECA d, CIUDAD c where d.IDCIUDAD = c.IDCIUDAD and c.NOMBRECIUDAD=?");
 			st.setString(1, nombreCiudad);
@@ -137,13 +142,31 @@ public class ServiceDiscoteca {
 			 * "Select * from DISCOTECA where NOMBREDISCOTECA like ?");
 			 * st.setString(1, "%" + nombre + "%"); }
 			 */
+=======
+		    st = con.prepareStatement("Select NOMBREDISCOTECA,d.IDCIUDAD,NOMBRETIPOMUSICA,PATHIMAGENDISCOTECA,EMAILUSR,DESCRIPCIONDISCOTECA from DISCOTECA d, CIUDAD c where d.IDCIUDAD = c.IDCIUDAD and c.NOMBRECIUDAD=?");
+			st.setString(1, nombreCiudad);
+			
+//			if (nombre.equals("") && disco.getCiudad()==0){
+//				st = con.prepareStatement("Select * from DISCOTECA");
+//			}
+//			else if (disco.getCiudad() != 0){
+//				st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
+//				st.setInt(1, disco.getCiudad());
+//			}else if(nombre.equals("")==false){
+//				st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA like ?");
+//				st.setString(1, "%" + nombre + "%");
+//			}
+>>>>>>> refs/remotes/origin/master
 
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
 			while (rs.next()) {
 				Discoteca disco1 = new Discoteca();
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
 				disco1.setNombre(rs.getString(1));
 				disco1.setCiudad(rs.getInt(2));
 				disco1.setTipoMusica(rs.getString(3));
@@ -157,7 +180,10 @@ public class ServiceDiscoteca {
 				disco1.setEmailUsr(rs.getString("EMAILUSR"));
 
 				disco1.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
 				listaDiscotecas.add(disco1);
 			}
 			st.close();
