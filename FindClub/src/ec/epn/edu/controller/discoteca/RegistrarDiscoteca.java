@@ -64,7 +64,7 @@ IOException {
 			Musica m = new Musica();
 			Discoteca disco = new Discoteca();
 
-			
+			/*
 			String nombrePais = request.getParameter("pais");
 			if (nombrePais == null)
 				nombrePais = "";
@@ -73,9 +73,35 @@ IOException {
 			
 			List<Pais> listaPais = sp.listarPais(pais);
 			request.setAttribute("listaPais", listaPais);
-			
+			ciudad.setIdPais(listaPais.get(0).getIdPais());
 			List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 			request.setAttribute("listaCiudad", listaCiudad);
+			*/
+
+			String nombrePais = request.getParameter("pais");
+			String nombreCiudad = request.getParameter("ciudad");
+			
+			if (nombrePais == null){
+				nombrePais = "";
+			}
+			pais.setNombrePais("");
+			
+			java.util.List<Pais> listaPais = sp.listarPais(pais);
+			request.setAttribute("listaPais", listaPais);
+			
+			if (nombreCiudad == null)
+				nombreCiudad = "";
+			if (nombrePais == "")
+				nombrePais = listaPais.get(0).getNombrePais();
+			
+			ciudad.setNombreCiudad("");
+			ciudad.setNombrePais(nombrePais);
+			
+			java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
+			request.setAttribute("listaCiudad", listaCiudad);
+			
+			if (nombreCiudad == "")
+				nombreCiudad = listaCiudad.get(0).getNombreCiudad();
 			
 			m.setNombreTipo("");
 			List<Musica> listaMusica = sm.listarMusica();
@@ -111,17 +137,22 @@ IOException {
    		ServicePais sp= new ServicePais();
 		try{
 			nombre=request.getParameter("nombre");
+			System.out.println(nombre);
 			nombrePais=request.getParameter("pais");
+			System.out.println(nombrePais);
 			nombreCiudad=request.getParameter("ciudad");
+			System.out.println(nombreCiudad);
 			tipoMusica=request.getParameter("tipoMusica");
-			imagen=request.getParameter("inputFile");
-			descripcion=request.getParameter("descripcion");			
+			//imagen=request.getParameter("inputFile");
+			System.out.println(tipoMusica);
+			descripcion=request.getParameter("descripcion");
+			System.out.println(descripcion);
 			Discoteca disco = new Discoteca();
 			disco.setNombre(nombre);
 			disco.setTipoMusica(tipoMusica);
 			System.out.println(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 			disco.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
-			disco.setImagen(imagen);
+			//disco.setImagen(imagen);
 			disco.setDescripcion(descripcion);
 			disco.setEmailUsr(emailUsr);
 			ServiceDiscoteca sd = new ServiceDiscoteca();
