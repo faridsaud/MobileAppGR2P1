@@ -16,77 +16,106 @@ import ec.edu.epn.model.vo.Usuario;
 
 /**
  * Servlet implementation class ModificarCiudad
+ * 
  * @author Samantha Molina
  */
 @WebServlet("/Ciudad/Modificar")
 public class ModificarCiudad extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ModificarCiudad() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		Ciudad ciudad = new Ciudad();
-		ServiceCiudad sc = new ServiceCiudad();
-		ciudad = sc.buscarCiudad((String)request.getParameter("nombreCiudadModificar"),(String)request.getParameter("nombrePaisModificar"));
-		
-		request.getSession().setAttribute("ciudadModificar", ciudad);
-		
-		ServicePais sp = new ServicePais();
-		Pais pais = new Pais();
-		pais.setNombrePais("");
-		
-		java.util.List<Pais> listaPais = sp.listarPais(pais);
-		request.setAttribute("listaPais", listaPais);
-		
-		try{
-		}catch(Exception e){
-			System.out.println("error publicacion ciudad modificar");
-		}
-		getServletConfig().getServletContext().getRequestDispatcher("/vistas/ciudad/modificar.jsp").forward(request, response);
-
+	public ModificarCiudad() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Ciudad ciudadModificador = new Ciudad();
-		Ciudad ciudadModificar = new Ciudad();
-		ServiceCiudad sc = new ServiceCiudad();
-		ServicePais sp = new ServicePais();
+		String nombrePais = "";
+		nombrePais = request.getParameter("pais");
+		request.setAttribute(nombrePais, "nombrePaisModificar");
 		
-		try{
-			String nombreCiudad = (String) request.getParameter("ciudad");
-			String nombrePais = (String) request.getParameter("pais");
-			
-			if (nombreCiudad == null)
-				nombreCiudad="";
-			if (nombrePais == null)
-				nombrePais="";
-			
-			ciudadModificar = (Ciudad) request.getSession().getAttribute("ciudadModificar");
-			ciudadModificador.setNombreCiudad(nombreCiudad);
-			ciudadModificador.setIdPais(sp.buscarPais(nombrePais).getIdPais());
-			ciudadModificador.setNombrePais(nombrePais);
-			ciudadModificador.setIdCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
+		doPost(request, response);
+	}
 
-			sc.modificarCiudad(ciudadModificar, ciudadModificador);
-		}catch(Exception e){
-			System.out.println("Error modificacion");
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String combos = request.getParameter("combos");
+
+		if (combos == null || combos.equals("si")) {
+			Ciudad ciudad = new Ciudad();
+			ServiceCiudad sc = new ServiceCiudad();
+			ciudad = sc.buscarCiudad((String) request.getParameter("nombreCiudadModificar"),
+					(String) request.getParameter("nombrePaisModificar"));
+
+			request.getSession().setAttribute("ciudadModificar", ciudad);
+
+			ServicePais sp = new ServicePais();
+			Pais pais = new Pais();
+			String nombrePais = "";
+
+			nombrePais = request.getParameter("pais");
+			request.setAttribute(nombrePais, "nombrePaisModificar");
+			
+			if (nombrePais == null) {
+				nombrePais = "";
+			}
+			pais.setNombrePais("");
+
+			java.util.List<Pais> listaPais = sp.listarPais(pais);
+			request.setAttribute("listaPais", listaPais);
+
+			try {
+				if (nombrePais.equals(""))
+					nombrePais = listaPais.get(0).getNombrePais();
+			} catch (Exception e) {
+			}
+
+			try {
+			} catch (Exception e) {
+				System.out.println("error publicacion ciudad modificar");
+			}
+			getServletConfig().getServletContext().getRequestDispatcher("/vistas/ciudad/modificar.jsp").forward(request,
+					response);
+		} else {
+			Ciudad ciudadModificador = new Ciudad();
+			Ciudad ciudadModificar = new Ciudad();
+			ServiceCiudad sc = new ServiceCiudad();
+			ServicePais sp = new ServicePais();
+
+			try {
+				String nombreCiudad = (String) request.getParameter("ciudad");
+				String nombrePais = (String) request.getParameter("pais");
+
+				if (nombreCiudad == null)
+					nombreCiudad = "";
+				if (nombrePais == null)
+					nombrePais = "";
+
+				ciudadModificar = (Ciudad) request.getSession().getAttribute("ciudadModificar");
+				ciudadModificador.setNombreCiudad(nombreCiudad);
+				ciudadModificador.setIdPais(sp.buscarPais(nombrePais).getIdPais());
+				ciudadModificador.setNombrePais(nombrePais);
+				ciudadModificador.setIdCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
+
+				sc.modificarCiudad(ciudadModificar, ciudadModificador);
+			} catch (Exception e) {
+				System.out.println("Error modificacion");
+			}
+			getServletConfig().getServletContext().getRequestDispatcher("/Ciudad/Home").forward(request, response);
 		}
-		getServletConfig().getServletContext().getRequestDispatcher("/Ciudad/Home").forward(request, response);
-
 	}
 
 }
