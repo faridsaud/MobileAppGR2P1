@@ -19,7 +19,7 @@ if(msc==null){
 
         <div class="form-group">
           <label for="descripcion">Descripción (Opcional)</label>
-          <textarea name="descripcionMusica" class="form-control" rows="5" id="descripcion" placeholder="Explicar el tipo de música" value=<%=msc.getDescripcion()%>></textarea>
+          <textarea name="descripcionMusica" class="form-control" rows="5" id="descripcion" placeholder="Explicar el tipo de música"><%=msc.getDescripcion()%></textarea>
         </div>
 
         <button type="submit" class="btn btn-default">Modificar</button>

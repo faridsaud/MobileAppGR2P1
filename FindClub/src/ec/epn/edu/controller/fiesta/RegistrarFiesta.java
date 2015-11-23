@@ -34,37 +34,36 @@ public class RegistrarFiesta extends HttpServlet {
 	}
 
 	/**
-	 * @throws IOException 
-	 * @throws ServletException 
+	 * @throws IOException
+	 * @throws ServletException
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
-	
+	 * 
 	 */
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-	    doPost(request, response);
-    }
-	
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String combos = request.getParameter("combos");
-		
-		if (combos == null || combos.equals("si")) {
 
-			// TODO Auto-generated method stub
-			Usuario usrIniciado = new Usuario();
-			boolean redireccion = true;
-			try {
-				usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
-				if (usrIniciado.isEstado() == true) {
-					redireccion = false;
-				}
-			} catch (Exception e) {
-				System.out.println("Error obteniendo usuario");
+		Usuario usrIniciado = new Usuario();
+		boolean redireccion = true;
+		try {
+			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+			if (usrIniciado.isEstado() == true) {
+				redireccion = false;
 			}
-			if (redireccion == true) {
-				getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
-			} else {
+		} catch (Exception e) {
+			System.out.println("Error obteniendo usuario");
+		}
+		if (redireccion == true) {
+			getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
+		} else {
+			if (combos == null || combos.equals("si")) {
 				ServicePais sp = new ServicePais();
 				ServiceCiudad sc = new ServiceCiudad();
 				ServiceDiscoteca sd = new ServiceDiscoteca();
@@ -74,6 +73,24 @@ public class RegistrarFiesta extends HttpServlet {
 
 				String nombrePais = request.getParameter("pais");
 				String nombreCiudad = request.getParameter("ciudad");
+				String nombreFiesta = request.getParameter("nombreFiesta");
+				String fecha = request.getParameter("fecha");
+				String hora = request.getParameter("hora");
+				String descripcion = request.getParameter("descripcion");
+
+				if (nombreFiesta == null)
+					nombreFiesta = "";
+				if (fecha == null)
+					fecha = "";
+				if (hora == null)
+					fecha = "";
+				if (descripcion == null)
+					descripcion = "";
+
+				request.setAttribute(nombreFiesta, "nombreFiesta");
+				request.setAttribute(fecha, "fecha");
+				request.setAttribute(hora, "hora");
+				request.setAttribute(descripcion, "descripcion");
 
 				if (nombrePais == null) {
 					nombrePais = "";
@@ -85,8 +102,12 @@ public class RegistrarFiesta extends HttpServlet {
 
 				if (nombreCiudad == null)
 					nombreCiudad = "";
-				if (nombrePais.equals(""))
-					nombrePais = listaPais.get(0).getNombrePais();
+
+				try {
+					if (nombrePais.equals(""))
+						nombrePais = listaPais.get(0).getNombrePais();
+				} catch (Exception e) {
+				}
 
 				ciudad.setNombreCiudad("");
 				ciudad.setNombrePais(nombrePais);
@@ -94,73 +115,61 @@ public class RegistrarFiesta extends HttpServlet {
 				java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 				request.setAttribute("listaCiudad", listaCiudad);
 
-				if (nombreCiudad.equals(""))
-					nombreCiudad = listaCiudad.get(0).getNombreCiudad();
+				try {
+					if (nombreCiudad.equals(""))
+						nombreCiudad = listaCiudad.get(0).getNombreCiudad();
+				} catch (Exception e) {
+				}
 
 				java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(nombreCiudad);
 				request.setAttribute("listaDiscoteca", listaDiscoteca);
-				
+
 				getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/registrar.jsp")
 						.forward(request, response);
-			}
-		} else {
-			// TODO Auto-generated method stub
-			Fiesta fiesta = new Fiesta();
-			String nombrePais;
-			String nombreCiudad;
-			String email = "";
-			String nombreDiscoteca = "";
-			String nombreFiesta = "";
-			String fecha = "";
-			String hora = "";
-			String descripcion = "";
 
-			Usuario usrIniciado = new Usuario();
-			boolean redireccion = true;
-			try {
-				usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
-				if (usrIniciado.isEstado() == true) {
-					redireccion = false;
-				}
-			} catch (Exception e) {
-				System.out.println("Error obteniendo usuario");
-			}
-			if (redireccion == true) {
-				getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
 			} else {
-				try {
-					ServiceDiscoteca sd = new ServiceDiscoteca();
-					ServiceCiudad sc = new ServiceCiudad();
-					email = usrIniciado.getEmail();
-					nombreDiscoteca = request.getParameter("discoteca");
-					nombreFiesta = request.getParameter("nombreFiesta");
-					nombrePais = request.getParameter("pais");
-					nombreCiudad = request.getParameter("ciudad");
-					fecha = request.getParameter("fecha");
-					hora = request.getParameter("hora");
-					descripcion = request.getParameter("descripcion");
+				Fiesta fiesta = new Fiesta();
+				String nombrePais;
+				String nombreCiudad;
+				String email = "";
+				String nombreDiscoteca = "";
+				String nombreFiesta = "";
+				String fecha = "";
+				String hora = "";
+				String descripcion = "";
+
+					try {
+						email = usrIniciado.getEmail();
+						nombreDiscoteca = request.getParameter("discoteca");
+						nombreFiesta = request.getParameter("nombreFiesta");
+						nombrePais = request.getParameter("pais");
+						nombreCiudad = request.getParameter("ciudad");
+						fecha = request.getParameter("fecha");
+						hora = request.getParameter("hora");
+						descripcion = request.getParameter("descripcion");
+
+						fiesta.setNombreFiesta(nombreFiesta);
+						fiesta.setNombreDiscoteca(nombreDiscoteca);
+						fiesta.setEmail(email);
+						fiesta.setFecha(fecha);
+						fiesta.setHora(hora);
+						fiesta.setDescripcion(descripcion);
+
+						ServiceFiesta sf = new ServiceFiesta();
+						sf.registrarFiesta(fiesta, nombreCiudad, nombrePais);
+
+						getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/home.jsp")
+								.forward(request, response);
+					} catch (Exception e) {
+						email = "";
+						nombreDiscoteca = "";
+						nombreFiesta = "";
+						fecha = "";
+						hora = "";
+						descripcion = "";
+						doGet(request, response);
+
 					
-					fiesta.setNombreFiesta(nombreFiesta);
-					fiesta.setNombreDiscoteca(nombreDiscoteca);
-					fiesta.setEmail(email);
-					fiesta.setFecha(fecha);
-					fiesta.setHora(hora);
-					fiesta.setDescripcion(descripcion);
-
-					ServiceFiesta sf = new ServiceFiesta();
-					sf.registrarFiesta(fiesta);
-
-					getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/home.jsp")
-							.forward(request, response);
-				} catch (Exception e) {
-					email = "";
-					nombreDiscoteca = "";
-					nombreFiesta = "";
-					fecha = "";
-					hora = "";
-					descripcion = "";
-					doGet(request, response);
-
 				}
 			}
 		}

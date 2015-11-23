@@ -116,13 +116,8 @@ public class ServiceDiscoteca {
 		}
 	}
 	
-<<<<<<< HEAD
 	public List<Discoteca> listarDiscoteca(String nombreCiudad) {
-=======
-	/*ToDo revisar*/
-	public List<Discoteca> listarDiscoteca(String nombre, Discoteca disco) {
 
->>>>>>> refs/remotes/origin/parteAndres
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -133,36 +128,32 @@ public class ServiceDiscoteca {
 					"bases", "bases");
 
 			PreparedStatement st = null;
-<<<<<<< HEAD
-			
+
 		    st = con.prepareStatement("Select NOMBREDISCOTECA,d.IDCIUDAD,NOMBRETIPOMUSICA,PATHIMAGENDISCOTECA,EMAILUSR,DESCRIPCIONDISCOTECA from DISCOTECA d, CIUDAD c where d.IDCIUDAD = c.IDCIUDAD and c.NOMBRECIUDAD=?");
 			st.setString(1, nombreCiudad);
-=======
-			if (nombre.equals("") && disco.getCiudad()==0){
-				st = con.prepareStatement("Select * from DISCOTECA");
-			}
-			else if (disco.getCiudad() != 0){
-				st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
-				st.setInt(1, disco.getCiudad());
-			}else if(nombre.equals("")==false){
-				st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA like ?");
-				st.setString(1, "%" + nombre + "%");
-			}
 			
->>>>>>> refs/remotes/origin/parteAndres
+//			if (nombre.equals("") && disco.getCiudad()==0){
+//				st = con.prepareStatement("Select * from DISCOTECA");
+//			}
+//			else if (disco.getCiudad() != 0){
+//				st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
+//				st.setInt(1, disco.getCiudad());
+//			}else if(nombre.equals("")==false){
+//				st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA like ?");
+//				st.setString(1, "%" + nombre + "%");
+//			}
+
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
 			while (rs.next()) {
 				Discoteca disco1 = new Discoteca();
-<<<<<<< HEAD
 				disco1.setNombre(rs.getString(1));
 				disco1.setCiudad(rs.getInt(2));
 				disco1.setTipoMusica(rs.getString(3));
 				disco1.setImagen(rs.getString(4));
 				disco1.setEmailUsr(rs.getString(5));
 				disco1.setDescripcion(rs.getString(6));
-=======
 				disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
 				disco1.setCiudad(rs.getInt("IDCIUDAD"));
 				disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
@@ -170,7 +161,6 @@ public class ServiceDiscoteca {
 				disco1.setEmailUsr(rs.getString("EMAILUSR"));
 				
 				disco1.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
->>>>>>> refs/remotes/origin/parteAndres
 				listaDiscotecas.add(disco1);
 			}
 			st.close();
