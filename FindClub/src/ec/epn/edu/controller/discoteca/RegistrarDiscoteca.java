@@ -1,5 +1,6 @@
 package ec.epn.edu.controller.discoteca;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,12 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import sun.text.normalizer.UBiDiProps;
 import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
+import ec.edu.epn.model.service.musica.ServiceMusica;
 import ec.edu.epn.model.service.pais.ServicePais;
 import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
+import ec.edu.epn.model.vo.Musica;
 import ec.edu.epn.model.vo.Pais;
 import ec.edu.epn.model.vo.Usuario;
 
@@ -34,79 +36,118 @@ public class RegistrarDiscoteca extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		ServicePais sp = new ServicePais();
-		ServiceCiudad sc = new ServiceCiudad();
-		Ciudad ciudad = new Ciudad();
-		Pais pais = new Pais();
-		
-		String nombreCiudad = request.getParameter("ciudad");
-		if (nombreCiudad == null)
-			nombreCiudad = "";
-		ciudad.setNombreCiudad(nombreCiudad);
-		
-		String nombrePais = request.getParameter("pais");
-		if (nombrePais == null)
-			nombrePais = "";
-		pais.setNombrePais("");
-		ciudad.setNombrePais(nombrePais);
-		
-		java.util.List<Pais> listaPais = sp.listarPais(pais);
-		request.setAttribute("listaPais", listaPais);
-		
-		java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
-		request.setAttribute("listaCiudad", listaCiudad);
-		
-		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/registrar.jsp").forward(request, response);
-	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, 
 
+IOException {
+		// TODO Auto-generated method stub
+		Usuario usrIniciado = new Usuario();
+		boolean redireccion = true;
+		try {
+			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+			if (usrIniciado.isEstado() == true) {
+				redireccion = false;
+			}
+		} catch (Exception e) {
+			System.out.println("Error obteniendo usuario");
+		}
+		if (redireccion == true) {
+			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, 
+
+response);
+		} else {
+			ServicePais sp = new ServicePais();
+			ServiceCiudad sc = new ServiceCiudad();
+			ServiceMusica sm = new ServiceMusica();
+			Ciudad ciudad = new Ciudad();
+			Pais pais = new Pais();
+			Musica m = new Musica();
+			Discoteca disco = new Discoteca();
+			String nombre = request.getParameter("nombre");
+			if(nombre==null)
+				nombre="";
+			disco.setNombre(nombre);
+			String nombreCiudad = request.getParameter("ciudad");
+			if (nombreCiudad == null)
+				nombreCiudad = "";
+			ciudad.setNombreCiudad(nombreCiudad);
+			
+			String nombrePais = request.getParameter("pais");
+			if (nombrePais == null)
+				nombrePais = "";
+			pais.setNombrePais("");
+			ciudad.setNombrePais(nombrePais);
+			
+			List<Pais> listaPais = sp.listarPais(pais);
+			request.setAttribute("listaPais", listaPais);
+			
+			List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
+			request.setAttribute("listaCiudad", listaCiudad);
+			request.setAttribute("listaPais", listaPais);
+			
+			m.setNombreTipo("");
+			List<Musica> listaMusica = sm.listarMusica();
+			request.setAttribute("listaMusica", listaMusica);
+			
+			String descripcion = request.getParameter("descripcion");
+			if(descripcion==null)
+				descripcion="";
+			disco.setDescripcion(descripcion);
+		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/registrar.jsp").forward
+
+(request, response);
+		}
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, 
+
+IOException {
 		// TODO Auto-generated method stub
+		
+	
 		String nombre="";
-		String pais="";
-		String ciudad="";
+		String nombreCiudad="";
 		String tipoMusica="";
 		String imagen="";
+		String nombrePais="";
 		String descripcion="";
 		String emailUsr="";
-		
+		Usuario usrIniciado= new Usuario();
+		usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
+   		emailUsr = usrIniciado.getEmail();
+   		Ciudad c = new Ciudad();
+   		ServiceCiudad sc = new ServiceCiudad();
 		try{
-			ServiceCiudad sc = new ServiceCiudad();
 			nombre=request.getParameter("nombre");
-			pais=request.getParameter("pais");
-			ciudad=request.getParameter("ciudad");
+			nombrePais=request.getParameter("pais");
+			nombreCiudad=request.getParameter("ciudad");
 			tipoMusica=request.getParameter("tipoMusica");
-			imagen=request.getParameter("imagen");
-			descripcion=request.getParameter("descripcion");
-			emailUsr=request.getParameter("emailUsuario");
-			
+			imagen=request.getParameter("inputFile");
+			descripcion=request.getParameter("descripcion");			
 			Discoteca disco = new Discoteca();
-			Usuario usr = new Usuario();
 			disco.setNombre(nombre);
-			disco.setPais(pais);
-			disco.setCiudad(sc.buscarCiudad(sc.buscarCiudad(request.getParameter("ciudad"), request.getParameter("pais")).getIdCiudad()).getIdCiudad());
 			disco.setTipoMusica(tipoMusica);
+			disco.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 			disco.setImagen(imagen);
 			disco.setDescripcion(descripcion);
 			disco.setEmailUsr(emailUsr);
-			
 			ServiceDiscoteca sd = new ServiceDiscoteca();
 			sd.registrarDiscoteca(disco);
-			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/home.jsp").forward(request, response);
+			
+			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/home.jsp").forward
+
+(request, response);
 		}catch(Exception e){
 			nombre="";
-			pais="";
-			ciudad="";
-			tipoMusica="";
-			imagen="";
-			descripcion="";
 			emailUsr="";
+			descripcion="";
+			imagen="";
+			nombrePais="";
+			nombreCiudad="";
+			tipoMusica="";
 			doGet(request, response);
 		}
+		
 	}
-
 }

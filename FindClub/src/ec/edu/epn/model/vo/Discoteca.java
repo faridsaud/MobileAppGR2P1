@@ -5,12 +5,12 @@ import java.awt.Image;
 public class Discoteca {
 	private int idDiscoteca;
 	private String nombre="";
-	private String pais="";
-	private int idCiudad;
+	//private String pais="";
+	private int ciudad;
 	private String tipoMusica="";
 	private String emailUsr="";
 	private String descripcion="";
-	private String imagen=null;
+	private String imagen;
 	
 	public int getIdDiscoteca() {
 		return idDiscoteca;
@@ -19,7 +19,7 @@ public class Discoteca {
 	public void setIdDiscoteca(int idDiscoteca) {
 		this.idDiscoteca = idDiscoteca;
 	}
-
+	
 	public String getEmailUsr() {
 		return emailUsr;
 	}
@@ -46,7 +46,7 @@ public class Discoteca {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
+/*
 	public String getPais() {
 		return pais;
 	}
@@ -54,13 +54,13 @@ public class Discoteca {
 	public void setPais(String pais) {
 		this.pais = pais;
 	}
-
+*/
 	public int getCiudad() {
-		return idCiudad;
+		return ciudad;
 	}
 
 	public void setCiudad(int ciudad) {
-		this.idCiudad = ciudad;
+		this.ciudad = ciudad;
 	}
 
 	public String getTipoMusica() {
@@ -78,4 +78,5 @@ public class Discoteca {
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
+	
 }
