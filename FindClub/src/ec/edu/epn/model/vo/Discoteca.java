@@ -5,7 +5,7 @@ import java.awt.Image;
 public class Discoteca {
 	private int idDiscoteca;
 	private String nombre="";
-	private String pais="";
+	//private String pais="";
 	private int ciudad;
 	private String tipoMusica="";
 	private String emailUsr="";
@@ -46,7 +46,7 @@ public class Discoteca {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
+/*
 	public String getPais() {
 		return pais;
 	}
@@ -54,7 +54,7 @@ public class Discoteca {
 	public void setPais(String pais) {
 		this.pais = pais;
 	}
-
+*/
 	public int getCiudad() {
 		return ciudad;
 	}

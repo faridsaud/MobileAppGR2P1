@@ -119,8 +119,7 @@ IOException {
 			discoModificar=(Discoteca)request.getSession().getAttribute("discotecaModificar");
 			discoModificador.setNombre(nombre);	
 			discoModificador.setEmailUsr(emailUsr);
-			discoModificador.setPais(nombrePais);
-			discoModificador.setCiudad(idCiudad);
+						discoModificador.setCiudad(idCiudad);
 			discoModificador.setTipoMusica(tipoMusica);
 			discoModificador.setDescripcion(descripcion);
 			discoModificador.setImagen(imagen);

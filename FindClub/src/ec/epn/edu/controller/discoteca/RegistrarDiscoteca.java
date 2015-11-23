@@ -127,7 +127,6 @@ IOException {
 			descripcion=request.getParameter("descripcion");			
 			Discoteca disco = new Discoteca();
 			disco.setNombre(nombre);
-			disco.setPais(nombrePais);
 			disco.setTipoMusica(tipoMusica);
 			disco.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 			disco.setImagen(imagen);
