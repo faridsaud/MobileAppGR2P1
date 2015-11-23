@@ -47,14 +47,15 @@ IOException {
 			if (usrIniciado.isEstado() == true) {
 				redireccion = false;
 			}
+			if(usrIniciado.isAdmin()==true){
+				redireccion = false;
+			}
 		} catch (Exception e) {
 			System.out.println("Error obteniendo usuario");
-		}
+		}	
 		if (redireccion == true) {
-			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, 
-
-response);
-		} else {
+			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
+		}else {
 			ServicePais sp = new ServicePais();
 			ServiceCiudad sc = new ServiceCiudad();
 			ServiceMusica sm = new ServiceMusica();
@@ -62,14 +63,7 @@ response);
 			Pais pais = new Pais();
 			Musica m = new Musica();
 			Discoteca disco = new Discoteca();
-			String nombre = request.getParameter("nombre");
-			if(nombre==null)
-				nombre="";
-			disco.setNombre(nombre);
-			String nombreCiudad = request.getParameter("ciudad");
-			if (nombreCiudad == null)
-				nombreCiudad = "";
-			ciudad.setNombreCiudad(nombreCiudad);
+
 			
 			String nombrePais = request.getParameter("pais");
 			if (nombrePais == null)
@@ -82,16 +76,11 @@ response);
 			
 			List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
 			request.setAttribute("listaCiudad", listaCiudad);
-			request.setAttribute("listaPais", listaPais);
 			
 			m.setNombreTipo("");
 			List<Musica> listaMusica = sm.listarMusica();
 			request.setAttribute("listaMusica", listaMusica);
 			
-			String descripcion = request.getParameter("descripcion");
-			if(descripcion==null)
-				descripcion="";
-			disco.setDescripcion(descripcion);
 		getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/registrar.jsp").forward
 
 (request, response);
@@ -117,7 +106,9 @@ IOException {
 		usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
    		emailUsr = usrIniciado.getEmail();
    		Ciudad c = new Ciudad();
+   		Pais pais= new Pais();
    		ServiceCiudad sc = new ServiceCiudad();
+   		ServicePais sp= new ServicePais();
 		try{
 			nombre=request.getParameter("nombre");
 			nombrePais=request.getParameter("pais");
@@ -128,6 +119,7 @@ IOException {
 			Discoteca disco = new Discoteca();
 			disco.setNombre(nombre);
 			disco.setTipoMusica(tipoMusica);
+			System.out.println(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 			disco.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 			disco.setImagen(imagen);
 			disco.setDescripcion(descripcion);
@@ -139,13 +131,7 @@ IOException {
 
 (request, response);
 		}catch(Exception e){
-			nombre="";
-			emailUsr="";
-			descripcion="";
-			imagen="";
-			nombrePais="";
-			nombreCiudad="";
-			tipoMusica="";
+			e.printStackTrace();
 			doGet(request, response);
 		}
 		

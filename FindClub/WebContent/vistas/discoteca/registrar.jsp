@@ -5,22 +5,6 @@
 	 <div class="container">
 	 <form method="post" >
     <%
-    	Usuario usrIniciado = new Usuario();
-		boolean redireccion = true;
-		try {
-			usrIniciado = (Usuario) request.getSession().getAttribute("usuarioActivo");
-			if (usrIniciado.isEstado() == true) {
-				redireccion = false;
-			}
-			if(usrIniciado.isAdmin()==true){
-				redireccion = false;
-			}
-		} catch (Exception e) {
-			System.out.println("Error obteniendo usuario");
-		}	
-		if (redireccion == true) {
-			getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
-		}	
 	
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
 		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
