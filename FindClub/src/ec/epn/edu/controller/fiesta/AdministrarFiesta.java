@@ -53,68 +53,77 @@ public class AdministrarFiesta extends HttpServlet {
 		if (redireccion == true) {
 			getServletConfig().getServletContext().getRequestDispatcher("/Fiesta/Home").forward(request, response);
 		} else {
-			ServiceUsuario su=new ServiceUsuario();
-			ServicePais sp = new ServicePais();
-			ServiceCiudad sc = new ServiceCiudad();
-			ServiceDiscoteca sd = new ServiceDiscoteca();
-			ServiceFiesta sf = new ServiceFiesta();
-			
-			String emailUsuario="";
 			try{
-				emailUsuario=request.getParameter("email");
-			}catch(Exception e){
+				ServiceUsuario su = new ServiceUsuario();
+				ServicePais sp = new ServicePais();
+				ServiceCiudad sc = new ServiceCiudad();
+				ServiceDiscoteca sd = new ServiceDiscoteca();
+				ServiceFiesta sf = new ServiceFiesta();
+
+				String emailUsuario = "";
+				try {
+					emailUsuario = request.getParameter("email");
+				} catch (Exception e) {
+
+				}
+				if (emailUsuario == null)
+					emailUsuario = "";
+
+				Pais pais = new Pais();
+				Ciudad ciudad = new Ciudad();
+				Discoteca discoteca = new Discoteca();
+				Fiesta fiesta = new Fiesta();
+
+				String nombrePais = request.getParameter("pais");
+				String nombreCiudad = request.getParameter("ciudad");
+				String nombreDiscoteca = request.getParameter("discoteca");
+				String nombreFiesta = request.getParameter("fiesta");
+
+				if (nombrePais == null) {
+					nombrePais = "";
+				}
+				pais.setNombrePais("");
+
+				java.util.List<Pais> listaPais = sp.listarPais(pais);
+				request.setAttribute("listaPais", listaPais);
+
+				if (nombreCiudad == null)
+					nombreCiudad = "";
+				if (nombrePais == "")
+					nombrePais = listaPais.get(0).getNombrePais();
+
+				ciudad.setNombreCiudad("");
+				ciudad.setNombrePais(nombrePais);
+
+				java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
+				request.setAttribute("listaCiudad", listaCiudad);
+
+				if (nombreCiudad == "")
+					nombreCiudad = listaCiudad.get(0).getNombreCiudad();
+
+				discoteca.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
+				discoteca.setNombre("");
+
+				java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(nombreCiudad);
+				request.setAttribute("listaDiscoteca", listaDiscoteca);
+
+				if (nombreDiscoteca == null)
+					nombreDiscoteca = listaDiscoteca.get(0).getNombre();
+
+				fiesta.setIdDiscoteca(sd.buscarDiscotecaByNombre(nombreDiscoteca,
+						sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad()).getIdDiscoteca());
 				
+				if (nombreFiesta == null)
+					nombreFiesta = "";
+
+				fiesta.setNombreFiesta(nombreFiesta);
+
+				java.util.List<Fiesta> listaFiesta = sf.listarFiesta(fiesta, usrIniciado);
+				request.setAttribute("listaFiesta", listaFiesta);
+				getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/administrar.jsp").forward(request, response);
+			}catch(Exception e){
+				getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/administrar.jsp").forward(request, response);
 			}
-			if(emailUsuario==null)
-				emailUsuario="";
-			
-			Pais pais = new Pais();
-			Ciudad ciudad = new Ciudad();
-			Discoteca discoteca = new Discoteca();
-			Fiesta fiesta = new Fiesta();
-			
-			String nombrePais = request.getParameter("pais");
-			String nombreCiudad = request.getParameter("ciudad");
-			String nombreDiscoteca = request.getParameter("discoteca");
-			
-			if (nombrePais == null){
-				nombrePais = "";
-			}
-			pais.setNombrePais("");
-			
-			java.util.List<Pais> listaPais = sp.listarPais(pais);
-			request.setAttribute("listaPais", listaPais);
-			
-			if (nombreCiudad == null)
-				nombreCiudad = "";
-			if (nombrePais == "")
-				nombrePais = listaPais.get(0).getNombrePais();
-			
-			ciudad.setNombreCiudad("");
-			ciudad.setNombrePais(nombrePais);
-			
-			java.util.List<Ciudad> listaCiudad = sc.listarCiudad(ciudad);
-			request.setAttribute("listaCiudad", listaCiudad);
-			
-			if (nombreCiudad == "")
-				nombreCiudad = listaCiudad.get(0).getNombreCiudad();
-			
-			discoteca.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
-			discoteca.setNombre("");
-			
-			java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(discoteca.getNombre(), discoteca);
-			request.setAttribute("listaDiscoteca", listaDiscoteca);
-			
-			
-			fiesta.setIdDiscoteca(sd.buscarDiscotecaByNombre(nombreDiscoteca, 
-					sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad()).getIdDiscoteca());
-			
-			Usuario usr = new Usuario();
-			usr = su.buscarUsuarioByEmail(emailUsuario);
-			System.out.println(emailUsuario);
-			java.util.List<Fiesta> listaFiesta = sf.listarFiesta(fiesta, usr);
-			request.setAttribute("listaFiesta", listaFiesta);
-			getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/administrar.jsp").forward(request, response);
 		}
 	}
 
@@ -123,6 +132,8 @@ public class AdministrarFiesta extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		
 		doGet(request, response);
 	}
 

@@ -5,6 +5,7 @@
 
 <jsp:include page="/templates/header.jsp"></jsp:include>
 
+<div class="container">
 	<%
 		List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
   		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
@@ -12,11 +13,11 @@
   		List<Fiesta> listaFiesta = (List<Fiesta>) request.getAttribute("listaFiesta");
 	%>
 
-    <div class="container">
-      
-      <form method="post">
-      <div class="form-group">
-      	<label for="pais">Pais</label>
+  <div class="row">
+   <div class="col-xs-12">
+     <form action="">
+        <div class="form-group">
+      	<label for="pais">País</label>
           <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true" 
           		onchange="this.form.method='GET'; this.form.submit()">
             <%
@@ -82,7 +83,7 @@
               <input name="fiesta" type="text" class="form-control" id="fiesta" >
             </div>
 
-            <button type="submit" class="btn btn-default">Buscar</button>
+            <button type="submit" class="btn btn-default" onchange="this.form.method='GET'; this.form.submit()">Buscar</button>
           </form>
 
         </div>
@@ -101,7 +102,7 @@
                 <th>Email</th>
                 <th>Fecha</th>
                 <th>Hora</th>
-                <th>Discoteca</th>
+                <th>Descripcion</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -117,23 +118,21 @@
               			<td><%=f.getEmail() %></td>
               			<td><%=f.getFecha()%></td>	
               			<td><%=f.getHora() %></td>
-              			<td><%=f.getNombreDiscoteca() %></td>
+              			<td><%=f.getDescripcion() %></td>
               			<td>
 							<form method="get"
 								action="${pageContext.request.contextPath}/Fiesta/Modificar">
 								<button type="submit" class="btn btn-default"
-									value="<%=f.getNombreFiesta()%>" name="nombreFiestaModificar">
+									value="<%=f.getIdFiesta()%>" name="nombreFiestaModificar">
 									<span class="glyphicon glyphicon-pencil" title="Modificar fiesta"></span>
 								</button>
-								<input type="hidden" value="<%=f.getEmail()%>" name="nombrePaisModificar">
 							</form>
 							<form method="post"
 								action="${pageContext.request.contextPath}/Fiesta/Eliminar">
 								<button type="submit" class="btn btn-default"
-									value="<%=f.getNombreFiesta()%>" name="nombreFiestaEliminar">
+									value="<%=f.getIdFiesta()%>" name="fiestaEliminar">
 									<span class="glyphicon glyphicon-remove" title="Eliminar fiesta"></span>
 								</button>
-								<input type="hidden" value="<%=f.getEmail() %>" name="nombrePaisEliminar">
 							</form> 
 						</td>
               		</tr>

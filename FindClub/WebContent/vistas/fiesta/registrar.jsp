@@ -13,8 +13,9 @@
       <form method="post">
       <div class="form-group">
       	<label for="pais">Pais</label>
+      	  <input id="combos" name="combos" type="hidden" value="no"/>
           <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true" 
-          		onchange="this.form.method='GET'; this.form.submit()">
+          		onchange="document.getElementById('combos').value='si'; document.getElementById('ciudad').value=''; this.form.submit();">
             <%
             	try{
               		for (Pais p: listaPais){
@@ -35,7 +36,7 @@
        <div class="form-group">
        <label for="pais">Ciudad</label>
           <select name="ciudad" class="form-control" id="ciudad" placeholder="Ciudad" required="true"
-          		onchange="this.form.method='GET'; this.form.submit()">
+          		onchange=" document.getElementById('combos').value='si'; this.form.submit()">
             <%
             	try{
               		for (Ciudad c: listaCiudad){
@@ -54,8 +55,7 @@
        </div>
        <div class="form-group">
        <label for="pais">Discoteca</label>
-          <select name="discoteca" class="form-control" id="discoteca" placeholder="Discoteca" required="true"
-          		onchange="this.form.method='GET'; this.form.submit()">
+          <select name="discoteca" class="form-control" id="discoteca" placeholder="Discoteca" required="true">
             <%
             	try{
               		for (Discoteca d: listaDiscoteca){
