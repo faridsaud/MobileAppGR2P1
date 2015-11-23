@@ -4,37 +4,18 @@
 
 <jsp:include page="/templates/header.jsp"></jsp:include>
 <%	
-	String nombreFiesta = (String) request.getParameter("nombreFiesta");
-	String fecha = (String) request.getParameter("fecha");
-	String hora = (String) request.getParameter("hora");
-	String descripcion = (String) request.getParameter("descripcion");
-	
 	List<Ciudad> listaCiudad = (List<Ciudad>) request.getAttribute("listaCiudad");
 	List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
 	List<Discoteca> listaDiscoteca = (List<Discoteca>) request.getAttribute("listaDiscoteca");
-	
-	if (nombreFiesta == null)
-		nombreFiesta = "";
-	if (descripcion == null)
-		descripcion = "";
 %>
     <div class="container">
       
       <form method="post">
-      
-      <div class="form-group">
-          <label for="email">Nombre</label>
-          <input type="text" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" 
-          		value="<%=nombreFiesta %>" required="true">
-      </div>
-      
       <div class="form-group">
       	<label for="pais">Pais</label>
       	  <input id="combos" name="combos" type="hidden" value="no"/>
           <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true" 
-          		onchange="document.getElementById('combos').value='si'; 
-          				  document.getElementById('ciudad').value=''; 
-          				  this.form.submit();">
+          		onchange="document.getElementById('combos').value='si'; document.getElementById('ciudad').value=''; this.form.submit();">
             <%
             	try{
               		for (Pais p: listaPais){
@@ -93,19 +74,20 @@
         </div>
         
         <div class="form-group">
+          <label for="email">Nombre</label>
+          <input type="text" class="form-control" id="nombreFiesta" placeholder="Nombre" name="nombreFiesta" required="true">
+        </div>
+        <div class="form-group">
           <label for="email">Fecha</label>
-          <input type="date" class="form-control" id="fecha" placeholder="yyyy-mm-dd" name="fecha" 
-          		value="<%=fecha %>" required="true">
+          <input type="date" class="form-control" id="fecha" placeholder="yyyy-mm-dd" name="fecha" required="true">
         </div>
         <div class="form-group">
           <label for="email">Hora</label>
-          <input type="time" class="form-control" id="hora" placeholder="00:00:00" name="hora" 
-          		value="<%=hora %>" required="true">
+          <input type="time" class="form-control" id="hora" placeholder="00:00:00" name="hora" required="true">
         </div>
         <div class="form-group">
           <label for="email">Descripción</label>
-          <input type="text" class="form-control" id="descripcion" placeholder="Descripcion" name="descripcion" 
-          		value="<%=descripcion %>" required="true">
+          <input type="text" class="form-control" id="descripcion" placeholder="Descripcion" name="descripcion" required="true">
         </div>
         <button type="submit" class="btn btn-default">Registrar</button>
       </form>

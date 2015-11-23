@@ -42,31 +42,25 @@
 		List<Pais> listaPais = (List<Pais>) request.getAttribute("listaPais");
 	%>
       <form method="post">
-      
         <div class="form-group">
-      	<label for="pais">Pais</label>
-      	  <input id="combos" name="combos" type="hidden" value="no"/>
-      	  <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true" 
-          		onchange="document.getElementById('combos').value='si';
-          				  document.getElementById('ciudad').value='';
-          				  document.getElementById('nombrePaisModificar').value='<%=(String) request.getParameter("pais")%>'; 
-          				  this.form.submit();">
+          <label for="pais">Pais</label>
+          <select name="pais" class="form-control" id="pais" name="pais1" placeholder="Pais" required="true">
             <%
             	try{
               		for (Pais p: listaPais){
-              			if (p.getNombrePais().equals((String) request.getParameter("nombrePaisModificar"))){
-                  			%><option selected values ="<%= p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
-              			}
-              			else{
-              				%><option values ="<%= p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
-              			}
+              			if (p.getNombrePais().equals(ciudadModificar.getNombrePais())){
+                  			%><option selected value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+                  		}
+                  		else{
+                  			%><option value="<%=p.getNombrePais()%>"><%=p.getNombrePais()%></option><%
+                  		}
               		}
               	}catch(Exception e){
               		
               	}
               %>
           </select>
-       </div>
+        </div>
 
         <div class="form-group">
           <label for="ciudad">Ciudad</label>

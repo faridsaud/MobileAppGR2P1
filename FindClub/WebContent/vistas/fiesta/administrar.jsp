@@ -16,14 +16,10 @@
   <div class="row">
    <div class="col-xs-12">
      <form action="">
-     
         <div class="form-group">
-      	<label for="pais">Pais</label>
-      	  <input id="combos" name="combos" type="hidden" value="no"/>
+      	<label for="pais">País</label>
           <select name="pais" class="form-control" id="pais" placeholder="Pais" required="true" 
-          		onchange="document.getElementById('combos').value='si'; 
-          				  document.getElementById('ciudad').value=''; 
-          				  this.form.submit();">
+          		onchange="this.form.method='GET'; this.form.submit()">
             <%
             	try{
               		for (Pais p: listaPais){
@@ -44,9 +40,7 @@
        <div class="form-group">
        <label for="pais">Ciudad</label>
           <select name="ciudad" class="form-control" id="ciudad" placeholder="Ciudad" required="true"
-          		onchange=" document.getElementById('combos').value='si'; 
-          				   document.getElementById('discoteca').value=''; 
-          				   this.form.submit()">
+          		onchange="this.form.method='GET'; this.form.submit()">
             <%
             	try{
               		for (Ciudad c: listaCiudad){
@@ -66,8 +60,7 @@
        <div class="form-group">
        <label for="pais">Discoteca</label>
           <select name="discoteca" class="form-control" id="discoteca" placeholder="Discoteca" required="true"
-          	onchange="document.getElementById('combos').value='si'; 
-          				  this.form.submit();">
+          		onchange="this.form.method='GET'; this.form.submit()">
             <%
             	try{
               		for (Discoteca d: listaDiscoteca){
@@ -90,11 +83,7 @@
               <input name="fiesta" type="text" class="form-control" id="fiesta" >
             </div>
 
-            <button type="submit" class="btn btn-default" onchange="this.form.method='GET'; this.form.submit()"
-            	onclick="document.getElementById('combos').value='si'; this.form.submit();"
-            	>
-            	Buscar
-            </button>
+            <button type="submit" class="btn btn-default" onchange="this.form.method='GET'; this.form.submit()">Buscar</button>
           </form>
 
         </div>
@@ -134,8 +123,7 @@
 							<form method="get"
 								action="${pageContext.request.contextPath}/Fiesta/Modificar">
 								<button type="submit" class="btn btn-default"
-									value="<%=f.getIdFiesta()%>" name="fModificar">
-									<input type="hidden" value="<%=f.getNombreFiesta()%>" name="nFiesta">
+									value="<%=f.getIdFiesta()%>" name="nombreFiestaModificar">
 									<span class="glyphicon glyphicon-pencil" title="Modificar fiesta"></span>
 								</button>
 							</form>
