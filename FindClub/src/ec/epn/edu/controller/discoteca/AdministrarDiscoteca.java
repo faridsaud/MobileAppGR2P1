@@ -77,9 +77,13 @@ public class AdministrarDiscoteca extends HttpServlet {
 
 			String nombrePais = request.getParameter("pais");
 			String nombreCiudad = request.getParameter("ciudad");
+			String tipoMusica = request.getParameter("tipoMusica");
 			String nombreDiscoteca = request.getParameter("discoteca");
-			String nombreFiesta = request.getParameter("fiesta");
 
+			if (nombreDiscoteca == null)
+				nombreDiscoteca = "";
+			if (tipoMusica == null)
+				tipoMusica = "";
 			if (nombrePais == null) {
 				nombrePais = "";
 			}
@@ -105,7 +109,10 @@ public class AdministrarDiscoteca extends HttpServlet {
 			discoteca.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 			discoteca.setNombre("");
 
-			java.util.List<Discoteca> listaDiscoteca = sd.listarDiscotecaByNombre(nombreCiudad, nombrePais);
+			java.util.List<Musica> listaMusica = sm.listarMusica();
+			request.setAttribute("listaMusica", listaMusica);
+			
+			java.util.List<Discoteca> listaDiscoteca = sd.listarDiscotecaByMusica(nombreCiudad, nombrePais, tipoMusica, nombreDiscoteca);
 			request.setAttribute("listaDiscoteca", listaDiscoteca);
 			
 			getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/administrar.jsp").forward(request, response);	

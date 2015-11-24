@@ -159,6 +159,52 @@ public class ServiceDiscoteca {
 		return listaDiscotecas;
 	}
 
+	public List<Discoteca> listarDiscotecaByMusica(String nombreCiudad, String nombrePais, String musica, String nombreDiscoteca) {
+
+		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			java.sql.Connection con = DriverManager.getConnection
+
+			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
+
+			PreparedStatement st = null;
+
+			st = con.prepareStatement("SELECT d.IDDISCOTECA, d.NOMBREDISCOTECA, d.IDCIUDAD, d.NOMBRETIPOMUSICA, d.EMAILUSR, d.DESCRIPCIONDISCOTECA, d.PATHIMAGENDISCOTECA "
+					+ "FROM DISCOTECA d, CIUDAD c "
+					+ "WHERE d.IDCIUDAD = c.IDCIUDAD AND c.NOMBRECIUDAD=? AND c.IDPAIS = (SELECT IDPAIS FROM PAIS WHERE NOMBREPAIS=?) AND NOMBREDISCOTECA like ? AND NOMBRETIPOMUSICA like ?;");
+			st.setString(1, nombreCiudad);
+			st.setString(2, nombrePais);
+			st.setString(3, "%" + nombreDiscoteca + "%");
+			st.setString(4, "%" + musica + "%");
+			st.execute();
+			ResultSet rs = st.getResultSet();
+
+			while (rs.next()) {
+				Discoteca disco1 = new Discoteca();
+				disco1.setIdDiscoteca(rs.getInt(1));
+				disco1.setNombre(rs.getString(2));
+				disco1.setCiudad(rs.getInt(3));
+				disco1.setTipoMusica(rs.getString(4));
+				disco1.setEmailUsr(rs.getString(5));
+				disco1.setDescripcion(rs.getString(6));
+				disco1.setImagen(rs.getString(7));
+				listaDiscotecas.add(disco1);
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return listaDiscotecas;
+	}
+	
 //	public List<Discoteca> listarDiscoteca(Discoteca disco, String nombre, nombreCiudad) {
 //
 //		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
