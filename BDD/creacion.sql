@@ -48,6 +48,7 @@ create table DISCOTECA
 create table FIESTA
 (
    IDFIESTA             bigint AUTO_INCREMENT,
+   NOMBREFIESTA		varchar(50),
    EMAILUSR             varchar(50),
    IDDISCOTECA          bigint,
    FECHAFIESTA          date not null,
