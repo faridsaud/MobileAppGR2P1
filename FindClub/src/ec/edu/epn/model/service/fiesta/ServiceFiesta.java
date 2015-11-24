@@ -7,11 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
-import ec.edu.epn.model.service.musica.ServiceMusica;
-import ec.edu.epn.model.service.pais.ServicePais;
-import ec.edu.epn.model.vo.Ciudad;
+import ec.edu.epn.model.vo.Discoteca;
 import ec.edu.epn.model.vo.Fiesta;
 import ec.edu.epn.model.vo.Usuario;
 
@@ -248,5 +245,40 @@ public class ServiceFiesta {
 			e.printStackTrace();
 		}
 	}
+	public List<Fiesta> buscarFiestaByDisco(Discoteca disc) {
+		ServiceDiscoteca sd = new ServiceDiscoteca();
+		List<Fiesta> listaFiestas= new ArrayList<Fiesta>();
+		try {
+			java.sql.Connection con = establecerConexion();
+			PreparedStatement st = null;
+			st = con.prepareStatement("Select * from FIESTA where IDDISCOTECA=?");
+			st.setInt(1, disc.getIdDiscoteca());
+			st.execute();
+
+			ResultSet rs = st.getResultSet();
+			while (rs.next()) {
+				Fiesta fiesta= new Fiesta();
+				fiesta.setIdFiesta(rs.getInt("IDFIESTA"));
+				fiesta.setNombreFiesta(rs.getString("NOMBREFIESTA"));
+				fiesta.setIdDiscoteca(rs.getShort("IDDISCOTECA"));
+				fiesta.setEmail(rs.getString("EMAILUSR"));
+				fiesta.setFecha(rs.getDate("FECHAFIESTA").toString());
+				fiesta.setHora(rs.getTime("HORAFIESTA").toString());
+				fiesta.setDescripcion(rs.getString("DESCRIPCIONFIESTA"));
+				listaFiestas.add(fiesta);
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return listaFiestas;
+	}
+
 
 }

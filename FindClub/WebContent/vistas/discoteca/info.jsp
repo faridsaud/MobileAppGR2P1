@@ -44,5 +44,8 @@
 			</div>
 		</div>
 	</form>
+	<br>
+	<a href="${pageContext.request.contextPath}/Fiesta/Info" class="btn btn-info center-block" role="button">
+	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>Ver Fiestas</a>
 </div>
 <jsp:include page="/templates/footer.jsp"></jsp:include>
