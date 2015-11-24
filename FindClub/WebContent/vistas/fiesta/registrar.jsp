@@ -17,6 +17,10 @@
 		nombreFiesta = "";
 	if (descripcion == null)
 		descripcion = "";
+	if (hora == null)
+		hora = "";
+	if (fecha == null)
+		fecha = "";
 %>
     <div class="container">
       
@@ -105,7 +109,7 @@
         <div class="form-group">
           <label for="email">Descripción</label>
           <input type="text" class="form-control" id="descripcion" placeholder="Descripcion" name="descripcion" 
-          		value="<%=descripcion %>" required="true">
+          		required="true">
         </div>
         <button type="submit" class="btn btn-default">Registrar</button>
       </form>

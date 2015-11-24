@@ -123,7 +123,7 @@ public class ModificarFiesta extends HttpServlet {
 				discoteca.setCiudad(sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
 				discoteca.setNombre("");
 
-				java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(nombreCiudad);
+				java.util.List<Discoteca> listaDiscoteca = sd.listarDiscotecaByNombre(nombreCiudad, nombrePais);
 				request.setAttribute("listaDiscoteca", listaDiscoteca);
 
 				if (nombreDiscoteca == null)

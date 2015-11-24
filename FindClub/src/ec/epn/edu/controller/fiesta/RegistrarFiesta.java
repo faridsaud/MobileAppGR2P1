@@ -71,12 +71,12 @@ public class RegistrarFiesta extends HttpServlet {
 				Pais pais = new Pais();
 				Ciudad ciudad = new Ciudad();
 
-				String nombrePais = request.getParameter("pais");
-				String nombreCiudad = request.getParameter("ciudad");
-				String nombreFiesta = request.getParameter("nombreFiesta");
-				String fecha = request.getParameter("fecha");
-				String hora = request.getParameter("hora");
-				String descripcion = request.getParameter("descripcion");
+				String nombrePais = (String) request.getParameter("pais");
+				String nombreCiudad = (String) request.getParameter("ciudad");
+				String nombreFiesta = (String) request.getParameter("nombreFiesta");
+				String fecha = (String) request.getParameter("fecha");
+				String hora = (String) request.getParameter("hora");
+				String descripcion = (String) request.getParameter("descripcion");
 
 				if (nombreFiesta == null)
 					nombreFiesta = "";
@@ -121,7 +121,7 @@ public class RegistrarFiesta extends HttpServlet {
 				} catch (Exception e) {
 				}
 
-				java.util.List<Discoteca> listaDiscoteca = sd.listarDiscoteca(nombreCiudad);
+				java.util.List<Discoteca> listaDiscoteca = sd.listarDiscotecaByNombre(nombreCiudad, nombrePais);
 				request.setAttribute("listaDiscoteca", listaDiscoteca);
 
 				getServletConfig().getServletContext().getRequestDispatcher("/vistas/fiesta/registrar.jsp")

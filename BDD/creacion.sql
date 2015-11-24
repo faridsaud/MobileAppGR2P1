@@ -21,7 +21,7 @@ drop table if exists USUARIO;
 /*==============================================================*/
 create table CIUDAD
 (
-   IDCIUDAD             int not null AUTO_INCREMENT,
+   IDCIUDAD             int AUTO_INCREMENT,
    IDPAIS               int,
    NOMBRECIUDAD         varchar(30) not null,
    primary key (IDCIUDAD)
@@ -32,10 +32,10 @@ create table CIUDAD
 /*==============================================================*/
 create table DISCOTECA
 (
+   IDDISCOTECA          bigint AUTO_INCREMENT,
    NOMBREDISCOTECA      varchar(30) not null,
-   IDDISCOTECA          bigint not null,
    NOMBRETIPOMUSICA     varchar(20),
-   NOMBRECIUDAD         varchar(30),
+   IDCIUDAD    		int,
    EMAILUSR             varchar(50),
    DESCRIPCIONDISCOTECA varchar(300),
    PATHIMAGENDISCOTECA  varchar(300),
@@ -47,7 +47,7 @@ create table DISCOTECA
 /*==============================================================*/
 create table FIESTA
 (
-   IDFIESTA             bigint not null AUTO_INCREMENT,
+   IDFIESTA             bigint AUTO_INCREMENT,
    EMAILUSR             varchar(50),
    IDDISCOTECA          bigint,
    FECHAFIESTA          date not null,
@@ -62,7 +62,7 @@ create table FIESTA
 create table MUSICA
 (
    NOMBRETIPOMUSICA     varchar(20) not null,
-   DESCRIPCIONDISCOTECA varchar(300),
+   DESCRIPCIONMUSICA    varchar(300),
    primary key (NOMBRETIPOMUSICA)
 );
 
@@ -71,7 +71,7 @@ create table MUSICA
 /*==============================================================*/
 create table PAIS
 (
-   IDPAIS               int not null AUTO_INCREMENT,
+   IDPAIS               int AUTO_INCREMENT,
    NOMBREPAIS           varchar(30) not null,
    primary key (IDPAIS)
 );
