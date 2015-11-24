@@ -2,11 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 	<jsp:include page="/templates/header.jsp"></jsp:include>
         <div class="container">
-       <div class="row">
-        <div class="col-xs-12">
-          <a href="Buscar" class="btn btn-default btn-block">Buscar</a>
-        </div>
-      </div>
+ 
       <div class="row">
         <div class="col-xs-12">
           <br>

@@ -103,7 +103,15 @@
 							for (Discoteca disco : listaDiscoteca) {
 					%>
 					<tr>
-						<td><%=disco.getNombre()%></td>
+						<td>
+							<form method="get"
+								action="${pageContext.request.contextPath}/Discoteca/Info">
+								<button type="submit" class="btn btn-default"
+									value="<%=disco.getIdDiscoteca()%>" name="discotecaInfo">
+									<%=disco.getNombre()%>
+								</button>
+							</form>
+						</td>
 						<td><%=disco.getDescripcion()%></td>
 						<td>
 							<form method="get"

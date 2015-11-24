@@ -34,7 +34,7 @@ public class InfoDiscoteca extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String idDiscoteca="5778";
+		String idDiscoteca=request.getParameter("discotecaInfo");
 		
 		ServiceCiudad sc= new ServiceCiudad();
 		ServiceDiscoteca sd= new ServiceDiscoteca();
