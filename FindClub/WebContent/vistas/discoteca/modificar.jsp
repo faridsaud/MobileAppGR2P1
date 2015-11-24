@@ -28,7 +28,7 @@
 			path = "";
 	%>
 	<div class="container">
-		<form method="post">
+		<form method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="nomdiscoteca">Nombre</label> <input name="nomDiscoteca"
 					id="nomDiscoteca" class="form-control" placeholder="Nombre"
@@ -110,7 +110,7 @@
 			</div>
 			<div class="form-group">
 				<label for="inputFile">Imagen de la discoteca</label> <input
-					name="pathDiscoteca" id="pathDiscoteca" type="file" id="inputFile"
+					type="file" id="inputFile"
 					name="inputFile">
 				<p class="help-block">Foto que muestre algo característico de la
 					discoteca</p>

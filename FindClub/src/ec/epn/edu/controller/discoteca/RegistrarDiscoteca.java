@@ -173,7 +173,7 @@ public class RegistrarDiscoteca extends HttpServlet {
 					directorio.mkdir();
 		
 					Part filePart = request.getPart("inputFile");
-					
+					if(filePart!=null){
 					final String fileName = getFileName(filePart);
 					if (fileName != null && fileName.equals("")==false) {
 						System.out.println("imprimiendo archivo");
@@ -210,7 +210,7 @@ public class RegistrarDiscoteca extends HttpServlet {
 						}
 						
 					}
-					
+					}
 
 					getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/home.jsp").forward
 

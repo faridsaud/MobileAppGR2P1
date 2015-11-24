@@ -1,13 +1,19 @@
 package ec.epn.edu.controller.discoteca;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.cuenta.ServiceUsuario;
@@ -26,6 +32,7 @@ import ec.edu.epn.model.vo.Usuario;
  * Servlet implementation class ModificarDiscoteca
  */
 @WebServlet("/Discoteca/Modificar")
+@MultipartConfig
 public class ModificarDiscoteca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -150,7 +157,7 @@ public class ModificarDiscoteca extends HttpServlet {
 				String nombreDiscoteca = "";
 				String tipoMusica = "";
 				String descripcion = "";
-				String path = "";
+				String pathImagen = "";
 
 				try {
 					nombreDiscoteca = (String) request.getParameter("nomDiscoteca");
@@ -158,16 +165,65 @@ public class ModificarDiscoteca extends HttpServlet {
 					nombreCiudad = (String) request.getParameter("ciudad");
 					tipoMusica = (String) request.getParameter("tipoMusica");
 					descripcion = (String) request.getParameter("descripcion");
-					path = (String) request.getParameter("pathDiscoteca");
 
+					Discoteca discoRegistrada = sd.buscarDiscoteca(nombreDiscoteca);
+					pathImagen = discoRegistrada.getImagen();
 					discotecaModificar = (Discoteca) request.getSession().getAttribute("discotecaModificar");
 					discotecaModificador.setNombre(nombreDiscoteca);
 					discotecaModificador.setDescripcion(descripcion);
 					discotecaModificador.setTipoMusica(tipoMusica);
-					discotecaModificador.setImagen(path);
+					discotecaModificador.setImagen(discotecaModificar.getImagen());
 					discotecaModificador.setEmailUsr(email);
 
 					sd.modificarDiscoteca(discotecaModificar, discotecaModificador, nombrePais, nombreCiudad);
+
+					/* Modificar archivo */
+					String path = "C:/Users/farid/Documents/7mo/Aplicaciones Moviles/Proyectos/ProyectoBimestre1/MobileAppGR2P1/FindClub/WebContent/images/";
+					File directorio = new File(path + discoRegistrada.getIdDiscoteca());
+					directorio.mkdir();
+
+					Part filePart = request.getPart("inputFile");
+					if (filePart != null) {
+						final String fileName = getFileName(filePart);
+						if (fileName != null && fileName.equals("") == false) {
+							System.out.println("imprimiendo archivo");
+							System.out.println(fileName);
+							discoRegistrada
+									.setImagen("/FindClub/images/" + discoRegistrada.getIdDiscoteca() + "/" + fileName);
+							try {
+								sd.modificarDiscoteca(discoRegistrada, discoRegistrada);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
+							OutputStream out = null;
+							InputStream filecontent = null;
+							try {
+								out = new FileOutputStream(new File(
+										path + discoRegistrada.getIdDiscoteca() + "/" + File.separator + fileName));
+								filecontent = filePart.getInputStream();
+
+								int read = 0;
+								final byte[] bytes = new byte[1024];
+
+								while ((read = filecontent.read(bytes)) != -1) {
+									out.write(bytes, 0, read);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							} finally {
+								if (out != null) {
+									out.close();
+								}
+								if (filecontent != null) {
+									filecontent.close();
+								}
+
+							}
+
+						}
+
+					}
 				} catch (Exception e) {
 					System.out.println("Error en la modificación");
 				}
@@ -176,5 +232,15 @@ public class ModificarDiscoteca extends HttpServlet {
 						response);
 			}
 		}
+	}
+
+	private String getFileName(final Part part) {
+		final String partHeader = part.getHeader("content-disposition");
+		for (String content : part.getHeader("content-disposition").split(";")) {
+			if (content.trim().startsWith("filename")) {
+				return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+			}
+		}
+		return null;
 	}
 }
