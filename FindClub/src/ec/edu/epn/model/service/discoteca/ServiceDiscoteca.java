@@ -272,7 +272,7 @@ public class ServiceDiscoteca {
 
 			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
 			PreparedStatement st = con.prepareStatement(
-					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, IDCIUDAD=?, EMAILUSR=?,"
+					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPOMUSICA=?, IDCIUDAD=?, EMAILUSR=?,"
 							+ "DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? WHERE IDDISCOTECA=?");
 			st.setString(1, discoModificador.getNombre());
 			st.setString(2, discoModificador.getTipoMusica());
@@ -413,6 +413,38 @@ public class ServiceDiscoteca {
 			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
 			PreparedStatement st = con.prepareStatement("delete from DISCOTECA where IDDISCOTECA=?");
 			st.setInt(1, disco.getIdDiscoteca());
+			st.execute();
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void modificarDiscoteca(Discoteca discotecaModificar, Discoteca discotecaModificador, String nombrePais,
+			String nombreCiudad) {
+		// TODO Auto-generated method stub
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			java.sql.Connection con = DriverManager.getConnection
+
+			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
+			PreparedStatement st = con.prepareStatement("UPDATE DISCOTECA"
+					+ "SET NOMBREDISCOTECA=? IDCIUDAD=(select IDCIUDAD from CIUDAD c where c.IDPAIS = (select IDPAIS from PAIS where NOMBREPAIS=?) and c.NOMBRECIUDAD=?) NOMBRETIPOMUSICA=? DESCRIPCIONDISCOTECA=? PATHIMAGENDISCOTECA=?"
+					+ "WHERE IDDISCOTECA = ?;");
+			st.setString(1, discotecaModificador.getNombre());
+			st.setString(2, nombrePais);
+			st.setString(3, nombreCiudad);
+			st.setString(4, discotecaModificador.getTipoMusica());
+			st.setString(5, discotecaModificador.getDescripcion());
+			st.setString(6, discotecaModificador.getImagen());
+			st.setInt(7, discotecaModificar.getIdDiscoteca());
 			st.execute();
 			st.close();
 			con.close();

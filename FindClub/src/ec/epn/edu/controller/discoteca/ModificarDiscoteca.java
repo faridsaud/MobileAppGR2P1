@@ -151,21 +151,20 @@ public class ModificarDiscoteca extends HttpServlet {
 				
 				try {
 					nombreDiscoteca = request.getParameter("discoteca");
-					nombreFiesta = request.getParameter("nombreFiesta");
 					nombrePais = request.getParameter("pais");
 					nombreCiudad = request.getParameter("ciudad");
-					fecha = request.getParameter("fecha");
-					hora = request.getParameter("hora");
+					tipoMusica = request.getParameter("tipoMusica");
 					descripcion = request.getParameter("descripcion");
+					path = request.getParameter("pathDiscoteca");
 					
-					fiestaModificar = (Fiesta) request.getSession().getAttribute("discotecaModificar");
-					fiestaModificador.setNombreFiesta(nombreFiesta);
-					fiestaModificador.setNombreDiscoteca(nombreDiscoteca);
-					fiestaModificador.setEmail(email);
-					fiestaModificador.setFecha(fecha);
-					fiestaModificador.setHora(hora);
-					fiestaModificador.setDescripcion(descripcion);
-					sf.modificarFiesta(fiestaModificar, fiestaModificador, nombreCiudad, nombrePais);
+					discotecaModificar = (Discoteca) request.getSession().getAttribute("discotecaModificar");
+					discotecaModificador.setNombre(nombreDiscoteca);
+					discotecaModificador.setDescripcion(descripcion);
+					discotecaModificador.setTipoMusica(tipoMusica);
+					discotecaModificador.setImagen(path);
+					discotecaModificador.setEmailUsr(email);
+					
+					sd.modificarDiscoteca(discotecaModificar, discotecaModificador, nombrePais, nombreCiudad);
 				} catch (Exception e) {
 					System.out.println("Error en la modificación");
 				}

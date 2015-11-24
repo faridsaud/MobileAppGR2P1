@@ -10,7 +10,7 @@
 			
 		}catch (Exception e){
 			discotecaModificar = (Discoteca) request.getSession().getAttribute("discotecaModificar");
-			nDiscoteca = request.getParameter("nDiscoteca");
+			nDiscoteca = request.getParameter("nDiscoteca"); System.out.print(discotecaModificar.getNombre());
 		}
 		
 		String nombreDiscoteca = (String) request.getParameter("nombreDiscoteca");
