@@ -98,7 +98,7 @@
 			</textarea>
 		</div>
 		<div class="form-group">
-			<label for="inputFile">Imágen de la discoteca</label> 
+			<label for="inputFile">Imagen de la discoteca</label> 
 			<input name="pathDiscoteca" id="pathDiscoteca" type="file" id="inputFile" name="inputFile">
 			<p class="help-block">Foto que muestre algo característico de la discoteca</p>
 		</div>

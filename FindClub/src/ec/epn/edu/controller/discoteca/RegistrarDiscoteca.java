@@ -79,18 +79,18 @@ public class RegistrarDiscoteca extends HttpServlet {
 
 				String nombrePais = (String) request.getParameter("pais");
 				String nombreCiudad = (String) request.getParameter("ciudad");
-				String nombreFiesta = (String) request.getParameter("nombreDiscoteca");
+				String nombreDiscoteca = (String) request.getParameter("nombreDiscoteca");
 				String descripcion = (String) request.getParameter("descripcion");
 				String path = (String) request.getParameter("pathDiscoteca");
 
-				if (nombreFiesta == null)
-					nombreFiesta = "";
+				if (nombreDiscoteca == null)
+					nombreDiscoteca = "";
 				if (descripcion == null)
 					descripcion = "";
 				if (path == null)
 					path = "";
 
-				request.setAttribute(nombreFiesta, "nombreFiesta");
+				request.setAttribute(nombreDiscoteca, "nombreFiesta");
 				request.setAttribute(descripcion, "descripcion");
 				request.setAttribute(path, "pathDiscoteca");
 
