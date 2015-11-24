@@ -4,7 +4,7 @@
 	import="ec.edu.epn.model.vo.Pais, javax.servlet.*,javax.servlet.http.*,javax.servlet.annotation.WebServlet, ec.edu.epn.model.vo.Ciudad, ec.edu.epn.model.vo.Usuario, ec.edu.epn.model.vo.Musica, java.util.*"%>
 <jsp:include page="/templates/header.jsp"></jsp:include>
 <div class="container">
-	<form method="post">
+	<form method="post" enctype="multipart/form-data">
 		<%
 			String nombreDiscoteca = (String) request.getParameter("nombreDiscoteca");
 			String descripcion = (String) request.getParameter("decripcion");
@@ -99,7 +99,7 @@
 		</div>
 		<div class="form-group">
 			<label for="inputFile">Imágen de la discoteca</label> 
-			<input name="pathDiscoteca" id="pathDiscoteca" type="file" id="inputFile" name="inputFile">
+			<input name="inputFile"id="pathDiscoteca" type="file" id="inputFile" >
 			<p class="help-block">Foto que muestre algo característico de la discoteca</p>
 		</div>
 		<button type="submit" class="btn btn-default">Registrar</button>

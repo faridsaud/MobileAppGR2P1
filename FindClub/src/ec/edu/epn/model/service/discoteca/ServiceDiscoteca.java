@@ -226,7 +226,7 @@ public class ServiceDiscoteca {
 
 			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
 			PreparedStatement st = con.prepareStatement(
-					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPODEMUSICA=?, IDCIUDAD=?, EMAILUSR=?,"
+					"UPDATE DISCOTECA SET NOMBREDISCOTECA=?,NOMBRETIPOMUSICA=?, IDCIUDAD=?, EMAILUSR=?,"
 							+ "DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? WHERE IDDISCOTECA=?");
 			st.setString(1, discoModificador.getNombre());
 			st.setString(2, discoModificador.getTipoMusica());

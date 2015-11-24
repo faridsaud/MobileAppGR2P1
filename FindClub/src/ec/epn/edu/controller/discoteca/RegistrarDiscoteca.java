@@ -1,22 +1,25 @@
 package ec.epn.edu.controller.discoteca;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import ec.edu.epn.model.service.ciudad.ServiceCiudad;
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
-import ec.edu.epn.model.service.fiesta.ServiceFiesta;
 import ec.edu.epn.model.service.musica.ServiceMusica;
 import ec.edu.epn.model.service.pais.ServicePais;
 import ec.edu.epn.model.vo.Ciudad;
 import ec.edu.epn.model.vo.Discoteca;
-import ec.edu.epn.model.vo.Fiesta;
 import ec.edu.epn.model.vo.Musica;
 import ec.edu.epn.model.vo.Pais;
 import ec.edu.epn.model.vo.Usuario;
@@ -25,6 +28,7 @@ import ec.edu.epn.model.vo.Usuario;
  * Servlet implementation class RegistrarDiscoteca
  */
 @WebServlet("/Discoteca/Registrar")
+@MultipartConfig
 public class RegistrarDiscoteca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -160,6 +164,53 @@ public class RegistrarDiscoteca extends HttpServlet {
 					
 					ServiceDiscoteca sd = new ServiceDiscoteca();
 					sd.registrarDiscoteca(disco, nombrePais, nombreCiudad);
+					
+					
+					/*Registro de archivo*/
+					Discoteca discoRegistrada=sd.buscarDiscoteca(nombre);
+					String path = "C:/Users/farid/Documents/7mo/Aplicaciones Moviles/Proyectos/ProyectoBimestre1/MobileAppGR2P1/FindClub/WebContent/images/";
+					File directorio = new File(path + discoRegistrada.getIdDiscoteca());
+					directorio.mkdir();
+		
+					Part filePart = request.getPart("inputFile");
+					
+					final String fileName = getFileName(filePart);
+					if (fileName != null && fileName.equals("")==false) {
+						System.out.println("imprimiendo archivo");
+						System.out.println(fileName);
+						discoRegistrada.setImagen("/FindClub/images/" +discoRegistrada.getIdDiscoteca() + "/" + fileName);
+						try {
+							sd.modificarDiscoteca(discoRegistrada, discoRegistrada);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						OutputStream out = null;
+						InputStream filecontent = null;
+						try {
+							out = new FileOutputStream(new File(path + discoRegistrada.getIdDiscoteca() + "/" + File.separator + fileName));
+							filecontent = filePart.getInputStream();
+
+							int read = 0;
+							final byte[] bytes = new byte[1024];
+
+							while ((read = filecontent.read(bytes)) != -1) {
+								out.write(bytes, 0, read);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							if (out != null) {
+								out.close();
+							}
+							if (filecontent != null) {
+								filecontent.close();
+							}
+
+						}
+						
+					}
+					
 
 					getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/home.jsp").forward
 
@@ -176,5 +227,15 @@ public class RegistrarDiscoteca extends HttpServlet {
 				}
 			}
 		}
+	}
+	
+	private String getFileName(final Part part) {
+		final String partHeader = part.getHeader("content-disposition");
+		for (String content : part.getHeader("content-disposition").split(";")) {
+			if (content.trim().startsWith("filename")) {
+				return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+			}
+		}
+		return null;
 	}
 }
