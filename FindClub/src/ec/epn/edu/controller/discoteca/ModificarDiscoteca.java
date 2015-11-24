@@ -1,4 +1,5 @@
 package ec.epn.edu.controller.discoteca;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -27,24 +28,25 @@ import ec.edu.epn.model.vo.Usuario;
 @WebServlet("/Discoteca/Modificar")
 public class ModificarDiscoteca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ModificarDiscoteca() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	public ModificarDiscoteca() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doPost(request, response);
 	}
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -52,7 +54,7 @@ public class ModificarDiscoteca extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+
 		String combos = request.getParameter("combos");
 
 		Usuario usrIniciado = new Usuario();
@@ -76,19 +78,9 @@ public class ModificarDiscoteca extends HttpServlet {
 				ServiceMusica sm = new ServiceMusica();
 				Discoteca disco = new Discoteca();
 
-				int idDiscoteca = 0;
-				try {
-					idDiscoteca = Integer.parseInt(request.getParameter("dModificar"));
-					disco = sd.buscarDiscoteca(idDiscoteca);
-					request.getSession().setAttribute("discotecaModificar", disco);
-
-				} catch (Exception e) {
-					System.out.println("Error al modificar discoteca, se recibió:" + request.getParameter("dModificar"));
-				}
-
 				String nombrePais = request.getParameter("pais");
 				String nombreCiudad = request.getParameter("ciudad");
-				String nombreDiscoteca = request.getParameter("discoteca");
+				String nombreDiscoteca = request.getParameter("nDiscoteca");
 				String tipoMusica = request.getParameter("tipoMusica");
 				String descripcion = (String) request.getParameter("descripcion");
 				String path = (String) request.getParameter("pathDiscoteca");
@@ -100,10 +92,11 @@ public class ModificarDiscoteca extends HttpServlet {
 				if (path == null)
 					path = "";
 
-				request.setAttribute(nombreDiscoteca, "nombreFiesta");
+				request.setAttribute(nombreDiscoteca, "nombreDiscoteca");
 				request.setAttribute(descripcion, "descripcion");
 				request.setAttribute(path, "pathDiscoteca");
-				
+				request.setAttribute(tipoMusica, "tipoMusica");
+
 				Pais pais = new Pais();
 				Ciudad ciudad = new Ciudad();
 				Discoteca discoteca = new Discoteca();
@@ -129,16 +122,26 @@ public class ModificarDiscoteca extends HttpServlet {
 
 				if (nombreCiudad == "")
 					nombreCiudad = listaCiudad.get(0).getNombreCiudad();
-				
+
 				java.util.List<Musica> listaMusica = sm.listarMusica();
 				request.setAttribute("listaMusica", listaMusica);
+
+				int idDiscoteca = 0;
+				try {
+					idDiscoteca = Integer.parseInt(request.getParameter("dModificar"));
+					disco = sd.buscarDiscoteca(idDiscoteca);
+					request.getSession().setAttribute("discotecaModificar", disco);
+				} catch (Exception e) {
+					System.out
+							.println("Error al modificar discoteca, se recibió:" + request.getParameter("dModificar"));
+				}
 
 				getServletConfig().getServletContext().getRequestDispatcher("/vistas/discoteca/modificar.jsp")
 						.forward(request, response);
 			} else {
 				Discoteca discotecaModificar = new Discoteca();
 				Discoteca discotecaModificador = new Discoteca();
-				
+
 				ServiceDiscoteca sd = new ServiceDiscoteca();
 
 				String nombrePais = "";
@@ -148,28 +151,29 @@ public class ModificarDiscoteca extends HttpServlet {
 				String tipoMusica = "";
 				String descripcion = "";
 				String path = "";
-				
+
 				try {
-					nombreDiscoteca = request.getParameter("discoteca");
-					nombrePais = request.getParameter("pais");
-					nombreCiudad = request.getParameter("ciudad");
-					tipoMusica = request.getParameter("tipoMusica");
-					descripcion = request.getParameter("descripcion");
-					path = request.getParameter("pathDiscoteca");
-					
+					nombreDiscoteca = (String) request.getParameter("nomDiscoteca");
+					nombrePais = (String) request.getParameter("pais");
+					nombreCiudad = (String) request.getParameter("ciudad");
+					tipoMusica = (String) request.getParameter("tipoMusica");
+					descripcion = (String) request.getParameter("descripcion");
+					path = (String) request.getParameter("pathDiscoteca");
+
 					discotecaModificar = (Discoteca) request.getSession().getAttribute("discotecaModificar");
 					discotecaModificador.setNombre(nombreDiscoteca);
 					discotecaModificador.setDescripcion(descripcion);
 					discotecaModificador.setTipoMusica(tipoMusica);
 					discotecaModificador.setImagen(path);
 					discotecaModificador.setEmailUsr(email);
-					
+
 					sd.modificarDiscoteca(discotecaModificar, discotecaModificador, nombrePais, nombreCiudad);
 				} catch (Exception e) {
 					System.out.println("Error en la modificación");
 				}
-				
-				getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request, response);
+
+				getServletConfig().getServletContext().getRequestDispatcher("/Discoteca/Home").forward(request,
+						response);
 			}
 		}
 	}

@@ -51,14 +51,15 @@ public class EliminarDiscoteca extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		ServiceDiscoteca sd=new ServiceDiscoteca();
-		String nombre=(String)request.getParameter("nombreEliminar");
-		if(nombre==null){
-			nombre="";
+		int idDiscoteca = 0;
+		try{
+			idDiscoteca = Integer.parseInt((String) request.getParameter("discotecaEliminar"));
+		}catch(Exception e){
+			
 		}
-		Discoteca disco=(Discoteca)sd.buscarDiscoteca(nombre);
 		
-		sd.eliminarDiscoteca(disco);
-		request.setAttribute("nombreEliminar",nombre );
+		sd.eliminarDiscoteca(idDiscoteca);
+		
 		doGet(request, response);
 	}
 

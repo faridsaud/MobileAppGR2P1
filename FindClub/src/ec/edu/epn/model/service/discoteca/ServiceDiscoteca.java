@@ -126,12 +126,13 @@ public class ServiceDiscoteca {
 
 			PreparedStatement st = null;
 
-			st = con.prepareStatement("SELECT d.IDDISCOTECA, d.NOMBREDISCOTECA, d.IDCIUDAD, d.NOMBRETIPOMUSICA, d.EMAILUSR, d.DESCRIPCIONDISCOTECA, d.PATHIMAGENDISCOTECA "
-					+ "FROM DISCOTECA d, CIUDAD c "
-					+ "WHERE d.IDCIUDAD = c.IDCIUDAD AND c.NOMBRECIUDAD=? AND c.IDPAIS = (SELECT IDPAIS FROM PAIS WHERE NOMBREPAIS=?);");
+			st = con.prepareStatement(
+					"SELECT d.IDDISCOTECA, d.NOMBREDISCOTECA, d.IDCIUDAD, d.NOMBRETIPOMUSICA, d.EMAILUSR, d.DESCRIPCIONDISCOTECA, d.PATHIMAGENDISCOTECA "
+							+ "FROM DISCOTECA d, CIUDAD c "
+							+ "WHERE d.IDCIUDAD = c.IDCIUDAD AND c.NOMBRECIUDAD=? AND c.IDPAIS = (SELECT IDPAIS FROM PAIS WHERE NOMBREPAIS=?);");
 			st.setString(1, nombreCiudad);
 			st.setString(2, nombrePais);
-			
+
 			st.execute();
 			ResultSet rs = st.getResultSet();
 
@@ -159,7 +160,8 @@ public class ServiceDiscoteca {
 		return listaDiscotecas;
 	}
 
-	public List<Discoteca> listarDiscotecaByMusica(String nombreCiudad, String nombrePais, String musica, String nombreDiscoteca) {
+	public List<Discoteca> listarDiscotecaByMusica(String nombreCiudad, String nombrePais, String musica,
+			String nombreDiscoteca) {
 
 		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
 		try {
@@ -171,9 +173,10 @@ public class ServiceDiscoteca {
 
 			PreparedStatement st = null;
 
-			st = con.prepareStatement("SELECT d.IDDISCOTECA, d.NOMBREDISCOTECA, d.IDCIUDAD, d.NOMBRETIPOMUSICA, d.EMAILUSR, d.DESCRIPCIONDISCOTECA, d.PATHIMAGENDISCOTECA "
-					+ "FROM DISCOTECA d, CIUDAD c "
-					+ "WHERE d.IDCIUDAD = c.IDCIUDAD AND c.NOMBRECIUDAD=? AND c.IDPAIS = (SELECT IDPAIS FROM PAIS WHERE NOMBREPAIS=?) AND NOMBREDISCOTECA like ? AND NOMBRETIPOMUSICA like ?;");
+			st = con.prepareStatement(
+					"SELECT d.IDDISCOTECA, d.NOMBREDISCOTECA, d.IDCIUDAD, d.NOMBRETIPOMUSICA, d.EMAILUSR, d.DESCRIPCIONDISCOTECA, d.PATHIMAGENDISCOTECA "
+							+ "FROM DISCOTECA d, CIUDAD c "
+							+ "WHERE d.IDCIUDAD = c.IDCIUDAD AND c.NOMBRECIUDAD=? AND c.IDPAIS = (SELECT IDPAIS FROM PAIS WHERE NOMBREPAIS=?) AND NOMBREDISCOTECA like ? AND NOMBRETIPOMUSICA like ?;");
 			st.setString(1, nombreCiudad);
 			st.setString(2, nombrePais);
 			st.setString(3, "%" + nombreDiscoteca + "%");
@@ -204,65 +207,70 @@ public class ServiceDiscoteca {
 		}
 		return listaDiscotecas;
 	}
-	
-//	public List<Discoteca> listarDiscoteca(Discoteca disco, String nombre, nombreCiudad) {
-//
-//		List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
-//		try {
-//			Class.forName("com.mysql.jdbc.Driver");
-//
-//			java.sql.Connection con = DriverManager.getConnection
-//
-//			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
-//
-//			PreparedStatement st = null;
-//
-//			st = con.prepareStatement(
-//					"Select NOMBREDISCOTECA,d.IDCIUDAD,NOMBRETIPOMUSICA,PATHIMAGENDISCOTECA,EMAILUSR,DESCRIPCIONDISCOTECA from DISCOTECA d, CIUDAD c where d.IDCIUDAD = c.IDCIUDAD and c.NOMBRECIUDAD=?");
-//			st.setString(1, nombreCiudad);
-//
-//			if (nombre.equals("") && disco.getCiudad() == 0) {
-//				st = con.prepareStatement("Select * from DISCOTECA");
-//			} else if (disco.getCiudad() != 0) {
-//				st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
-//				st.setInt(1, disco.getCiudad());
-//			} else if (nombre.equals("") == false) {
-//				st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA like ?");
-//				st.setString(1, "%" + nombre + "%");
-//			}
-//
-//			st.execute();
-//			ResultSet rs = st.getResultSet();
-//
-//			while (rs.next()) {
-//				Discoteca disco1 = new Discoteca();
-//				disco1.setNombre(rs.getString(1));
-//				disco1.setCiudad(rs.getInt(2));
-//				disco1.setTipoMusica(rs.getString(3));
-//				disco1.setImagen(rs.getString(4));
-//				disco1.setEmailUsr(rs.getString(5));
-//				disco1.setDescripcion(rs.getString(6));
-//				disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
-//				disco1.setCiudad(rs.getInt("IDCIUDAD"));
-//				disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
-//				disco1.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
-//				disco1.setEmailUsr(rs.getString("EMAILUSR"));
-//
-//				disco1.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
-//				listaDiscotecas.add(disco1);
-//			}
-//			st.close();
-//			con.close();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return listaDiscotecas;
-//	}
+
+	// public List<Discoteca> listarDiscoteca(Discoteca disco, String nombre,
+	// nombreCiudad) {
+	//
+	// List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
+	// try {
+	// Class.forName("com.mysql.jdbc.Driver");
+	//
+	// java.sql.Connection con = DriverManager.getConnection
+	//
+	// ("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
+	//
+	// PreparedStatement st = null;
+	//
+	// st = con.prepareStatement(
+	// "Select
+	// NOMBREDISCOTECA,d.IDCIUDAD,NOMBRETIPOMUSICA,PATHIMAGENDISCOTECA,EMAILUSR,DESCRIPCIONDISCOTECA
+	// from DISCOTECA d, CIUDAD c where d.IDCIUDAD = c.IDCIUDAD and
+	// c.NOMBRECIUDAD=?");
+	// st.setString(1, nombreCiudad);
+	//
+	// if (nombre.equals("") && disco.getCiudad() == 0) {
+	// st = con.prepareStatement("Select * from DISCOTECA");
+	// } else if (disco.getCiudad() != 0) {
+	// st = con.prepareStatement("Select * from DISCOTECA where IDCIUDAD = ?");
+	// st.setInt(1, disco.getCiudad());
+	// } else if (nombre.equals("") == false) {
+	// st = con.prepareStatement("Select * from DISCOTECA where NOMBREDISCOTECA
+	// like ?");
+	// st.setString(1, "%" + nombre + "%");
+	// }
+	//
+	// st.execute();
+	// ResultSet rs = st.getResultSet();
+	//
+	// while (rs.next()) {
+	// Discoteca disco1 = new Discoteca();
+	// disco1.setNombre(rs.getString(1));
+	// disco1.setCiudad(rs.getInt(2));
+	// disco1.setTipoMusica(rs.getString(3));
+	// disco1.setImagen(rs.getString(4));
+	// disco1.setEmailUsr(rs.getString(5));
+	// disco1.setDescripcion(rs.getString(6));
+	// disco1.setNombre(rs.getString("NOMBREDISCOTECA"));
+	// disco1.setCiudad(rs.getInt("IDCIUDAD"));
+	// disco1.setTipoMusica(rs.getString("NOMBRETIPOMUSICA"));
+	// disco1.setImagen(rs.getString("PATHIMAGENDISCOTECA"));
+	// disco1.setEmailUsr(rs.getString("EMAILUSR"));
+	//
+	// disco1.setDescripcion(rs.getString("DESCRIPCIONDISCOTECA"));
+	// listaDiscotecas.add(disco1);
+	// }
+	// st.close();
+	// con.close();
+	// } catch (ClassNotFoundException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	//
+	// } catch (SQLException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// return listaDiscotecas;
+	// }
 
 	public void modificarDiscoteca(Discoteca discoModificar, Discoteca discoModificador) {
 
@@ -403,7 +411,7 @@ public class ServiceDiscoteca {
 		return disco;
 	}
 
-	public void eliminarDiscoteca(Discoteca disco) {
+	public void eliminarDiscoteca(int idDiscoteca) {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -412,7 +420,7 @@ public class ServiceDiscoteca {
 
 			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
 			PreparedStatement st = con.prepareStatement("delete from DISCOTECA where IDDISCOTECA=?");
-			st.setInt(1, disco.getIdDiscoteca());
+			st.setInt(1, idDiscoteca);
 			st.execute();
 			st.close();
 			con.close();
@@ -430,21 +438,21 @@ public class ServiceDiscoteca {
 			String nombreCiudad) {
 		// TODO Auto-generated method stub
 		try {
+			ServiceCiudad sc = new ServiceCiudad();
 			Class.forName("com.mysql.jdbc.Driver");
 
 			java.sql.Connection con = DriverManager.getConnection
 
 			("jdbc:mysql://192.168.216.131:3306/movilDBPrueba", "bases", "bases");
-			PreparedStatement st = con.prepareStatement("UPDATE DISCOTECA"
-					+ "SET NOMBREDISCOTECA=? IDCIUDAD=(select IDCIUDAD from CIUDAD c where c.IDPAIS = (select IDPAIS from PAIS where NOMBREPAIS=?) and c.NOMBRECIUDAD=?) NOMBRETIPOMUSICA=? DESCRIPCIONDISCOTECA=? PATHIMAGENDISCOTECA=?"
+			PreparedStatement st = con.prepareStatement("UPDATE DISCOTECA "
+					+ "SET NOMBREDISCOTECA=?, IDCIUDAD=?, NOMBRETIPOMUSICA=?, DESCRIPCIONDISCOTECA=?, PATHIMAGENDISCOTECA=? "
 					+ "WHERE IDDISCOTECA = ?;");
 			st.setString(1, discotecaModificador.getNombre());
-			st.setString(2, nombrePais);
-			st.setString(3, nombreCiudad);
-			st.setString(4, discotecaModificador.getTipoMusica());
-			st.setString(5, discotecaModificador.getDescripcion());
-			st.setString(6, discotecaModificador.getImagen());
-			st.setInt(7, discotecaModificar.getIdDiscoteca());
+			st.setInt(2, sc.buscarCiudad(nombreCiudad, nombrePais).getIdCiudad());
+			st.setString(3, discotecaModificador.getTipoMusica());
+			st.setString(4, discotecaModificador.getDescripcion());
+			st.setString(5, discotecaModificador.getImagen());
+			st.setInt(6, discotecaModificar.getIdDiscoteca());
 			st.execute();
 			st.close();
 			con.close();
