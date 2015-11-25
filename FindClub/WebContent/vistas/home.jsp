@@ -6,7 +6,7 @@
     <div class="container">
       <div class="jumbotron text-center">
         <h1>Bienvenidos a Find your Club!</h1>
-        <p>Prototipo</p>
+
       </div>
     </div>
     

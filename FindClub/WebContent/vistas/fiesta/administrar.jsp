@@ -110,10 +110,7 @@
             <thead>
               <tr>
                 <th>Fiesta</th>
-                <th>Email</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Descripcion</th>
+
                 <th>Acción</th>
               </tr>
             </thead>
@@ -126,10 +123,6 @@
               		<tr>
               		
               			<td><%=f.getNombreFiesta() %></td>
-              			<td><%=f.getEmail() %></td>
-              			<td><%=f.getFecha()%></td>	
-              			<td><%=f.getHora() %></td>
-              			<td><%=f.getDescripcion() %></td>
               			<td>
 							<form method="get"
 								action="${pageContext.request.contextPath}/Fiesta/Modificar">
