@@ -7,11 +7,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.JsonObject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
 import ec.edu.epn.model.vo.Usuario;
 
+@Path("/Usuario/")
+@Produces("application/json")
+@Consumes("application/json")
 public class ServiceUsuario {
 
-	public Usuario buscarUsuario(String email, String password) {
+	@POST
+	@Path("/buscar")
+	public Usuario buscarUsuario(@FormParam("email")String email, @FormParam("password")String password) {
 		Usuario usr = new Usuario();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -46,6 +63,8 @@ public class ServiceUsuario {
 		return usr;
 	}
 
+	@POST
+	@Path("/")
 	public void registrarUsuario(Usuario usr) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -73,7 +92,9 @@ public class ServiceUsuario {
 
 	}
 
-	public List<Usuario> listarUsuario(Usuario usrLogeado, String emailUsuario) {
+	@GET
+	@Path("/")
+	public List<Usuario> listarUsuario(Usuario usrLogeado, @QueryParam("email")String emailUsuario) {
 		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -118,7 +139,11 @@ public class ServiceUsuario {
 		return listaUsuarios;
 	}
 
-	public void modificarUsuario(Usuario usrModificar, Usuario usrModificador) {
+	@PUT
+	@Path("/")
+	public void modificarUsuario(List<Usuario> listUsr , JsonObject objeto) {
+		Usuario usrModificar=listUsr.get(0);
+		Usuario usrModificador=listUsr.get(1);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
@@ -143,7 +168,10 @@ public class ServiceUsuario {
 		}
 
 	}
-	public Usuario buscarUsuarioByEmail(String email) {
+	
+	@GET
+	@Path("/{email}")
+	public Usuario buscarUsuarioByEmail(@PathParam("email")String email) {
 		Usuario usr = new Usuario();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -176,6 +204,9 @@ public class ServiceUsuario {
 		}
 		return usr;
 	}
+	
+	@DELETE
+	@Path("/")
 	public void eliminarUsuario(Usuario usr) {
 		
 		try {
