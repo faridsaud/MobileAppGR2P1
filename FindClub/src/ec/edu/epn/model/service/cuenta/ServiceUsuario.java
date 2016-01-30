@@ -23,7 +23,6 @@ import ec.edu.epn.model.vo.Usuario;
 
 @Path("/Usuario/")
 @Produces("application/json")
-@Consumes("application/json")
 public class ServiceUsuario {
 
 	@GET
@@ -65,17 +64,17 @@ public class ServiceUsuario {
 
 	@POST
 	@Path("/")
-	public void registrarUsuario(Usuario usr) {
+	public void registrarUsuario(@QueryParam("email")String email,@QueryParam("password")String password,@QueryParam("nombre")String nombre,@QueryParam("apellido")String apellido) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con.prepareStatement(
 					"Insert into USUARIO (EMAILUSR,PASSWORDUSR, NOMBREUSR, APELLIDOUSR, ADMINUSR, ESTADOUSR) values (?,?,?,?,?,?) ");
-			st.setString(1, usr.getEmail());
-			st.setString(2, usr.getPassword());
-			st.setString(3, usr.getNombre());
-			st.setString(4, usr.getApellido());
+			st.setString(1, email);
+			st.setString(2, password);
+			st.setString(3, nombre);
+			st.setString(4, apellido);
 			st.setBoolean(5, false);
 			st.setBoolean(6, true);
 			st.execute();
