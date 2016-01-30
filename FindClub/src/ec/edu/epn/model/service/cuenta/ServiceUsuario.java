@@ -26,9 +26,9 @@ import ec.edu.epn.model.vo.Usuario;
 @Consumes("application/json")
 public class ServiceUsuario {
 
-	@POST
+	@GET
 	@Path("/buscar")
-	public Usuario buscarUsuario(@FormParam("email")String email, @FormParam("password")String password) {
+	public Usuario buscarUsuario(@QueryParam("email")String email, @QueryParam("password")String password) {
 		Usuario usr = new Usuario();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
