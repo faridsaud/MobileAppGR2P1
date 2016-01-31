@@ -18,13 +18,13 @@ import ec.edu.epn.model.vo.Discoteca;
  * Servlet implementation class InfoDiscoteca
  */
 @WebServlet("/Discoteca/Info")
-public class InfoDiscoteca extends HttpServlet {
+public class infoDiscoteca extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InfoDiscoteca() {
+    public infoDiscoteca() {
         super();
         // TODO Auto-generated constructor stub
     }

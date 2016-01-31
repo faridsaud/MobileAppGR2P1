@@ -1,13 +1,10 @@
 package ec.edu.epn.model.vo;
 
-import java.awt.Image;
+import java.io.Serializable;
 
-public class Discoteca {
+public class Discoteca implements Serializable{
 	private int idDiscoteca;
 	private String nombre="";
-	//private String pais="";
-	private int ciudad;
-	private String tipoMusica="";
 	private String emailUsr="";
 	private String descripcion="";
 	private String imagen;
@@ -46,31 +43,6 @@ public class Discoteca {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-/*
-	public String getPais() {
-		return pais;
-	}
-
-	public void setPais(String pais) {
-		this.pais = pais;
-	}
-*/
-	public int getCiudad() {
-		return ciudad;
-	}
-
-	public void setCiudad(int ciudad) {
-		this.ciudad = ciudad;
-	}
-
-	public String getTipoMusica() {
-		return tipoMusica;
-	}
-
-	public void setTipoMusica(String tipoMusica) {
-		this.tipoMusica = tipoMusica;
-	}
-
 	public String getImagen() {
 		return imagen;
 	}
