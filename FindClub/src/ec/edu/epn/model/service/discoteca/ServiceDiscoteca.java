@@ -27,7 +27,7 @@ public class ServiceDiscoteca{
         return con;
     }
     @GET
-	@Path(value="IngresarDiscoteca/{nombreDisco}/{emailUsr}/{descripcion}/{pathImagen}")
+	@Path(value="Ingresar/{nombreDisco}/{emailUsr}/{descripcion}/{pathImagen}")
     public String IngresarDiscoteca(@PathParam("nombreDisco")String nombreDisco, 
     		@PathParam("emailUsr")String emailUsr, @PathParam("descripcion")String descripcion, 
     		@PathParam("pathImagen")String pathImagen) 
@@ -58,7 +58,7 @@ public class ServiceDiscoteca{
     	return "Discoteca Ingresada con exito";
     }
     @GET
-	@Path(value="ModificarDiscoteca/{nombreDisco}/{emailUsr}/{descripcion}/{pathImagen}/{idDisco}")
+	@Path(value="Modificar/{nombreDisco}/{emailUsr}/{descripcion}/{pathImagen}/{idDisco}")
     public String ModificarDiscoteca(@PathParam("nombreDisco")String nombreDisco, 
     		@PathParam("emailUsr")String emailUsr, @PathParam("descripcion")String descripcion, 
     		@PathParam("pathImagen")String pathImagen, @PathParam("idDisco")int idDisco){
@@ -89,7 +89,7 @@ public class ServiceDiscoteca{
     	return "Modificado con éxito";
     }
     @GET
-	@Path(value="BuscarDiscoteca/{idDisco}")
+	@Path(value="Buscar/{idDisco}")
     public Discoteca BuscarDiscoteca(@PathParam("idDisco")int idDisco) {
 		Discoteca disco = new Discoteca();
 		try {
@@ -122,7 +122,7 @@ public class ServiceDiscoteca{
 		return disco;
 	}
     @GET
-    @Path(value="ListarDiscoteca")
+    @Path(value="Listar")
     public List<Discoteca> ListarDiscoteca(){
     	List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
 		try {
@@ -156,7 +156,7 @@ public class ServiceDiscoteca{
 		return listaDiscotecas;
     }
     @GET
-    @Path(value="EliminarDiscoteca/{idDiscoteca}")
+    @Path(value="Eliminar/{idDiscoteca}")
     public void EliminarDiscoteca(@PathParam("idDiscoteca")int idDiscoteca) {
 		try {
 			Connection con = conexionMYSQL();
