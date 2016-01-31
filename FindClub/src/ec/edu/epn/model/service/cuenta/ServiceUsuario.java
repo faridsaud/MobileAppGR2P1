@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.JsonObject;
-import javax.ws.rs.Consumes;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -18,12 +17,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import ec.edu.epn.model.vo.Usuario;
 
 @Path("/Usuario/")
 @Produces("application/json")
 public class ServiceUsuario {
+
 
 	@GET
 	@Path("/buscar")
@@ -93,7 +94,12 @@ public class ServiceUsuario {
 
 	@GET
 	@Path("/")
-	public List<Usuario> listarUsuario(Usuario usrLogeado, @QueryParam("email")String emailUsuario) {
+	public List<Usuario> listarUsuario(@QueryParam("email")String emailUsuario,@QueryParam("emailLog")String emailLogeado) {
+		ServiceUsuario su= new ServiceUsuario();
+		Usuario usrLogeado=su.buscarUsuarioByEmail(emailLogeado);
+		if(emailUsuario==null){
+			emailUsuario="";
+		}
 		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -140,20 +146,18 @@ public class ServiceUsuario {
 
 	@PUT
 	@Path("/")
-	public void modificarUsuario(List<Usuario> listUsr , JsonObject objeto) {
-		Usuario usrModificar=listUsr.get(0);
-		Usuario usrModificador=listUsr.get(1);
+	public void modificarUsuario(@QueryParam("email") String email, @QueryParam("newPassword") String newPassword, @QueryParam("newNombre") String newNombre, @QueryParam("newApellido") String newApellido, @QueryParam("newEmail") String newEmail) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://192.168.216.131:3306/movilDBPrueba",
 					"bases", "bases");
 			PreparedStatement st = con.prepareStatement(
 					"UPDATE USUARIO SET EMAILUSR=?,PASSWORDUSR=?, NOMBREUSR=?, APELLIDOUSR=? WHERE EMAILUSR=?");
-			st.setString(1, usrModificador.getEmail());
-			st.setString(2, usrModificador.getPassword());
-			st.setString(3, usrModificador.getNombre());
-			st.setString(4, usrModificador.getApellido());
-			st.setString(5, usrModificar.getEmail());
+			st.setString(1, newEmail);
+			st.setString(2, newPassword);
+			st.setString(3, newNombre);
+			st.setString(4, newApellido);
+			st.setString(5, email);
 			st.execute();
 			st.close();
 			con.close();
@@ -205,8 +209,8 @@ public class ServiceUsuario {
 	}
 	
 	@DELETE
-	@Path("/")
-	public void eliminarUsuario(Usuario usr) {
+	@Path("/{email}")
+	public void eliminarUsuario(@PathParam("email")String email) {
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -215,7 +219,7 @@ public class ServiceUsuario {
 					"bases", "bases");
 			PreparedStatement st = con
 					.prepareStatement("delete from USUARIO where EMAILUSR=?");
-			st.setString(1, usr.getEmail());
+			st.setString(1, email);
 			st.execute();
 			st.close();
 			con.close();
