@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,15 +33,13 @@ public class ServiceDiscoteca{
     		@PathParam("pathImagen")String pathImagen) 
     				throws ClassNotFoundException, SQLException{
     	try{
-    		Discoteca disco = new Discoteca();
     		Connection con = conexionMYSQL();
     		PreparedStatement st = con.prepareStatement("INSERT INTO DISCOTECA (IDDISCOTECA, NOMBREDISCOTECA, EMAILUSR, "
     				+ "DESCRIPCIONDISCOTECA, PATHIMAGENDISCOTECA) VALUES (NULL,?,?,?,?);");
-    		st.setInt(1, disco.getIdDiscoteca());
-    		st.setString(2, nombreDisco);
-    		st.setString(3, emailUsr);
-    		st.setString(4, descripcion);
-    		st.setString(5, pathImagen);
+    		st.setString(1, nombreDisco);
+    		st.setString(2, emailUsr);
+    		st.setString(3, descripcion);
+    		st.setString(4, pathImagen);
     		st.execute();
 			st.close();
 			con.close();
@@ -60,7 +59,7 @@ public class ServiceDiscoteca{
     }
     @GET
 	@Path(value="ModificarDiscoteca/{nombreDisco}/{emailUsr}/{descripcion}/{pathImagen}/{idDisco}")
-    public void ModificarDiscoteca(@PathParam("nombreDisco")String nombreDisco, 
+    public String ModificarDiscoteca(@PathParam("nombreDisco")String nombreDisco, 
     		@PathParam("emailUsr")String emailUsr, @PathParam("descripcion")String descripcion, 
     		@PathParam("pathImagen")String pathImagen, @PathParam("idDisco")int idDisco){
     	try{
@@ -78,15 +77,16 @@ public class ServiceDiscoteca{
     	}catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("error modificando CLASS");
+			return "error class";
 		} catch (SQLIntegrityConstraintViolationException e){
 			e.printStackTrace();
-			System.out.println("error constraint");
+			return "error constraint";
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("error modificando SQL");
+			return "error sql";
 		}
+    	return "Modificado con éxito";
     }
     @GET
 	@Path(value="BuscarDiscoteca/{idDisco}")
