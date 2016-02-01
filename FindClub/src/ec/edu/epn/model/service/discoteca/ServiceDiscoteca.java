@@ -122,6 +122,41 @@ public class ServiceDiscoteca{
 		return disco;
 	}
     @GET
+    @Path(value="ListaDiscos/{nombreDisco}")
+    public List<Discoteca> ListarDiscotecaNombre(@PathParam("nombreDisco")String nombreDisco){
+    	List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
+		try {
+			Connection con = conexionMYSQL();
+			PreparedStatement st = con.prepareStatement("SELECT * FROM DISCOTECA WHERE NOMBREDISCOTECA LIKE ? ORDER BY NOMBREDISCOTECA;");
+			st.setString(1, "%" + nombreDisco + "%");
+			st.execute();
+			ResultSet rs = st.getResultSet();
+			while (rs.next()) {
+				Discoteca disco1 = new Discoteca();
+				disco1.setIdDiscoteca(rs.getInt(1));
+				disco1.setNombre(rs.getString(2));
+				disco1.setEmailUsr(rs.getString(3));
+				disco1.setDescripcion(rs.getString(4));
+				disco1.setImagen(rs.getString(5));
+				listaDiscotecas.add(disco1);
+			}
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("error listando CLASS");
+		} catch (SQLIntegrityConstraintViolationException e){
+			e.printStackTrace();
+			System.out.println("error constraint");
+		}catch (SQLException es) {
+			// TODO Auto-generated catch block
+			es.printStackTrace();
+			System.out.println("error listando SQL");
+		} 
+		return listaDiscotecas;
+    }
+    @GET
     @Path(value="Listar")
     public List<Discoteca> ListarDiscoteca(){
     	List<Discoteca> listaDiscotecas = new ArrayList<Discoteca>();
