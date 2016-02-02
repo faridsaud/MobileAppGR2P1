@@ -4,8 +4,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import ec.edu.epn.model.service.discoteca.ServiceDiscoteca;
 import ec.edu.epn.model.vo.Discoteca;
@@ -15,8 +22,9 @@ import ec.edu.epn.model.vo.Usuario;
 /***
  * @author Samantha Molina
  */
+@Path(value = "Fiesta")
+@Produces("application/json")
 public class ServiceFiesta {
-
 	private String driver = "com.mysql.jdbc.Driver";
 	private String url = "jdbc:mysql://192.168.216.131:3306/movilDBPrueba";
 	private String userName = "bases";
@@ -26,6 +34,18 @@ public class ServiceFiesta {
 		Class.forName(driver);
 		java.sql.Connection con = DriverManager.getConnection(url, userName, password);
 		return con;
+	}
+
+	@GET
+	@Path(value = "Prueba")
+	public String pruebaFiesta() {
+		return "Prueba Fiesta";
+	}
+
+	@GET
+	@Path(value = "Consultar/{id}")
+	public Fiesta consultarFiesta(@PathParam("id") int id) {
+		return new Fiesta(id, "sam@dominio.com", 1, "fiestaPrueba", "2016-01-25", "10:00", "Fiesta");
 	}
 
 	public boolean existeFiesta(String nombreFiesta, String email) {
@@ -41,36 +61,46 @@ public class ServiceFiesta {
 		return false;
 	}
 
-	public void registrarFiesta(Fiesta fiesta, String nombreCiudad, String nombrePais) {
-		if (existeFiesta(fiesta.getNombreFiesta(), fiesta.getEmail()) == false) {
-			try {
-				java.sql.Connection con = establecerConexion();
-				PreparedStatement st = con.prepareStatement(
-						"insert into FIESTA (IDFIESTA, EMAILUSR, IDDISCOTECA, NOMBREFIESTA, FECHAFIESTA, HORAFIESTA, DESCRIPCIONFIESTA) "
-								+ "values (NULL,?, (select d.IDDISCOTECA from DISCOTECA d where d.NOMBREDISCOTECA=? AND d.IDCIUDAD = (select IDCIUDAD from CIUDAD c where c.IDPAIS = (select IDPAIS from PAIS where NOMBREPAIS=?) and c.NOMBRECIUDAD=?)),?,?,?,?)");
-				st.setString(1, fiesta.getEmail());
-				st.setString(2, fiesta.getNombreDiscoteca());
-				st.setString(3, nombrePais);
-				st.setString(4, nombreCiudad);
-				st.setString(5, fiesta.getNombreFiesta());
-				st.setString(6, fiesta.getFecha());
-				st.setString(7, fiesta.getHora());
-				st.setString(8, fiesta.getDescripcion());
+	@GET
+	@Path(value = "Registrar")
+	public String registrarFiesta(@QueryParam("nombre") String nombre, @QueryParam("email") String email,
+			@QueryParam("idDiscoteca") int idDiscoteca, @QueryParam("fecha") String fecha,
+			@QueryParam("hora") String hora, @QueryParam("descripcion") String descripcion) {
+		Fiesta fiesta = new Fiesta(nombre, email, idDiscoteca, fecha, hora, descripcion);
+		try {
+			java.sql.Connection con = establecerConexion();
+			PreparedStatement st = con.prepareStatement(
+					"insert into FIESTA (IDFIESTA, EMAILUSR, IDDISCOTECA, NOMBREFIESTA, FECHAFIESTA, HORAFIESTA, DESCRIPCIONFIESTA) "
+							+ "values (NULL,?,?,?,?,?,?)");
+			st.setString(1, fiesta.getEmail());
+			st.setInt(2, fiesta.getIdDiscoteca());
+			st.setString(3, fiesta.getNombreFiesta());
+			st.setString(4, fiesta.getFecha());
+			st.setString(5, fiesta.getHora());
+			st.setString(6, fiesta.getDescripcion());
 
-				st.execute();
-				st.close();
-				con.close();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			st.execute();
+			st.close();
+			con.close();
+			return "Fiesta registrada";
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Ha ocurrido un error al registrar fiesta";
+		} catch (SQLIntegrityConstraintViolationException e) {
+			// Error message for integrity constraint violation
+			return "Error ya ha registrado una fiesta con ese nombre";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Ha ocurrido un error al registrar fiesta";
 		}
 	}
 
-	public Fiesta buscarFiesta(Fiesta fiesta, String nombreFiesta, String emailUsuario) {
+	@GET
+	@Path(value = "BuscarNombre")
+	public Fiesta buscarFiesta(@QueryParam("nombre") String nombreFiesta, @QueryParam("email") String emailUsuario) {
+		Fiesta fiesta = new Fiesta();
 		try {
 			java.sql.Connection con = establecerConexion();
 			PreparedStatement st = null;
@@ -109,7 +139,10 @@ public class ServiceFiesta {
 		return fiesta;
 	}
 
-	public Fiesta buscarFiesta(Fiesta fiesta, int idFiesta) {
+	@GET
+	@Path(value = "Buscar/{idFiesta}")
+	public Fiesta buscarFiesta(@PathParam("idFiesta") int idFiesta) {
+		Fiesta fiesta = new Fiesta();
 		ServiceDiscoteca sd = new ServiceDiscoteca();
 		try {
 			java.sql.Connection con = establecerConexion();
@@ -123,7 +156,7 @@ public class ServiceFiesta {
 				fiesta.setIdFiesta(rs.getInt("IDFIESTA"));
 				fiesta.setNombreFiesta(rs.getString("NOMBREFIESTA"));
 				fiesta.setIdDiscoteca(rs.getShort("IDDISCOTECA"));
-				fiesta.setNombreDiscoteca(sd.buscarDiscoteca(fiesta.getIdDiscoteca()).getNombre());
+				fiesta.setNombreDiscoteca(sd.BuscarDiscoteca(fiesta.getIdDiscoteca()).getNombre());
 				fiesta.setEmail(rs.getString("EMAILUSR"));
 				fiesta.setFecha(rs.getDate("FECHAFIESTA").toString());
 				fiesta.setHora(rs.getTime("HORAFIESTA").toString());
@@ -142,33 +175,33 @@ public class ServiceFiesta {
 		return fiesta;
 	}
 
-	public List<Fiesta> listarFiesta(Fiesta fiesta, Usuario usr) {
+	@GET
+	@Path(value = "Listar")
+	public List<Fiesta> listarFiesta(@QueryParam("nombreFiesta") String nombre,
+			@QueryParam("idDiscoteca") int idDiscoteca, @QueryParam("email") String email,
+			@QueryParam("admin") boolean isAdmin) {
+		if (nombre == null || nombre.equals("null"))
+			nombre = "";
+		if (email == null || email.equals("null"))
+			email = "";
+		Fiesta fiesta = new Fiesta(nombre, email, idDiscoteca, "", "", "");
 		List<Fiesta> listaFiesta = new ArrayList<Fiesta>();
 		ServiceDiscoteca sd = new ServiceDiscoteca();
 		PreparedStatement st = null;
 		try {
 			java.sql.Connection con = establecerConexion();
-			if (usr.isAdmin() == true && (fiesta.getNombreFiesta().equals(""))) {
-				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDDISCOTECA=? ORDER BY NOMBREFIESTA");
-				st.setInt(1, fiesta.getIdDiscoteca());
-			} else if (usr.isAdmin() == true && (fiesta.getNombreFiesta().equals(""))) {
+			if (isAdmin == true) {
 				st = con.prepareStatement(
-						"SELECT * FROM FIESTA WHERE IDDISCOTECA=? NOMBREFIESTA like ? ORDER BY NOMBREFIESTA");
+						"SELECT * FROM FIESTA WHERE IDDISCOTECA=? AND NOMBREFIESTA like ? ORDER BY NOMBREFIESTA");
 				st.setInt(1, fiesta.getIdDiscoteca());
 				st.setString(2, "%" + fiesta.getNombreFiesta() + "%");
-			} else if (fiesta.getIdDiscoteca() != 0 && (!usr.getEmail().equals(""))
+			} else if (fiesta.getIdDiscoteca() != 0 && (!fiesta.getEmail().equals(""))
 					&& (fiesta.getNombreFiesta().equals(""))) {
 				st = con.prepareStatement(
-						"SELECT * FROM FIESTA WHERE IDDISCOTECA=? and EMAILUSR=? ORDER BY NOMBREFIESTA");
+						"SELECT * FROM FIESTA WHERE IDDISCOTECA=? AND NOMBREFIESTA like ? and EMAILUSR=? ORDER BY NOMBREFIESTA");
 				st.setInt(1, fiesta.getIdDiscoteca());
-				st.setString(2, usr.getEmail());
-			} else if (fiesta.getIdDiscoteca() != 0 && (!usr.getEmail().equals(""))
-					&& (!fiesta.getNombreFiesta().equals(""))) {
-				st = con.prepareStatement(
-						"SELECT * FROM FIESTA WHERE IDDISCOTECA=? and EMAILUSR=? and NOMBREFIESTA like ? ORDER BY NOMBREFIESTA");
-				st.setInt(1, fiesta.getIdDiscoteca());
-				st.setString(2, usr.getEmail());
-				st.setString(3, "%" + fiesta.getNombreFiesta() + "%");
+				st.setString(2, "%" + fiesta.getNombreFiesta() + "%");
+				st.setString(3, fiesta.getEmail());
 			} else {
 				st = con.prepareStatement("SELECT * FROM FIESTA WHERE IDFIESTA=0");
 			}
@@ -184,7 +217,7 @@ public class ServiceFiesta {
 				f.setFecha(rs.getString("FECHAFIESTA"));
 				f.setHora(rs.getString("HORAFIESTA"));
 				f.setDescripcion(rs.getString("DESCRIPCIONFIESTA"));
-				f.setNombreDiscoteca(sd.buscarDiscoteca(f.getIdDiscoteca()).getNombre());
+				f.setNombreDiscoteca(sd.BuscarDiscoteca(f.getIdDiscoteca()).getNombre());
 				listaFiesta.add(f);
 			}
 
@@ -200,64 +233,78 @@ public class ServiceFiesta {
 		return listaFiesta;
 	}
 
-	public void modificarFiesta(Fiesta fiestaModificar, Fiesta fiestaModificador, String nombreCiudad, String nombrePais) {
-		Fiesta fiesta = new Fiesta();
-		if (existeFiesta(fiestaModificador.getNombreFiesta(), fiestaModificador.getEmail()) == false) {
-			try {
-				java.sql.Connection con = establecerConexion();
-				PreparedStatement st = con.prepareStatement("Update FIESTA set NOMBREFIESTA=?, "
-						+ "IDDISCOTECA= (select d.IDDISCOTECA from DISCOTECA d where d.NOMBREDISCOTECA=? AND d.IDCIUDAD = (select IDCIUDAD from CIUDAD c where c.IDPAIS = (select IDPAIS from PAIS where NOMBREPAIS=?) and c.NOMBRECIUDAD=?)), "
-						+ "FECHAFIESTA=?, HORAFIESTA=?, DESCRIPCIONFIESTA=?  where IDFIESTA=?");
-				st.setString(1, fiestaModificador.getNombreFiesta());
-				st.setString(2, fiestaModificador.getNombreDiscoteca());
-				st.setString(3, nombrePais);
-				st.setString(4, nombreCiudad);
-				st.setString(5, fiestaModificador.getFecha());
-				st.setString(6, fiestaModificador.getHora());
-				st.setString(7, fiestaModificador.getDescripcion());
-				st.setInt(8, fiestaModificar.getIdFiesta());
-				st.execute();
-				st.close();
-				con.close();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+	@GET
+	@Path(value = "Modificar")
+	public String modificarFiesta(@QueryParam("idFiesta") int idFiesta, @QueryParam("nombre") String nombre,
+			@QueryParam("idDiscoteca") int idDiscoteca, @QueryParam("fecha") String fecha, 
+			@QueryParam("hora") String hora, @QueryParam("descripcion") String descripcion) {
+		Fiesta fiestaModificador = new Fiesta(idFiesta, "", idDiscoteca, nombre, fecha, hora, descripcion);
 
-	public void eliminarFiesta(Fiesta fiesta) {
 		try {
 			java.sql.Connection con = establecerConexion();
-			PreparedStatement st = con.prepareStatement("Delete from FIESTA where IDFIESTA=?");
-			st.setInt(1, fiesta.getIdFiesta());
+			PreparedStatement st = con.prepareStatement("Update FIESTA set NOMBREFIESTA=?, "
+					+ "IDDISCOTECA = ?, FECHAFIESTA=?, HORAFIESTA=?, DESCRIPCIONFIESTA=?  where IDFIESTA=?");
+			st.setString(1, fiestaModificador.getNombreFiesta());
+			st.setInt(2, fiestaModificador.getIdDiscoteca());
+			st.setString(3, fiestaModificador.getFecha());
+			st.setString(4, fiestaModificador.getHora());
+			st.setString(5, fiestaModificador.getDescripcion());
+			st.setInt(6, fiestaModificador.getIdFiesta());
 			st.execute();
 			st.close();
 			con.close();
+			return "Fiesta modificada";
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "Ha ocurrido un error al modificar fiesta";
+		} catch (SQLIntegrityConstraintViolationException e) {
+			// Error message for integrity constraint violation
+			return "Error ya ha registrado una fiesta con ese nombre";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "Ha ocurrido un error al modificar fiesta";
 		}
 	}
-	public List<Fiesta> buscarFiestaByDisco(Discoteca disc) {
+
+	@GET
+	@Path(value = "Eliminar/{idFiesta}")
+	public String eliminarFiesta(@PathParam("idFiesta") int idFiesta) {
+		try {
+			java.sql.Connection con = establecerConexion();
+			PreparedStatement st = con.prepareStatement("Delete from FIESTA where IDFIESTA=?");
+			st.setInt(1, idFiesta);
+			st.execute();
+			st.close();
+			con.close();
+			return "Fiesta eliminada";
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Ha ocurrido un error al eliminar fiesta";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Ha ocurrido un error al eliminar fiesta";
+		}
+	}
+
+	@GET
+	@Path(value = "ListarPorDiscoteca/{idDiscoteca}")
+	public List<Fiesta> buscarFiestaByDisco(@PathParam("idDiscoteca") int idDiscoteca) {
 		ServiceDiscoteca sd = new ServiceDiscoteca();
-		List<Fiesta> listaFiestas= new ArrayList<Fiesta>();
+		List<Fiesta> listaFiestas = new ArrayList<Fiesta>();
 		try {
 			java.sql.Connection con = establecerConexion();
 			PreparedStatement st = null;
 			st = con.prepareStatement("Select * from FIESTA where IDDISCOTECA=?");
-			st.setInt(1, disc.getIdDiscoteca());
+			st.setInt(1, idDiscoteca);
 			st.execute();
 
 			ResultSet rs = st.getResultSet();
 			while (rs.next()) {
-				Fiesta fiesta= new Fiesta();
+				Fiesta fiesta = new Fiesta();
 				fiesta.setIdFiesta(rs.getInt("IDFIESTA"));
 				fiesta.setNombreFiesta(rs.getString("NOMBREFIESTA"));
 				fiesta.setIdDiscoteca(rs.getShort("IDDISCOTECA"));
@@ -279,6 +326,4 @@ public class ServiceFiesta {
 
 		return listaFiestas;
 	}
-
-
 }

@@ -1,11 +1,12 @@
 package ec.edu.epn.model.vo;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  * @author Samantha Molina
  */
-public class Fiesta {
+public class Fiesta implements Serializable {
 	private int idFiesta;
 	private String email;
 	private int idDiscoteca;
@@ -14,12 +15,35 @@ public class Fiesta {
 	private String fecha;
 	private String hora;
 	private String descripcion;
+	private static final long serialVersionUID = 8799656478674716638L;
 	
 	public Fiesta(){
 		
 	}
 	
-	
+	public Fiesta(int idFiesta, String email, int idDiscoteca, String nombreFiesta,
+			String fecha, String hora, String descripcion) {
+		super();
+		this.idFiesta = idFiesta;
+		this.email = email;
+		this.idDiscoteca = idDiscoteca;
+		this.nombreFiesta = nombreFiesta;
+		this.fecha = fecha;
+		this.hora = hora;
+		this.descripcion = descripcion;
+	}
+
+	public Fiesta(String nombreFiesta, String email, int idDiscoteca,
+			String fecha, String hora, String descripcion) {
+		super();
+		this.email = email;
+		this.idDiscoteca = idDiscoteca;
+		this.nombreFiesta = nombreFiesta;
+		this.fecha = fecha;
+		this.hora = hora;
+		this.descripcion = descripcion;
+	}
+
 	public String getNombreFiesta() {
 		return nombreFiesta;
 	}
@@ -74,3 +98,4 @@ public class Fiesta {
 	
 	
 }
+
